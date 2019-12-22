@@ -1,4 +1,4 @@
-import {checkInArray, matchRoles, checkUserContext, checkConditions, getRolesFromUser} from './utils';
+import {checkInArray, matchRoles, checkUserContext, checkConditions, getRolesFromUser} from './utils/utils';
 import {
   Actions,
   UserContext,
