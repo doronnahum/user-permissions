@@ -1,9 +1,11 @@
-import {checkInArray, matchRoles, checkUserContext, checkConditions, getRolesFromUser} from './utils/utils';
 import {
-  Actions,
-  UserContext,
-} from './types';
-
+  checkInArray,
+  matchRoles,
+  checkUserContext,
+  checkConditions,
+  getRolesFromUser,
+} from './utils/utils';
+import { Actions, UserContext } from './types';
 
 export default class Ability {
   private actions: Actions | Actions[];
@@ -52,24 +54,28 @@ export default class Ability {
   public checkRole(userRoles?: string[]) {
     return matchRoles(userRoles, this.roles);
   }
-  public checkConditions(data: object | object[] ,user?: object) {
+  public checkConditions(data: object | object[], user?: object) {
     return checkConditions(data, this.conditions, user);
   }
-  public checkContext(user? : {}) {
+  public checkContext(user?: {}) {
     return checkUserContext(this.userContext, user);
   }
 
-  public can(action: Actions, subject: string, user?: object, data?: object | object[]){
-    if(!this.checkAction(action)) return false;
-    if(!this.checkSubject(subject)) return false;
-    if(!this.checkRole(getRolesFromUser(user))) return false;
-    if(!this.checkContext(user)) return false;
-    if(data){
+  public can(
+    action: Actions,
+    subject: string,
+    user?: object,
+    data?: object | object[]
+  ) {
+    if (!this.checkAction(action)) return false;
+    if (!this.checkSubject(subject)) return false;
+    if (!this.checkRole(getRolesFromUser(user))) return false;
+    if (!this.checkContext(user)) return false;
+    if (data) {
       const isArray = Array.isArray(data);
-      if(isArray && this.allowOne) return false;
-      if(!this.checkConditions(data, user)) return false;
+      if (isArray && this.allowOne) return false;
+      if (!this.checkConditions(data, user)) return false;
     }
     return true;
   }
- 
 }
