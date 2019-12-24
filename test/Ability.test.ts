@@ -13,6 +13,11 @@ describe('Test Ability class', () => {
     allowOne: true,
   });
   const allowAll = new Ability({ actions: '*', subject: '*' });
+  const withWhen = new Ability({
+    actions: '*',
+    subject: '*',
+    when: () => false,
+  });
 
   it('Create new Ability', () => {
     expect(readPost).toBeInstanceOf(Ability);
@@ -75,5 +80,9 @@ describe('Test Ability class', () => {
         allowAll.can('delete', 'atrial') &&
         allowAll.can('update', 'posts')
     ).toEqual(true);
+  });
+
+  it('Validate using when', () => {
+    expect(withWhen.can('read', 'posts')).toEqual(false);
   });
 });

@@ -15,6 +15,8 @@ export default class Ability {
   private roles?: string[];
   private userContext?: UserContext;
   private allowOne?: boolean;
+
+  private when?: () => {};
   constructor(payload: {
     actions: Actions | Actions[];
     subject: string | string[];
@@ -23,6 +25,7 @@ export default class Ability {
     roles?: string[];
     userContext?: UserContext;
     allowOne?: boolean;
+    when?: () => {};
   }) {
     this.actions = payload.actions;
     this.subject = payload.subject;
@@ -31,6 +34,7 @@ export default class Ability {
     this.roles = payload.roles;
     this.userContext = payload.userContext;
     this.allowOne = payload.allowOne;
+    this.when = payload.when;
   }
   public get() {
     return {
@@ -60,6 +64,9 @@ export default class Ability {
   public checkContext(user?: {}) {
     return checkUserContext(this.userContext, user);
   }
+  public checkWhen() {
+    return this.when ? this.when() : true;
+  }
 
   public can(
     action: Actions,
@@ -69,6 +76,7 @@ export default class Ability {
   ) {
     if (!this.checkAction(action)) return false;
     if (!this.checkSubject(subject)) return false;
+    if (!this.checkWhen()) return false;
     if (!this.checkRole(getRolesFromUser(user))) return false;
     if (!this.checkContext(user)) return false;
     if (data) {
