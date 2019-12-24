@@ -3,36 +3,37 @@ import {
   matchRoles,
   checkUserContext,
   checkConditions,
-  getRolesFromUser,
+  getParseConditions,
+  notAllowed,
+  validateData,
 } from './utils/utils';
-import { Actions, UserContext } from './types';
+import {
+  Actions,
+  UserContext,
+  When,
+  IAbility,
+  Roles,
+  Context,
+  IAbilityCanResponse,
+} from './types';
 
 export default class Ability {
   private actions: Actions | Actions[];
   private subject: string | string[];
   private fields?: string[];
   private conditions?: object | string;
-  private roles?: string[];
+  private roles?: Roles;
   private userContext?: UserContext;
   private allowOne?: boolean;
 
-  private when?: () => {};
-  constructor(payload: {
-    actions: Actions | Actions[];
-    subject: string | string[];
-    fields?: string[];
-    conditions?: object | string;
-    roles?: string[];
-    userContext?: UserContext;
-    allowOne?: boolean;
-    when?: () => {};
-  }) {
+  private when?: When;
+  constructor(payload: IAbility) {
     this.actions = payload.actions;
     this.subject = payload.subject;
     this.fields = payload.fields;
     this.conditions = payload.conditions;
     this.roles = payload.roles;
-    this.userContext = payload.userContext;
+    this.userContext = payload.user;
     this.allowOne = payload.allowOne;
     this.when = payload.when;
   }
@@ -55,35 +56,51 @@ export default class Ability {
     return checkInArray(name, this.subject);
   }
 
-  public checkRole(userRoles?: string[]) {
-    return matchRoles(userRoles, this.roles);
-  }
-  public checkConditions(data: object | object[], user?: object) {
-    return checkConditions(data, this.conditions, user);
-  }
-  public checkContext(user?: {}) {
-    return checkUserContext(this.userContext, user);
-  }
-  public checkWhen() {
-    return this.when ? this.when() : true;
+  public checkRole(roles?: Roles) {
+    return matchRoles(this.roles, roles);
   }
 
-  public can(
+  public checkUserContext(user?: {}) {
+    return checkUserContext(this.userContext, user);
+  }
+  public checkWhen(context?: Context) {
+    return this.when ? this.when(context) : true;
+  }
+
+  public check(
     action: Actions,
     subject: string,
-    user?: object,
-    data?: object | object[]
-  ) {
-    if (!this.checkAction(action)) return false;
-    if (!this.checkSubject(subject)) return false;
-    if (!this.checkWhen()) return false;
-    if (!this.checkRole(getRolesFromUser(user))) return false;
-    if (!this.checkContext(user)) return false;
+    context?: Context
+  ): IAbilityCanResponse {
+    if (!this.checkAction(action)) return notAllowed;
+    if (!this.checkSubject(subject)) return notAllowed;
+    if (!this.checkWhen(context)) return notAllowed;
+    const user = context && context.user;
+    const data = context && context.data;
+    const roles = context && context.roles;
+    if (!this.checkUserContext(user)) return notAllowed;
+    if (!this.checkRole(roles)) return notAllowed;
+    let parseConditions =
+      this.conditions && getParseConditions(this.conditions, context);
     if (data) {
       const isArray = Array.isArray(data);
-      if (isArray && this.allowOne) return false;
-      if (!this.checkConditions(data, user)) return false;
+      if (isArray && this.allowOne) return notAllowed;
+      if (parseConditions && !checkConditions(parseConditions, context))
+        return notAllowed;
     }
-    return true;
+    const response: IAbilityCanResponse = {
+      can: true,
+    };
+    if (parseConditions) {
+      response.where = parseConditions;
+    }
+    if (!data) {
+      response.validateData = validateData({
+        allowOne: this.allowOne,
+        context,
+        parseConditions: parseConditions || undefined,
+      });
+    }
+    return response;
   }
 }

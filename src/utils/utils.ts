@@ -1,35 +1,40 @@
-import { UserContext } from '../types';
+import {
+  UserContext,
+  Roles,
+  Conditions,
+  Context,
+  ParseConditions,
+  IAbilityCanResponse,
+} from '../types';
 import tinytim from './tinytim';
 import sift from 'sift';
-import { USER_ROLE_FIELD } from '../config';
+
+export const getAsArray = (value: string | string[]) => {
+  if (typeof value === 'string') return value.split(',');
+  return value;
+};
 
 export const checkInArray = (value: string, values: string | string[]) => {
   return values.includes(value) || values.includes('*');
 };
 
-export const matchRoles = (userRoles?: string[], ruleRoles?: string[]) => {
-  if (!ruleRoles || !ruleRoles.length) {
+export const matchRoles = (abilityRoles?: Roles, roles?: Roles) => {
+  if (!abilityRoles || !abilityRoles.length) {
     return true;
   }
-  if (!userRoles) {
+  if (!roles) {
     return false;
   }
-  return ruleRoles.some(role => userRoles.some(item => item === role));
+  return getAsArray(abilityRoles).some(role => roles.includes(role));
 };
 
 export const parseTemplate = (stringify: string, data: object) => {
   return JSON.parse(tinytim(stringify, data));
 };
 
-export const checkUserContext = async (
-  userContext?: UserContext,
-  user?: object
-) => {
+export const checkUserContext = (userContext?: UserContext, user?: object) => {
   if (!userContext) {
     return true;
-  }
-  if (typeof userContext === 'function') {
-    return userContext(user);
   }
   if (!user) {
     return false;
@@ -37,33 +42,55 @@ export const checkUserContext = async (
   if (userContext === true) {
     return true;
   }
-  const isStringify = typeof userContext === 'string';
-  const context = isStringify
-    ? parseTemplate(userContext as string, user)
-    : userContext;
-  return sift(context)(user);
+  return sift(userContext)(user);
 };
 
+export const getParseConditions = (
+  conditions: Conditions,
+  context?: Context
+): ParseConditions | null => {
+  const user = context && context.user;
+  const data = context && context.data;
+  const parseConditions =
+    typeof conditions === 'string'
+      ? parseTemplate(conditions as string, { user, data })
+      : conditions;
+  return parseConditions;
+};
 export const checkConditions = (
-  data: object | object[],
-  conditions?: object | string,
-  user?: object
+  parseConditions: ParseConditions,
+  context?: Context
 ) => {
-  if (!conditions) {
-    return true;
-  }
-
-  const isStringify = typeof conditions === 'string';
-  const conditionsToCheck = isStringify
-    ? parseTemplate(conditions as string, user || {})
-    : conditions;
+  const data = context && context.data;
   const isArray = Array.isArray(data);
   if (isArray) {
-    return (data as object[]).some(obj => sift(conditionsToCheck)(obj));
+    return (data as object[]).some(dataInArray =>
+      sift(parseConditions)(dataInArray)
+    );
   } else {
-    return sift(conditionsToCheck)(data);
+    return sift(parseConditions)(data);
   }
 };
 
-export const getRolesFromUser = (user?: object) =>
-  user && (user as any)[USER_ROLE_FIELD];
+export const notAllowed: IAbilityCanResponse = { can: false };
+
+export const validateData = ({
+  context,
+  parseConditions,
+  allowOne,
+}: {
+  context?: Context;
+  parseConditions?: ParseConditions;
+  allowOne?: boolean;
+}) => {
+  return (data: object | object[]) => {
+    if (!data) return false;
+    const isArray = Array.isArray(data);
+    if (isArray && allowOne) return false;
+    if (parseConditions) {
+      const contextWithData = context ? { ...context, data } : { data };
+      return checkConditions(parseConditions, contextWithData);
+    }
+    return true;
+  };
+};
