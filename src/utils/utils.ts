@@ -5,6 +5,7 @@ import {
   Context,
   ParseConditions,
   IAbilityCanResponse,
+  ValidateData,
 } from '../types';
 import tinytim from './tinytim';
 import sift from 'sift';
@@ -72,8 +73,6 @@ export const checkConditions = (
   }
 };
 
-export const notAllowed: IAbilityCanResponse = { can: false };
-
 export const validateData = ({
   context,
   parseConditions,
@@ -92,5 +91,20 @@ export const validateData = ({
       return checkConditions(parseConditions, contextWithData);
     }
     return true;
+  };
+};
+
+const defaultValidateData = () => false;
+export const getResponse = (
+  can: boolean,
+  message: string,
+  where?: object,
+  validateData?: ValidateData
+): IAbilityCanResponse => {
+  return {
+    can,
+    message,
+    where,
+    validateData: validateData || (defaultValidateData as ValidateData),
   };
 };

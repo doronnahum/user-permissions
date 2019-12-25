@@ -5,7 +5,6 @@ export type ParseConditions = {};
 export type Roles = string | string[];
 export type Context = {
   user?: object;
-  data?: object | object[];
   roles?: Roles;
 };
 export type When = (context?: Context) => boolean;
@@ -22,8 +21,10 @@ export interface IAbility {
   when?: When;
 }
 
+export type ValidateData = (data: object | object[]) => boolean;
 export interface IAbilityCanResponse {
   can: boolean;
+  message: string;
   where?: object;
-  validateData?: (data: object | object[]) => boolean;
+  validateData: ValidateData;
 }

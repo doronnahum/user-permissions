@@ -53,13 +53,13 @@ describe('Test Ability class', () => {
   });
 
   it('Validate read action + conditions', () => {
-    const checkResult = abilityToCreatePost.check('create', 'posts', {
-      data: {
-        title: 'lorem',
-        publish: true,
-      },
-    });
+    const data = {
+      title: 'lorem',
+      publish: true,
+    };
+    const checkResult = abilityToCreatePost.check('create', 'posts');
     expect(checkResult.can).toEqual(true);
+    expect(checkResult.validateData(data)).toEqual(true);
     expect(checkResult.where).toEqual(abilityToCreatePost.get().conditions);
   });
 
@@ -91,51 +91,51 @@ describe('Test Ability class', () => {
     const validData = { organization: 'Yellow' };
     const unValidData = { organization: 'Facebook' };
     expect(
-      abilityToCreatePostWithTemplateConditions.check('create', 'posts', {
-        user,
-        data: validData,
-      }).can
+      abilityToCreatePostWithTemplateConditions
+        .check('create', 'posts', {
+          user,
+        })
+        .validateData(validData)
     ).toEqual(true);
     expect(
-      abilityToCreatePostWithTemplateConditions.check('create', 'posts', {
-        user,
-        data: unValidData,
-      }).can
+      abilityToCreatePostWithTemplateConditions
+        .check('create', 'posts', {
+          user,
+        })
+        .validateData(unValidData)
     ).toEqual(false);
   });
 
   it('Validate read action + conditions - many', () => {
     expect(
-      abilityToCreatePost.check('create', 'posts', {
-        data: [{ title: 'lorem', publish: true }],
-      }).can
+      abilityToCreatePost
+        .check('create', 'posts')
+        .validateData([{ title: 'lorem', publish: true }])
     ).toEqual(true);
   });
 
   it('Validate read action + conditions - many when allowOne is true [should failed]', () => {
     expect(
-      abilityToCreateOnePost.check('create', 'posts', {
-        data: [{ title: 'lorem', publish: true }],
-      }).can
+      abilityToCreateOnePost
+        .check('create', 'posts')
+        .validateData([{ title: 'lorem', publish: true }])
     ).toEqual(false);
   });
 
   it('Validate read action + conditions [should failed]', () => {
     expect(
-      abilityToCreatePost.check('create', 'posts', {
-        data: {
-          title: 'lorem',
-          publish: false,
-        },
-      }).can
+      abilityToCreatePost.check('create', 'posts').validateData({
+        title: 'lorem',
+        publish: false,
+      })
     ).toEqual(false);
   });
 
   it('Validate read action +  conditions  - many [should failed]', () => {
     expect(
-      abilityToCreatePost.check('create', 'posts', {
-        data: [{ title: 'lorem', publish: false }],
-      }).can
+      abilityToCreatePost
+        .check('create', 'posts')
+        .validateData([{ title: 'lorem', publish: false }])
     ).toEqual(false);
   });
 
