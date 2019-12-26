@@ -6,6 +6,8 @@ import {
   ParseConditions,
   IAbilityCanResponse,
   ValidateData,
+  IAbility,
+  Actions
 } from '../types';
 import tinytim from './tinytim';
 import sift from 'sift';
@@ -51,18 +53,16 @@ export const getParseConditions = (
   context?: Context
 ): ParseConditions | null => {
   const user = context && context.user;
-  const data = context && context.data;
   const parseConditions =
     typeof conditions === 'string'
-      ? parseTemplate(conditions as string, { user, data })
+      ? parseTemplate(conditions as string, { user })
       : conditions;
   return parseConditions;
 };
 export const checkConditions = (
   parseConditions: ParseConditions,
-  context?: Context
+  data?: object | object[]
 ) => {
-  const data = context && context.data;
   const isArray = Array.isArray(data);
   if (isArray) {
     return (data as object[]).some(dataInArray =>
@@ -74,7 +74,6 @@ export const checkConditions = (
 };
 
 export const validateData = ({
-  context,
   parseConditions,
   allowOne,
 }: {
@@ -87,8 +86,7 @@ export const validateData = ({
     const isArray = Array.isArray(data);
     if (isArray && allowOne) return false;
     if (parseConditions) {
-      const contextWithData = context ? { ...context, data } : { data };
-      return checkConditions(parseConditions, contextWithData);
+      return checkConditions(parseConditions, data);
     }
     return true;
   };
@@ -108,3 +106,15 @@ export const getResponse = (
     validateData: validateData || (defaultValidateData as ValidateData),
   };
 };
+
+export const filterAbilities = (abilities: IAbility[], subject: string, action: Actions, context?: Context) => {
+  return abilities.filter(ability => {
+    return (
+      checkInArray(subject, ability.subjects)
+      && checkInArray(action, ability.actions)
+      && (!ability.when || ability.when(context))
+      && checkUserContext(ability.user, context && context.user)
+      && matchRoles(ability.roles, context && context.roles)
+    )
+  })
+}

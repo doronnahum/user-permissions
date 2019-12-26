@@ -1,42 +1,42 @@
 import Ability from '../src/Ability';
 
 describe('Test Ability class', () => {
-  const abilityToReadPost = new Ability({ actions: 'read', subject: 'posts' });
+  const abilityToReadPost = new Ability({ actions: 'read', subjects: 'posts' });
   const abilityToCreatePost = new Ability({
     actions: 'create',
-    subject: 'posts',
+    subjects: 'posts',
     conditions: { publish: true },
   });
   const abilityToCreatePostWithTemplateConditions = new Ability({
     actions: 'create',
-    subject: 'posts',
+    subjects: 'posts',
     conditions: '{ "organization": "{{ user.organization }}" }',
   });
   const abilityToCreateOnePost = new Ability({
     actions: 'create',
-    subject: 'posts',
+    subjects: 'posts',
     allowOne: true,
   });
-  const abilityToAll = new Ability({ actions: '*', subject: '*' });
+  const abilityToAll = new Ability({ actions: '*', subjects: '*' });
   const abilityWithWhen = new Ability({
     actions: '*',
-    subject: '*',
+    subjects: '*',
     when: () => false,
   });
   const abilityToAdmin = new Ability({
     actions: '*',
-    subject: '*',
+    subjects: '*',
     roles: 'admin',
   });
 
   const abilityToUser = new Ability({
     actions: '*',
-    subject: '*',
+    subjects: '*',
     user: true,
   });
   const abilityToUserWithPayment = new Ability({
     actions: '*',
-    subject: '*',
+    subjects: '*',
     user: { payment: { $exists: true } },
   });
 
@@ -139,7 +139,7 @@ describe('Test Ability class', () => {
     ).toEqual(false);
   });
 
-  it('Validate when actions & subject is *', () => {
+  it('Validate when actions & subjects is *', () => {
     expect(
       abilityToAll.check('read', 'posts').can &&
         abilityToAll.check('create', 'comments').can &&

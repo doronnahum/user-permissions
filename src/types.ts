@@ -12,7 +12,7 @@ export type UserContext = boolean | object;
 
 export interface IAbility {
   actions: Actions | Actions[];
-  subject: string | string[];
+  subjects: string | string[];
   fields?: string[];
   conditions?: Conditions;
   roles?: Roles;

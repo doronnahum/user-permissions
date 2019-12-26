@@ -27,7 +27,7 @@ const {
 } = messageTypes;
 export default class Ability {
   private actions: Actions | Actions[];
-  private subject: string | string[];
+  private subjects: string | string[];
   private fields?: string[];
   private conditions?: object | string;
   private roles?: Roles;
@@ -37,7 +37,7 @@ export default class Ability {
   private when?: When;
   constructor(payload: IAbility) {
     this.actions = payload.actions;
-    this.subject = payload.subject;
+    this.subjects = payload.subjects;
     this.fields = payload.fields;
     this.conditions = payload.conditions;
     this.roles = payload.roles;
@@ -48,7 +48,7 @@ export default class Ability {
   public get() {
     return {
       actions: this.actions,
-      subject: this.subject,
+      subjects: this.subjects,
       // tslint:disable-next-line: object-literal-sort-keys
       fields: this.fields,
       conditions: this.conditions,
@@ -56,52 +56,34 @@ export default class Ability {
       userContext: this.userContext,
     };
   }
-  public checkAction(name: Actions) {
-    return checkInArray(name, this.actions);
-  }
-
-  public checkSubject(name: string) {
-    return checkInArray(name, this.subject);
-  }
-
-  public checkRole(roles?: Roles) {
-    return matchRoles(this.roles, roles);
-  }
-
-  public checkUserContext(user?: {}) {
-    return checkUserContext(this.userContext, user);
-  }
-  public checkWhen(context?: Context) {
-    return this.when ? this.when(context) : true;
-  }
 
   public check(
     action: Actions,
     subject: string,
     context?: Context
   ): IAbilityCanResponse {
-    if (!this.checkSubject(subject)) {
+    if (!checkInArray(subject, this.subjects)) {
       return getResponse(
         false,
         getMessage(NOT_ABLE_BY_SUBJECT, subject, action)
       );
     }
-    if (!this.checkAction(action)) {
+    if (!checkInArray(action, this.actions)) {
       return getResponse(
         false,
         getMessage(NOT_ABLE_BY_ACTION, subject, action)
       );
     }
-    if (!this.checkWhen(context)) {
+    if (this.when && !this.when(context)) {
       return getResponse(false, getMessage(NOT_ABLE_BY_WHEN, subject, action));
     }
-    if (!this.checkUserContext(context && context.user)) {
+    if (!checkUserContext(this.userContext, context && context.user)) {
       return getResponse(
         false,
         getMessage(NOT_ABLE_BY_USER_CONTEXT, subject, action)
       );
     }
-    if (!this.checkRole(context && context.roles)) {
+    if (!matchRoles(this.roles, context && context.roles)) {
       return getResponse(false, getMessage(NOT_ABLE_BY_ROLE, subject, action));
     }
     let parseConditions =
@@ -112,7 +94,6 @@ export default class Ability {
       parseConditions || undefined,
       validateData({
         allowOne: this.allowOne,
-        context,
         parseConditions: parseConditions || undefined,
       })
     );

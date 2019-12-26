@@ -9,22 +9,22 @@ export const messageTypes = {
 };
 export let renderMessageByTypes = (
   type: string,
-  subject: string,
+  subjects: string,
   action: string
 ) => {
   switch (type) {
     case messageTypes.VALID:
       return `Valid`;
     case messageTypes.NOT_ABLE_BY_SUBJECT:
-      return `You are not able to use ${subject}`;
+      return `You are not able to use ${subjects}`;
     case messageTypes.NOT_ABLE_BY_ACTION:
-      return `You are not able to ${action} ${subject}`;
+      return `You are not able to ${action} ${subjects}`;
     case messageTypes.NOT_ABLE_BY_ROLE:
     case messageTypes.NOT_ABLE_BY_USER_CONTEXT:
     case messageTypes.NOT_ABLE_BY_WHEN:
       return 'You are not able, missing permission';
     case messageTypes.NOT_ABLE_BY_DATA:
-      return `You can't to ${action} ${subject} in this data structure`;
+      return `You can't to ${action} ${subjects} in this data structure`;
     default:
       return 'You are not able';
   }
@@ -36,7 +36,7 @@ export let renderMessageByTypes = (
  * @param handler
  */
 export const setRenderMessageByTypes = (
-  handler: (type: string, subject: string, action: string) => string
+  handler: (type: string, subjects: string, action: string) => string
 ) => {
   if (typeof handler === 'function') {
     renderMessageByTypes = handler;
