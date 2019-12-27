@@ -1,32 +1,7 @@
-import {
-  checkInArray,
-  matchRoles,
-  checkUserContext,
-  getParseConditions,
-  getResponse,
-  validateData,
-  filterAbilities
-} from './utils/utils';
-import {
-  Actions,
-  UserContext,
-  When,
-  IAbility,
-  Roles,
-  Context,
-  IAbilityCanResponse,
-} from './types';
-import { renderMessageByTypes as getMessage, messageTypes } from './messages';
+import { checkAbilities, filterData } from './utils/utils';
+import { Actions, IAbility, Context, IAbilitiesCanResponse } from './types';
 import Ability from 'Ability';
 
-const {
-  NOT_ABLE_BY_SUBJECT,
-  NOT_ABLE_BY_ACTION,
-  NOT_ABLE_BY_WHEN,
-  NOT_ABLE_BY_USER_CONTEXT,
-  NOT_ABLE_BY_ROLE,
-  VALID,
-} = messageTypes;
 export default class Abilities {
   private abilities: IAbility[];
   constructor(abilities: Ability[]) {
@@ -34,7 +9,7 @@ export default class Abilities {
   }
   public get() {
     return {
-      abilities: this.abilities
+      abilities: this.abilities,
     };
   }
 
@@ -42,25 +17,24 @@ export default class Abilities {
     action: Actions,
     subject: string,
     context?: Context
-  ): IAbilityCanResponse {
-    const abilities = filterAbilities(this.abilities, subject, action, context)
-    if(abilities.length === 0){
-      getResponse(
-        false,
-        getMessage(NOT_ABLE_BY_ACTION, subjects, action)
-      )
-    }
-    let parseConditions =
-      this.conditions && getParseConditions(this.conditions, context);
-    return getResponse(
-      true,
-      getMessage(VALID, subjects, action),
-      parseConditions || undefined,
-      validateData({
-        allowOne: this.allowOne,
-        context,
-    subjectsseConditions: parseConditions || undefined,
-      })
+  ): IAbilitiesCanResponse {
+    const checkAbilitiesResponse = checkAbilities(
+      this.abilities,
+      subject,
+      action,
+      context
     );
+    const {fields, fieldsWithConditions, where, allowOne} = checkAbilitiesResponse;
+    checkAbilitiesResponse.validateData({
+      allowOne,
+      parseConditions: where || undefined,
+    })
+    if(fields || fieldsWithConditions){
+      checkAbilitiesResponse.filterData = filterData({
+        fields,
+        fieldsWithConditions
+      })
+    }
+    return checkAbilitiesResponse;
   }
 }

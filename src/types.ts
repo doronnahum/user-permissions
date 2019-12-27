@@ -22,9 +22,21 @@ export interface IAbility {
 }
 
 export type ValidateData = (data: object | object[]) => boolean;
+export type FilterData = (data: object | object[]) => object | object[];
 export interface IAbilityCanResponse {
   can: boolean;
   message: string;
   where?: object;
   validateData: ValidateData;
+}
+
+export type FieldsWithConditions = { conditions: object; fields: string[] };
+
+export interface IAbilitiesCanResponse extends IAbilityCanResponse {
+  $select: null | string[];
+  fields: null | string[];
+  fieldsWithConditions: null | FieldsWithConditions[];
+
+  allowOne: boolean,
+  filterData: FilterData,
 }
