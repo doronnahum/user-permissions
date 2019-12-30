@@ -1,4 +1,5 @@
-import { checkAbilities, filterData } from './utils/utils';
+import { checkAbilities } from './utils/utils';
+import { filterData } from './utils/filterData';
 import { Actions, IAbility, Context, IAbilitiesCanResponse } from './types';
 import Ability from 'Ability';
 
@@ -24,16 +25,21 @@ export default class Abilities {
       action,
       context
     );
-    const {fields, fieldsWithConditions, where, allowOne} = checkAbilitiesResponse;
+    const {
+      fields,
+      fieldsWithConditions,
+      where,
+      allowOne,
+    } = checkAbilitiesResponse;
     checkAbilitiesResponse.validateData({
       allowOne,
       parseConditions: where || undefined,
-    })
-    if(fields || fieldsWithConditions){
+    });
+    if (fields || fieldsWithConditions) {
       checkAbilitiesResponse.filterData = filterData({
         fields,
-        fieldsWithConditions
-      })
+        fieldsWithConditions,
+      });
     }
     return checkAbilitiesResponse;
   }

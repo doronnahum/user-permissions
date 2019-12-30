@@ -9,7 +9,6 @@ import {
   IAbility,
   Actions,
   IAbilitiesCanResponse,
-  FieldsWithConditions
 } from '../types';
 import tinytim from './tinytim';
 import sift from 'sift';
@@ -207,12 +206,12 @@ export const checkAbilities = (
     if (!can) return;
 
     response.can = true;
-    
-    if(ability.allowOne){
-      if(!allowMany){
+
+    if (ability.allowOne) {
+      if (!allowMany) {
         response.allowOne = true;
       }
-    }else{
+    } else {
       allowMany = true;
     }
     const parseConditions =
@@ -228,7 +227,6 @@ export const checkAbilities = (
       allParseConditione = allParseConditione || [];
       allParseConditione.push(parseConditions);
     }
-
 
     if (!allowAllFields) {
       if (parseConditions && ability.fields) {
@@ -247,30 +245,31 @@ export const checkAbilities = (
     checkAbilitiesResponseHelpers.buildSelectFieldsAndFilterFieldsWithConditions(
       response
     );
-    if(!allowWithoutConditions && allParseConditione && (allParseConditione as []).length > 0){
-      response.where = {'$or': allParseConditione};
+    if (
+      !allowWithoutConditions &&
+      allParseConditione &&
+      (allParseConditione as []).length > 0
+    ) {
+      response.where = { $or: allParseConditione };
     }
   }
-  return (response as IAbilitiesCanResponse);
+  return response as IAbilitiesCanResponse;
 };
 
-
-export const filterData = (fields :null | string[], fieldsWithConditions: null | FieldsWithConditions[]) => {
-  return (data: {} | {}[]) => {
-    const isArray = Array.isArray(data);
-    if(isArray){
-
-    }else{
-      const allowedFields = fields ? [...fields] : [];
-      if(fieldsWithConditions){
-        fieldsWithConditions.forEach(item => {
-          if(checkConditions(item.conditions)){
-            allowedFields.push(...item.fields);
-          }
-        })
-      }
-      
-    }
-
+export const deletePropertyPath = (obj: {}, path: string) => {
+  if (!obj || !path) {
+    return;
   }
-}
+  let splitPath: string[] = path.split('.');
+
+  for (var i = 0; i < splitPath.length - 1; i++) {
+    obj = (obj as any)[splitPath[i]];
+
+    if (typeof obj === 'undefined') {
+      return;
+    }
+  }
+
+  const pathToDelete = splitPath.pop();
+  if (typeof pathToDelete === 'string') delete (obj as any)[pathToDelete];
+};

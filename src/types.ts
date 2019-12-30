@@ -37,6 +37,6 @@ export interface IAbilitiesCanResponse extends IAbilityCanResponse {
   fields: null | string[];
   fieldsWithConditions: null | FieldsWithConditions[];
 
-  allowOne: boolean,
-  filterData: FilterData,
+  allowOne: boolean;
+  filterData: FilterData;
 }

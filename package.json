@@ -32,12 +32,14 @@
   "devDependencies": {
     "@types/dot": "^1.1.3",
     "@types/jest": "^24.0.24",
+    "@types/pick-deep": "^1.0.0",
     "husky": "^3.1.0",
     "tsdx": "^0.12.0",
     "tslib": "^1.10.0",
     "typescript": "^3.7.4"
   },
   "dependencies": {
+    "pick-deep": "^1.0.0",
     "sift": "^9.0.4"
   }
 }
