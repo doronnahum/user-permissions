@@ -1,8 +1,9 @@
-export type Actions = 'create' | 'read' | 'update' | 'delete' | '*';
+export type Actions = string | string[];
+export type Subjects = string | string[];
 
 export type Conditions = string | {};
 export type ParseConditions = {};
-export type Roles = string | string[];
+export type Roles = string[];
 export type Context = {
   user?: object;
   roles?: Roles;
@@ -10,12 +11,15 @@ export type Context = {
 export type When = (context?: Context) => boolean;
 export type UserContext = boolean | object;
 
-export interface IAbility {
-  actions: Actions | Actions[];
+export interface IAbility extends IAbilityOptions {
+  actions: Actions;
   subjects: string | string[];
-  fields?: string[];
-  conditions?: Conditions;
   roles?: Roles;
+  conditions?: Conditions;
+}
+
+export interface IAbilityOptions {
+  fields?: string[];
   user?: UserContext;
   allowOne?: boolean;
   when?: When;

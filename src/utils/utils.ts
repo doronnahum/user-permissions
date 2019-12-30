@@ -8,7 +8,9 @@ import {
   ValidateData,
   IAbility,
   Actions,
+  Subjects,
   IAbilitiesCanResponse,
+  IAbilityOptions,
 } from '../types';
 import tinytim from './tinytim';
 import sift from 'sift';
@@ -112,7 +114,7 @@ export const getResponse = (
 const abilityCanCheck = (
   ability: IAbility,
   subject: string,
-  action: Actions,
+  action: string,
   context?: Context
 ) => {
   return (
@@ -181,7 +183,7 @@ const checkAbilitiesResponseHelpers = {
 export const checkAbilities = (
   abilities: IAbility[],
   subject: string,
-  action: Actions,
+  action: string,
   context?: Context
 ): IAbilitiesCanResponse => {
   let allowAllFields = false;
@@ -272,4 +274,79 @@ export const deletePropertyPath = (obj: {}, path: string) => {
 
   const pathToDelete = splitPath.pop();
   if (typeof pathToDelete === 'string') delete (obj as any)[pathToDelete];
+};
+
+const validateActions = (actions: Actions) => {
+  if (typeof actions !== 'string' && !Array.isArray(actions)) {
+    throw new Error('actions is required and must be string | string[]');
+  }
+};
+
+const validateSubject = (subjects: Subjects) => {
+  if (typeof subjects !== 'string' && !Array.isArray(subjects)) {
+    throw new Error('subjects is required and must be string | string[]');
+  }
+};
+
+const validateRoles = (roles?: Roles) => {
+  if (
+    roles &&
+    (!Array.isArray(roles) || roles.some(role => typeof role !== 'string'))
+  ) {
+    throw new Error('roles must be type of string[]');
+  }
+};
+
+const validateConditions = (conditions?: object | string) => {
+  if (conditions) {
+    if (typeof conditions !== 'object' && typeof conditions !== 'string') {
+      throw new Error('conditions must be type of string | object');
+    }
+  }
+};
+
+const optionsValidKeys = 'allowOne,fields,user,when';
+const validateOptions = (options?: IAbilityOptions) => {
+  if (options) {
+    if (typeof options !== 'object') {
+      throw new Error('options must be type of object');
+    }
+    if (options.allowOne && typeof options.allowOne !== 'boolean') {
+      throw new Error('options.allowOne must be type of boolean');
+    }
+    if (
+      options.fields &&
+      (!Array.isArray(options.fields) ||
+        options.fields.some(field => typeof field !== 'string'))
+    ) {
+      throw new Error('options.fields must be type of string[]');
+    }
+    if (
+      options.user &&
+      typeof options.user !== 'boolean' &&
+      typeof options.user !== 'object'
+    ) {
+      throw new Error('options.fields must be type of boolean | object');
+    }
+    if (options.when && typeof options.when !== 'function') {
+      throw new Error('options.when must be type of function');
+    }
+    if (Object.keys(options).some(key => !optionsValidKeys.includes(key))) {
+      console.warn('options can be include one of ' + optionsValidKeys);
+    }
+  }
+};
+
+export const validateAbilityArguments = (
+  actions: Actions,
+  subjects: Subjects,
+  roles?: Roles,
+  conditions?: object | string,
+  options?: IAbilityOptions
+) => {
+  validateActions(actions);
+  validateSubject(subjects);
+  validateRoles(roles);
+  validateConditions(conditions);
+  validateOptions(options);
 };

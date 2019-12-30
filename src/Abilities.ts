@@ -1,6 +1,6 @@
 import { checkAbilities } from './utils/utils';
 import { filterData } from './utils/filterData';
-import { Actions, IAbility, Context, IAbilitiesCanResponse } from './types';
+import { IAbility, Context, IAbilitiesCanResponse } from './types';
 import Ability from 'Ability';
 
 export default class Abilities {
@@ -15,7 +15,7 @@ export default class Abilities {
   }
 
   public check(
-    action: Actions,
+    action: string,
     subject: string,
     context?: Context
   ): IAbilitiesCanResponse {

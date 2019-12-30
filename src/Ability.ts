@@ -5,15 +5,16 @@ import {
   getParseConditions,
   getResponse,
   validateData,
+  validateAbilityArguments,
 } from './utils/utils';
 import {
   Actions,
   UserContext,
   When,
-  IAbility,
   Roles,
   Context,
   IAbilityCanResponse,
+  IAbilityOptions,
 } from './types';
 import { renderMessageByTypes as getMessage, messageTypes } from './messages';
 
@@ -26,24 +27,31 @@ const {
   VALID,
 } = messageTypes;
 export default class Ability {
-  private actions: Actions | Actions[];
+  private actions: Actions;
   private subjects: string | string[];
-  private fields?: string[];
-  private conditions?: object | string;
+
   private roles?: Roles;
+  private conditions?: object | string;
+  private fields?: string[];
   private userContext?: UserContext;
   private allowOne?: boolean;
-
   private when?: When;
-  constructor(payload: IAbility) {
-    this.actions = payload.actions;
-    this.subjects = payload.subjects;
-    this.fields = payload.fields;
-    this.conditions = payload.conditions;
-    this.roles = payload.roles;
-    this.userContext = payload.user;
-    this.allowOne = payload.allowOne;
-    this.when = payload.when;
+  constructor(
+    actions: Actions,
+    subjects: string | string[],
+    roles?: Roles,
+    conditions?: object | string,
+    options?: IAbilityOptions
+  ) {
+    validateAbilityArguments(actions, subjects, roles, conditions, options);
+    this.actions = actions;
+    this.subjects = subjects;
+    this.roles = roles;
+    this.conditions = conditions;
+    this.fields = options && options.fields;
+    this.userContext = options && options.user;
+    this.allowOne = options && options.allowOne;
+    this.when = options && options.when;
   }
   public get() {
     return {
@@ -58,7 +66,7 @@ export default class Ability {
   }
 
   public check(
-    action: Actions,
+    action: string,
     subject: string,
     context?: Context
   ): IAbilityCanResponse {

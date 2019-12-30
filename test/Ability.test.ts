@@ -1,42 +1,32 @@
 import Ability from '../src/Ability';
 
 describe('Test Ability class', () => {
-  const abilityToReadPost = new Ability({ actions: 'read', subjects: 'posts' });
-  const abilityToCreatePost = new Ability({
-    actions: 'create',
-    subjects: 'posts',
-    conditions: { publish: true },
+  const abilityToReadPost = new Ability('read', 'posts');
+  const abilityToCreatePost = new Ability('create', 'posts', undefined, {
+    publish: true,
   });
-  const abilityToCreatePostWithTemplateConditions = new Ability({
-    actions: 'create',
-    subjects: 'posts',
-    conditions: '{ "organization": "{{ user.organization }}" }',
-  });
-  const abilityToCreateOnePost = new Ability({
-    actions: 'create',
-    subjects: 'posts',
-    allowOne: true,
-  });
-  const abilityToAll = new Ability({ actions: '*', subjects: '*' });
-  const abilityWithWhen = new Ability({
-    actions: '*',
-    subjects: '*',
+  const abilityToCreatePostWithTemplateConditions = new Ability(
+    'create',
+    'posts',
+    undefined,
+    '{ "organization": "{{ user.organization }}" }'
+  );
+  const abilityToCreateOnePost = new Ability(
+    'create',
+    'posts',
+    undefined,
+    undefined,
+    { allowOne: true }
+  );
+  const abilityToAll = new Ability('*', '*');
+  const abilityWithWhen = new Ability('*', '*', undefined, undefined, {
     when: () => false,
   });
-  const abilityToAdmin = new Ability({
-    actions: '*',
-    subjects: '*',
-    roles: 'admin',
-  });
-
-  const abilityToUser = new Ability({
-    actions: '*',
-    subjects: '*',
+  const abilityToAdmin = new Ability('*', '*', ['admin']);
+  const abilityToUser = new Ability('*', '*', undefined, undefined, {
     user: true,
   });
-  const abilityToUserWithPayment = new Ability({
-    actions: '*',
-    subjects: '*',
+  const abilityToUserWithPayment = new Ability('*', '*', undefined, undefined, {
     user: { payment: { $exists: true } },
   });
 
@@ -155,10 +145,10 @@ describe('Test Ability class', () => {
   it('Validate using roles', () => {
     expect(abilityToAdmin.check('read', 'posts').can).toEqual(false);
     expect(
-      abilityToAdmin.check('read', 'posts', { roles: 'admin' }).can
+      abilityToAdmin.check('read', 'posts', { roles: ['admin'] }).can
     ).toEqual(true);
     expect(
-      abilityToAdmin.check('read', 'posts', { roles: 'guest' }).can
+      abilityToAdmin.check('read', 'posts', { roles: ['guest'] }).can
     ).toEqual(false);
   });
 
