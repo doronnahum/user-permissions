@@ -4,8 +4,6 @@ import {
   Conditions,
   Context,
   ParseConditions,
-  IAbilityCanResponse,
-  ValidateData,
   IAbility,
   Actions,
   Subjects,
@@ -39,17 +37,17 @@ export const parseTemplate = (stringify: string, data: object) => {
   return JSON.parse(tinytim(stringify, data));
 };
 
-export const checkUserContext = (userContext?: UserContext, user?: object) => {
-  if (!userContext) {
+export const checkUserContext = (user?: UserContext, userData?: object) => {
+  if (!user) {
     return true;
   }
-  if (!user) {
+  if (!userData) {
     return false;
   }
-  if (userContext === true) {
+  if (user === true) {
     return true;
   }
-  return sift(userContext)(user);
+  return sift(user)(userData);
 };
 
 export const getParseConditions = (
@@ -97,32 +95,21 @@ export const validateData = ({
 };
 
 const defaultValidateData = () => false;
-export const getResponse = (
-  can: boolean,
-  message: string,
-  where?: object,
-  validateData?: ValidateData
-): IAbilityCanResponse => {
-  return {
-    can,
-    message,
-    where,
-    validateData: validateData || (defaultValidateData as ValidateData),
-  };
-};
 
 const abilityCanCheck = (
   ability: IAbility,
-  subject: string,
   action: string,
+  subject: string,
   context?: Context
 ) => {
+  const userData = context ? context.user : undefined;
+  const roles = context ? context.roles : undefined;
   return (
-    checkInArray(subject, ability.subjects) &&
     checkInArray(action, ability.actions) &&
+    checkInArray(subject, ability.subjects) &&
     (!ability.when || ability.when(context)) &&
-    checkUserContext(ability.user, context && context.user) &&
-    matchRoles(ability.roles, context && context.roles)
+    checkUserContext(ability.user, userData) &&
+    matchRoles(ability.roles, roles)
   );
 };
 
@@ -182,8 +169,8 @@ const checkAbilitiesResponseHelpers = {
 
 export const checkAbilities = (
   abilities: IAbility[],
-  subject: string,
   action: string,
+  subject: string,
   context?: Context
 ): IAbilitiesCanResponse => {
   let allowAllFields = false;
@@ -203,7 +190,7 @@ export const checkAbilities = (
   };
 
   abilities.forEach(ability => {
-    const can = abilityCanCheck(ability, subject, action, context);
+    const can = abilityCanCheck(ability, action, subject, context);
 
     if (!can) return;
 
@@ -216,12 +203,14 @@ export const checkAbilities = (
     } else {
       allowMany = true;
     }
-    const parseConditions =
-      ability.conditions && getParseConditions(ability.conditions, context);
-
-    if (!parseConditions && !ability.fields) {
-      allowAllFields = true;
+    let parseConditions;
+    if (ability.conditions && !allParseConditione) {
+      parseConditions = getParseConditions(ability.conditions, context);
+    } else {
       allowWithoutConditions = true;
+    }
+    if (!ability.conditions && !ability.fields) {
+      allowAllFields = true;
       checkAbilitiesResponseHelpers.onEmptyFieldsAndConditions(response);
     }
 

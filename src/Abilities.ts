@@ -1,4 +1,4 @@
-import { checkAbilities } from './utils/utils';
+import { checkAbilities, validateData } from './utils/utils';
 import { filterData } from './utils/filterData';
 import { IAbility, Context, IAbilitiesCanResponse } from './types';
 import Ability from 'Ability';
@@ -6,6 +6,7 @@ import Ability from 'Ability';
 export default class Abilities {
   private abilities: IAbility[];
   constructor(abilities: Ability[]) {
+    // Convert abilities class to object
     this.abilities = abilities.map(ability => ability.get());
   }
   public get() {
@@ -21,25 +22,28 @@ export default class Abilities {
   ): IAbilitiesCanResponse {
     const checkAbilitiesResponse = checkAbilities(
       this.abilities,
-      subject,
       action,
+      subject,
       context
     );
     const {
+      can,
       fields,
       fieldsWithConditions,
       where,
       allowOne,
     } = checkAbilitiesResponse;
-    checkAbilitiesResponse.validateData({
-      allowOne,
-      parseConditions: where || undefined,
-    });
-    if (fields || fieldsWithConditions) {
-      checkAbilitiesResponse.filterData = filterData({
-        fields,
-        fieldsWithConditions,
+    if (can) {
+      checkAbilitiesResponse.validateData = validateData({
+        allowOne,
+        parseConditions: where || undefined,
       });
+      if (fields || fieldsWithConditions) {
+        checkAbilitiesResponse.filterData = filterData(
+          fields,
+          fieldsWithConditions
+        );
+      }
     }
     return checkAbilitiesResponse;
   }

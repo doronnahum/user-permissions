@@ -39,20 +39,19 @@ const filterObject = (
   data: {},
   fields: null | string[],
   fieldsWithConditions: null | FieldsWithConditions[]
-) => {
+): object => {
   const allowedFields = getAllowedFields(data, fields, fieldsWithConditions);
   const { positiveFields, negativeFields } = splitFields(allowedFields);
   const filteredObj = pick(data, positiveFields);
-  return negativeFields.forEach(field =>
-    deletePropertyPath(filteredObj, field)
-  );
+  negativeFields.forEach(field => deletePropertyPath(filteredObj, field));
+  return filteredObj;
 };
 
 export const filterData = (
   fields: null | string[],
   fieldsWithConditions: null | FieldsWithConditions[]
 ) => {
-  return (data: {} | {}[]) => {
+  return (data: object | object[]): object | object[] => {
     const isArray = Array.isArray(data);
     if (isArray) {
       return (data as {}[]).map(item =>

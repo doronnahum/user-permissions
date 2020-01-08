@@ -26,7 +26,7 @@ export interface IAbilityOptions {
 }
 
 export type ValidateData = (data: object | object[]) => boolean;
-export type FilterData = (data: object | object[]) => object | object[];
+
 export interface IAbilityCanResponse {
   can: boolean;
   message: string;
@@ -42,5 +42,5 @@ export interface IAbilitiesCanResponse extends IAbilityCanResponse {
   fieldsWithConditions: null | FieldsWithConditions[];
 
   allowOne: boolean;
-  filterData: FilterData;
+  filterData: (data: object | object[]) => object | object[];
 }
