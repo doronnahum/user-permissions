@@ -20,31 +20,21 @@ export default class Abilities {
     subject: string,
     context?: Context
   ): IAbilitiesCanResponse {
-    const checkAbilitiesResponse = checkAbilities(
-      this.abilities,
-      action,
-      subject,
-      context
-    );
-    const {
-      can,
-      fields,
-      fieldsWithConditions,
-      where,
-      allowOne,
-    } = checkAbilitiesResponse;
-    if (can) {
-      checkAbilitiesResponse.validateData = validateData({
-        allowOne,
-        parseConditions: where || undefined,
+    const response = checkAbilities(this.abilities, action, subject, context);
+    if (response.can) {
+      // Add ValidateData method to the response
+      response.validateData = validateData({
+        allowOne: response.allowOne,
+        parseConditions: response.where || undefined,
       });
-      if (fields || fieldsWithConditions) {
-        checkAbilitiesResponse.filterData = filterData(
-          fields,
-          fieldsWithConditions
+      // Add FilterField method to the response
+      if (response.fields || response.fieldsWithConditions) {
+        response.filterData = filterData(
+          response.fields,
+          response.fieldsWithConditions
         );
       }
     }
-    return checkAbilitiesResponse;
+    return response;
   }
 }

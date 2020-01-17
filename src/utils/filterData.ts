@@ -42,7 +42,10 @@ const filterObject = (
 ): object => {
   const allowedFields = getAllowedFields(data, fields, fieldsWithConditions);
   const { positiveFields, negativeFields } = splitFields(allowedFields);
-  const filteredObj = pick(data, positiveFields);
+  const filteredObj =
+    positiveFields.length === 0 || positiveFields.includes('*')
+      ? data
+      : pick(data, positiveFields);
   negativeFields.forEach(field => deletePropertyPath(filteredObj, field));
   return filteredObj;
 };

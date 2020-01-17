@@ -39,6 +39,7 @@
     "typescript": "^3.7.4"
   },
   "dependencies": {
+    "clone": "^2.1.2",
     "pick-deep": "^1.0.0",
     "sift": "^9.0.4"
   }
