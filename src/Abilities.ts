@@ -21,17 +21,29 @@ export default class Abilities {
     context?: Context
   ): IAbilitiesCanResponse {
     const response = checkAbilities(this.abilities, action, subject, context);
+    // When checkAbilities is pass then add helpers to handle data
     if (response.can) {
-      // Add ValidateData method to the response
+      /**
+       * validateData
+       * -------------------
+       * Validate data check the data with the abilities conditions
+       * can handle this check(...).validateData(data) : boolean
+       */
       response.validateData = validateData({
         allowOne: response.allowOne,
         parseConditions: response.where || undefined,
       });
-      // Add FilterField method to the response
-      if (response.fields || response.fieldsWithConditions) {
+      /**
+       * filterData
+       * -------------------
+       * When one or more of the rules includes a fields then filterData
+       * can handle this check(...).filterData(data) : filteredData
+       */
+      const hasFieldsToSelect = (response.fields && response.fields.length) || (response.fieldsWithConditions && response.fieldsWithConditions.length)
+      if (hasFieldsToSelect) {
         response.filterData = filterData(
-          response.fields,
-          response.fieldsWithConditions
+          response.fields, // ['user', '-user.password']
+          response.fieldsWithConditions // 
         );
       }
     }
