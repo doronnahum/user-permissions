@@ -4,7 +4,7 @@ export default [
     isActive: true,
     name: 'Barbara Dodson',
     location: {
-      'state:': 'lorem',
+      state: 'lorem',
       address: '870 Decatur Street, Belfair, Tennessee, 8468',
     },
   },
@@ -14,7 +14,7 @@ export default [
     name: 'Kristen Wagner',
     location: {
       address: '132 Monitor Street, Villarreal, Northern Mariana Islands, 9384',
-      'state:': 'ipsum',
+      state: 'ipsum',
     },
   },
 ];

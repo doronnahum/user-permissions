@@ -1,7 +1,7 @@
 import { checkConditions } from './utils';
 import { FieldsWithConditions } from '../types';
 import pick from 'pick-deep';
-import clone from 'clone';
+
 import { deletePropertyPath } from './utils';
 const splitFields = (allowedFields: string[]) => {
   const positiveFields: string[] = [];
@@ -54,8 +54,7 @@ export const filterData = (
   fields: null | string[],
   fieldsWithConditions: null | FieldsWithConditions[]
 ) => {
-  return (_data: object | object[]): object | object[] => {
-    const data = clone(_data);
+  return (data: object | object[]): object | object[] => {
     const isArray = Array.isArray(data);
     if (isArray) {
       return (data as {}[]).map(item =>

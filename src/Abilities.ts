@@ -39,11 +39,13 @@ export default class Abilities {
        * When one or more of the rules includes a fields then filterData
        * can handle this check(...).filterData(data) : filteredData
        */
-      const hasFieldsToSelect = (response.fields && response.fields.length) || (response.fieldsWithConditions && response.fieldsWithConditions.length)
+      const hasFieldsToSelect =
+        (response.fields && response.fields.length) ||
+        (response.fieldsWithConditions && response.fieldsWithConditions.length);
       if (hasFieldsToSelect) {
         response.filterData = filterData(
           response.fields, // ['user', '-user.password']
-          response.fieldsWithConditions // 
+          response.fieldsWithConditions //
         );
       }
     }

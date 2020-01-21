@@ -4,8 +4,10 @@
 
 import _fakeData from './utils/fakeData';
 import { filterData } from '../src/utils/filterData';
+import clone from 'clone';
 
-const getFakeData = () => _fakeData;
+const getFakeData = () => clone(_fakeData);
+
 describe('test filter data function', () => {
   it('Should by return a function', () => {
     expect(typeof filterData([], [])).toEqual('function');
@@ -39,5 +41,39 @@ describe('test filter data function', () => {
     expect(dataItem.name).not.toEqual(undefined);
     expect(dataItem.isActive).not.toEqual(undefined);
     expect(dataItem._id).toEqual(undefined);
+  });
+  it('test positive deep field', () => {
+    const fakeData = getFakeData();
+    const _filterData = filterData(['location.address'], null);
+    const dataItem = (_filterData(fakeData) as any)[0];
+    expect(dataItem.name).toEqual(undefined);
+    expect(dataItem.isActive).toEqual(undefined);
+    expect(dataItem._id).toEqual(undefined);
+    expect(dataItem.location.state).toEqual(undefined);
+    expect(dataItem.location.address).not.toEqual(undefined);
+  });
+  it('test positive deep nested field', () => {
+    const fakeData = getFakeData();
+    const _filterData = filterData(['location.address', 'location'], null);
+    const dataItem = (_filterData(fakeData) as any)[0];
+    expect(dataItem.location.state).not.toEqual(undefined);
+    expect(dataItem.location.address).not.toEqual(undefined);
+  });
+  it('test positive deep nested field', () => {
+    const fakeData = getFakeData();
+    const _filterData = filterData(['location', 'location.address'], null);
+    const dataItem = (_filterData(fakeData) as any)[0];
+    expect(dataItem.location.state).not.toEqual(undefined);
+    expect(dataItem.location.address).not.toEqual(undefined);
+  });
+  it('test negative deep field', () => {
+    const fakeData = getFakeData();
+    const _filterData = filterData(['-location.address'], null);
+    const dataItem = (_filterData(fakeData) as any)[0];
+    expect(dataItem.name).not.toEqual(undefined);
+    expect(dataItem.isActive).not.toEqual(undefined);
+    expect(dataItem._id).not.toEqual(undefined);
+    expect(dataItem.location.state).not.toEqual(undefined);
+    expect(dataItem.location.address).toEqual(undefined);
   });
 });
