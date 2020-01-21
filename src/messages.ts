@@ -9,8 +9,8 @@ export const messageTypes = {
 };
 export let renderMessageByTypes = (
   type: string,
-  subjects: string,
-  action: string
+  action: string,
+  subjects: string
 ) => {
   switch (type) {
     case messageTypes.VALID:

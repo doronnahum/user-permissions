@@ -34,6 +34,10 @@ describe('Test Abilities class', () => {
   it('Create new Abilities', () => {
     expect(appAbilities).toBeInstanceOf(Abilities);
   });
+  it('test Abilities.get', () => {
+    expect(typeof appAbilities.get).toEqual('function');
+    expect(typeof appAbilities.get()).toEqual('object');
+  });
   it('anonymous user can read post', () => {
     expect(appAbilities.check('read', 'posts').can).toBe(true);
   });

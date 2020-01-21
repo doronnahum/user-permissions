@@ -180,7 +180,7 @@ export const checkAbilities = (
 
   const response: IAbilitiesCanResponse = {
     can: false,
-    message: getMessage(messageTypes.NOT_ABLE_BY_ACTION, subject, action),
+    message: getMessage(messageTypes.NOT_ABLE_BY_ACTION, action, subject),
     $select: null,
     fields: null,
     fieldsWithConditions: null,
