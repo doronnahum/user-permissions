@@ -57,7 +57,7 @@ export const getParseConditions = (
   const user = context && context.user;
   const parseConditions =
     typeof conditions === 'string'
-      ? parseTemplate(conditions as string, { user })
+      ? parseTemplate(conditions, { user })
       : conditions;
   return parseConditions;
 };
@@ -244,14 +244,14 @@ export const checkAbilities = (
       response.where = { $or: allParseConditione };
     }
   }
-  return response as IAbilitiesCanResponse;
+  return response;
 };
 
 export const deletePropertyPath = (obj: {}, path: string) => {
   if (!obj || !path) {
     return;
   }
-  let splitPath: string[] = path.split('.');
+  const splitPath: string[] = path.split('.');
 
   for (var i = 0; i < splitPath.length - 1; i++) {
     obj = (obj as any)[splitPath[i]];

@@ -24,7 +24,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>34/34</span>
+                <span class='fraction'>33/33</span>
             </div>
         
             
@@ -45,7 +45,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>31/31</span>
+                <span class='fraction'>30/30</span>
             </div>
         
             
@@ -121,12 +121,10 @@
 <a name='L63'></a><a href='#L63'>63</a>
 <a name='L64'></a><a href='#L64'>64</a>
 <a name='L65'></a><a href='#L65'>65</a>
-<a name='L66'></a><a href='#L66'>66</a>
-<a name='L67'></a><a href='#L67'>67</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">2x</span>
+<a name='L66'></a><a href='#L66'>66</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-yes">21x</span>
 <span class="cline-any cline-yes">21x</span>
@@ -188,72 +186,71 @@
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { checkConditions } from './utils';
-import { FieldsWithConditions } from '../types';
-import pick from 'pick-deep';
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { checkConditions, deletePropertyPath } from './utils'
+import { FieldsWithConditions } from '../types'
+import pick from 'pick-deep'
 &nbsp;
-import { deletePropertyPath } from './utils';
 const splitFields = (allowedFields: string[]) =&gt; {
-  const positiveFields: string[] = [];
-  const negativeFields: string[] = [];
+  const positiveFields: string[] = []
+  const negativeFields: string[] = []
   allowedFields.forEach(field =&gt; {
     if (field.startsWith('-')) {
-      negativeFields.push(field.substr(1));
+      negativeFields.push(field.substr(1))
     } else {
-      positiveFields.push(field);
+      positiveFields.push(field)
     }
-  });
+  })
   return {
     positiveFields,
-    negativeFields,
-  };
-};
+    negativeFields
+  }
+}
 &nbsp;
 const getAllowedFields = (
   data: {},
   fields: null | string[],
   fieldsWithConditions: null | FieldsWithConditions[]
 ) =&gt; {
-  const allowedFields = fields ? [...fields] : <span class="branch-1 cbranch-no" title="branch not covered" >[];</span>
+  const allowedFields = fields ? [...fields] : <span class="branch-1 cbranch-no" title="branch not covered" >[]</span>
   if (fieldsWithConditions) {
     fieldsWithConditions.forEach(item =&gt; {
       if (checkConditions(item.conditions, data)) {
-        allowedFields.push(...item.fields);
+        allowedFields.push(...item.fields)
       }
-    });
+    })
   }
-  return allowedFields;
-};
+  return allowedFields
+}
 &nbsp;
 const filterObject = (
   data: {},
   fields: null | string[],
   fieldsWithConditions: null | FieldsWithConditions[]
 ): object =&gt; {
-  const allowedFields = getAllowedFields(data, fields, fieldsWithConditions);
-  const { positiveFields, negativeFields } = splitFields(allowedFields);
+  const allowedFields = getAllowedFields(data, fields, fieldsWithConditions)
+  const { positiveFields, negativeFields } = splitFields(allowedFields)
   const filteredObj =
     positiveFields.length === 0 || positiveFields.includes('*')
       ? data
-      : pick(data, positiveFields);
-  negativeFields.forEach(field =&gt; deletePropertyPath(filteredObj, field));
-  return filteredObj;
-};
+      : pick(data, positiveFields)
+  negativeFields.forEach(field =&gt; deletePropertyPath(filteredObj, field))
+  return filteredObj
+}
 &nbsp;
 export const filterData = (
   fields: null | string[],
   fieldsWithConditions: null | FieldsWithConditions[]
 ) =&gt; {
   return (data: object | object[]): object | object[] =&gt; {
-    const isArray = Array.isArray(data);
+    const isArray = Array.isArray(data)
     if (isArray) {
-      return (data as {}[]).map(item =&gt;
+      return (data as Array&lt;{}&gt;).map(item =&gt;
         filterObject(item, fields, fieldsWithConditions)
-      );
+      )
     }
-    return filterObject(data, fields, fieldsWithConditions);
-  };
-};
+    return filterObject(data, fields, fieldsWithConditions)
+  }
+}
 &nbsp;</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
@@ -261,7 +258,7 @@ export const filterData = (
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Tue Jan 21 2020 22:44:00 GMT+0200 (Israel Standard Time)
+                at Tue Jan 21 2020 22:50:21 GMT+0200 (Israel Standard Time)
             </div>
         </div>
         <script src="..\..\prettify.js"></script>

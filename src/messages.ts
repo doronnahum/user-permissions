@@ -14,7 +14,7 @@ export let renderMessageByTypes = (
 ) => {
   switch (type) {
     case messageTypes.VALID:
-      return `Valid`;
+      return 'Valid';
     case messageTypes.NOT_ABLE_BY_SUBJECT:
       return `You are not able to use ${subjects}`;
     case messageTypes.NOT_ABLE_BY_ACTION:

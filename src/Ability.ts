@@ -9,15 +9,15 @@ import {
 } from './types';
 
 export default class Ability {
-  private actions: Actions;
-  private subjects: string | string[];
+  private readonly actions: Actions;
+  private readonly subjects: string | string[];
 
-  private roles?: Roles;
-  private conditions?: object | string;
-  private fields?: string[];
-  private user?: UserContext;
-  private allowOne?: boolean;
-  private when?: When;
+  private readonly roles?: Roles;
+  private readonly conditions?: object | string;
+  private readonly fields?: string[];
+  private readonly user?: UserContext;
+  private readonly allowOne?: boolean;
+  private readonly when?: When;
   constructor(
     actions: Actions,
     subjects: string | string[],
@@ -35,6 +35,7 @@ export default class Ability {
     this.allowOne = options && options.allowOne;
     this.when = options && options.when;
   }
+
   public get(): IAbility {
     return {
       actions: this.actions,

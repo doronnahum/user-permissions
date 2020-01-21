@@ -13,6 +13,7 @@
     "test-with-coverage": "tsdx test --coverage && cat ./coverage/lcov.info | codacy-coverage",
     "lint": "tsdx lint",
     "format": "tsdx lint --fix",
+    "clean": "tsdx lint --fix && ts-standard --fix",
     "prepare": "tsdx build"
   },
   "peerDependencies": {},
@@ -38,6 +39,7 @@
     "clone": "2.1.2",
     "codacy-coverage": "^3.4.0",
     "husky": "4.0.10",
+    "ts-standard": "^3.1.0",
     "tsdx": "^0.12.3",
     "tslib": "1.10.0",
     "typescript": "3.7.5"

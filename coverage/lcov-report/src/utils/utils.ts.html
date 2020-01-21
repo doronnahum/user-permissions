@@ -748,93 +748,93 @@
   Actions,
   Subjects,
   IAbilitiesCanResponse,
-  IAbilityOptions,
-} from '../types';
-import tinytim from './tinytim';
-import sift from 'sift';
-import { renderMessageByTypes as getMessage, messageTypes } from '../messages';
+  IAbilityOptions
+} from '../types'
+import tinytim from './tinytim'
+import sift from 'sift'
+import { renderMessageByTypes as getMessage, messageTypes } from '../messages'
 &nbsp;
 export const getAsArray = (value: string | string[]) =&gt; {
-  <span class="missing-if-branch" title="if path not taken" >I</span>if (typeof value === 'string') <span class="cstat-no" title="statement not covered" >return value.split(',');</span>
-  return value;
-};
+  <span class="missing-if-branch" title="if path not taken" >I</span>if (typeof value === 'string') <span class="cstat-no" title="statement not covered" >return value.split(',')</span>
+  return value
+}
 &nbsp;
 export const checkInArray = (value: string, values: string | string[]) =&gt; {
-  return values.includes(value) || values.includes('*');
-};
+  return values.includes(value) || values.includes('*')
+}
 &nbsp;
 export const matchRoles = (abilityRoles?: Roles, roles?: Roles) =&gt; {
   if (!abilityRoles || !abilityRoles.length) {
-    return true;
+    return true
   }
   if (!roles) {
-    return false;
+    return false
   }
-  return getAsArray(abilityRoles).some(role =&gt; roles.includes(role));
-};
+  return getAsArray(abilityRoles).some(role =&gt; roles.includes(role))
+}
 &nbsp;
 export const parseTemplate = (stringify: string, data: object) =&gt; {
-  return JSON.parse(tinytim(stringify, data));
-};
+  return JSON.parse(tinytim(stringify, data))
+}
 &nbsp;
 export const checkUserContext = (user?: UserContext, userData?: object) =&gt; {
   if (!user) {
-    return true;
+    return true
   }
   if (!userData) {
-    return false;
+    return false
   }
   if (user === true) {
-    return true;
+    return true
   }
-  return sift(user)(userData);
-};
+  return sift(user)(userData)
+}
 &nbsp;
 export const getParseConditions = (
   conditions: Conditions,
   context?: Context
 ): ParseConditions | null =&gt; {
-  const user = context &amp;&amp; context.user;
+  const user = context &amp;&amp; context.user
   const parseConditions =
     typeof conditions === 'string'
-      ? parseTemplate(conditions as string, { user })
-      : <span class="branch-1 cbranch-no" title="branch not covered" >conditions;</span>
-  return parseConditions;
-};
+      ? parseTemplate(conditions, { user })
+      : <span class="branch-1 cbranch-no" title="branch not covered" >conditions</span>
+  return parseConditions
+}
 export const checkConditions = (
   parseConditions: ParseConditions,
   data?: object | object[]
 ) =&gt; {
-  const isArray = Array.isArray(data);
+  const isArray = Array.isArray(data)
   <span class="missing-if-branch" title="if path not taken" >I</span>if (isArray) {
 <span class="cstat-no" title="statement not covered" >    return (data as object[]).some(<span class="fstat-no" title="function not covered" >dataInArray </span>=&gt;</span>
 <span class="cstat-no" title="statement not covered" >      sift(parseConditions)(dataInArray)</span>
-    );
+    )
   } else {
-    return sift(parseConditions)(data);
+    return sift(parseConditions)(data)
   }
-};
+}
 &nbsp;
 export const validateData = ({
   parseConditions,
-  allowOne,
+  allowOne
 }: {
-  context?: Context;
-  parseConditions?: ParseConditions;
-  allowOne?: boolean;
+  context?: Context
+  parseConditions?: ParseConditions
+  allowOne?: boolean
 }) =&gt; {
   return (data: object | object[]) =&gt; {
-    <span class="missing-if-branch" title="if path not taken" >I</span>if (!data) <span class="cstat-no" title="statement not covered" >return false;</span>
-    const isArray = Array.isArray(data);
-    <span class="missing-if-branch" title="if path not taken" >I</span>if (isArray &amp;&amp; <span class="branch-1 cbranch-no" title="branch not covered" >allowOne)</span> <span class="cstat-no" title="statement not covered" >return false;</span>
+    <span class="missing-if-branch" title="if path not taken" >I</span>if (!data) <span class="cstat-no" title="statement not covered" >return false</span>
+    const isArray = Array.isArray(data)
+    <span class="missing-if-branch" title="if path not taken" >I</span>if (isArray &amp;&amp; <span class="branch-1 cbranch-no" title="branch not covered" >allowOne)</span> <span class="cstat-no" title="statement not covered" >return false</span>
     <span class="missing-if-branch" title="else path not taken" >E</span>if (parseConditions) {
-      return checkConditions(parseConditions, data);
+      return checkConditions(parseConditions, data)
     }
-<span class="cstat-no" title="statement not covered" >    return true;</span>
-  };
-};
+<span class="cstat-no" title="statement not covered" >    return true</span>
+  }
+}
 &nbsp;
-const defaultValidateData = <span class="fstat-no" title="function not covered" >() =&gt; <span class="cstat-no" title="statement not covered" >f</span>alse;</span>
+const defaultValidateData = <span class="fstat-no" title="function not covered" >() =&gt; <span class="cstat-no" title="statement not covered" >f</span>alse</span>
 &nbsp;
 const abilityCanCheck = (
   ability: IAbility,
@@ -842,70 +842,70 @@ const abilityCanCheck = (
   subject: string,
   context?: Context
 ) =&gt; {
-  const userData = context ? context.user : undefined;
-  const roles = context ? context.roles : undefined;
+  const userData = context ? context.user : undefined
+  const roles = context ? context.roles : undefined
   return (
     checkInArray(action, ability.actions) &amp;&amp;
     checkInArray(subject, ability.subjects) &amp;&amp;
     (!ability.when || <span class="branch-3 cbranch-no" title="branch not covered" >ability.when(context))</span> &amp;&amp;
     checkUserContext(ability.user, userData) &amp;&amp;
     matchRoles(ability.roles, roles)
-  );
-};
+  )
+}
 &nbsp;
 const checkAbilitiesResponseHelpers = {
   onEmptyFieldsAndConditions: (response: IAbilitiesCanResponse) =&gt; {
-    response.$select = null;
-    response.fields = null;
-    response.fieldsWithConditions = null;
+    response.$select = null
+    response.fields = null
+    response.fieldsWithConditions = null
   },
   addFieldsWithConditions: (
     response: IAbilitiesCanResponse,
     ability: IAbility,
     parseConditions: {}
   ) =&gt; {
-    response.fieldsWithConditions = response.fieldsWithConditions || [];
-    response.$select = response.$select || [];
+    response.fieldsWithConditions = response.fieldsWithConditions || []
+    response.$select = response.$select || []
     response.fieldsWithConditions.push({
       fields: ability.fields as string[],
-      conditions: parseConditions,
-    });
+      conditions: parseConditions
+    })
   },
   addFields: (response: IAbilitiesCanResponse, ability: IAbility) =&gt; {
-    response.fields = response.fields || [];
-    response.fields.push(...(ability.fields as string[]));
+    response.fields = response.fields || []
+    response.fields.push(...(ability.fields as string[]))
   },
   buildSelectFieldsAndFilterFieldsWithConditions: (
     response: IAbilitiesCanResponse
   ) =&gt; {
     if (response.fields || response.fieldsWithConditions) {
-      response.$select = [];
+      response.$select = []
       <span class="missing-if-branch" title="else path not taken" >E</span>if (response.fields) {
-        response.$select.push(...response.fields);
+        response.$select.push(...response.fields)
       }
       if (response.fieldsWithConditions) {
         <span class="missing-if-branch" title="else path not taken" >E</span>if (response.fields) {
-          const fieldsWithConditions = [];
+          const fieldsWithConditions = []
           response.fieldsWithConditions.forEach(item =&gt; {
             const fields = item.fields.filter(
               field =&gt; !(response.fields as string[]).includes(field)
-            );
+            )
             <span class="missing-if-branch" title="else path not taken" >E</span>if (fields.length) {
               fieldsWithConditions.push({
                 fields: fields,
-                conditions: item.conditions,
-              });
+                conditions: item.conditions
+              })
             }
-          });
+          })
         } else {
 <span class="cstat-no" title="statement not covered" >          response.fieldsWithConditions.forEach(<span class="fstat-no" title="function not covered" >item </span>=&gt; {</span>
-<span class="cstat-no" title="statement not covered" >            (response.$select as string[]).push(...item.fields);</span>
-          });
+<span class="cstat-no" title="statement not covered" >            (response.$select as string[]).push(...item.fields)</span>
+          })
         }
       }
     }
-  },
-};
+  }
+}
 &nbsp;
 export const checkAbilities = (
   abilities: IAbility[],
@@ -913,10 +913,10 @@ export const checkAbilities = (
   subject: string,
   context?: Context
 ): IAbilitiesCanResponse =&gt; {
-  let allowAllFields = false;
-  let allowWithoutConditions = false;
-  let allParseConditione: null | object[] = null;
-  let allowMany = false;
+  let allowAllFields = false
+  let allowWithoutConditions = false
+  let allParseConditione: null | object[] = null
+  let allowMany = false
 &nbsp;
   const response: IAbilitiesCanResponse = {
     can: false,
@@ -926,37 +926,37 @@ export const checkAbilities = (
     fieldsWithConditions: null,
     validateData: defaultValidateData,
     allowOne: false,
-    filterData: <span class="fstat-no" title="function not covered" >res </span>=&gt; <span class="cstat-no" title="statement not covered" >res,</span>
-  };
+    filterData: <span class="fstat-no" title="function not covered" >res </span>=&gt; <span class="cstat-no" title="statement not covered" >res</span>
+  }
 &nbsp;
   abilities.forEach(ability =&gt; {
-    const can = abilityCanCheck(ability, action, subject, context);
+    const can = abilityCanCheck(ability, action, subject, context)
 &nbsp;
-    if (!can) return;
+    if (!can) return
 &nbsp;
-    response.can = true;
+    response.can = true
 &nbsp;
     <span class="missing-if-branch" title="if path not taken" >I</span>if (ability.allowOne) {
 <span class="cstat-no" title="statement not covered" >      if (!allowMany) {</span>
-<span class="cstat-no" title="statement not covered" >        response.allowOne = true;</span>
+<span class="cstat-no" title="statement not covered" >        response.allowOne = true</span>
       }
     } else {
-      allowMany = true;
+      allowMany = true
     }
-    let parseConditions;
+    let parseConditions
     if (ability.conditions &amp;&amp; !allParseConditione) {
-      parseConditions = getParseConditions(ability.conditions, context);
+      parseConditions = getParseConditions(ability.conditions, context)
     } else {
-      allowWithoutConditions = true;
+      allowWithoutConditions = true
     }
     if (!ability.conditions &amp;&amp; !ability.fields) {
-      allowAllFields = true;
-      checkAbilitiesResponseHelpers.onEmptyFieldsAndConditions(response);
+      allowAllFields = true
+      checkAbilitiesResponseHelpers.onEmptyFieldsAndConditions(response)
     }
 &nbsp;
     if (!allowWithoutConditions &amp;&amp; parseConditions) {
-      allParseConditione = allParseConditione || [];
-      allParseConditione.push(parseConditions);
+      allParseConditione = allParseConditione || []
+      allParseConditione.push(parseConditions)
     }
 &nbsp;
     if (!allowAllFields) {
@@ -965,106 +965,106 @@ export const checkAbilities = (
           response,
           ability,
           parseConditions
-        );
+        )
       } else if (!parseConditions &amp;&amp; ability.fields) {
-        checkAbilitiesResponseHelpers.addFields(response, ability);
+        checkAbilitiesResponseHelpers.addFields(response, ability)
       }
     }
-  });
+  })
   if (response.can) {
-    response.message = getMessage(messageTypes.VALID, subject, action);
+    response.message = getMessage(messageTypes.VALID, subject, action)
     checkAbilitiesResponseHelpers.buildSelectFieldsAndFilterFieldsWithConditions(
       response
-    );
+    )
     if (
       !allowWithoutConditions &amp;&amp;
       allParseConditione &amp;&amp;
       (allParseConditione as []).length &gt; 0
     ) {
-      response.where = { $or: allParseConditione };
+      response.where = { $or: allParseConditione }
     }
   }
-  return response as IAbilitiesCanResponse;
-};
+  return response
+}
 &nbsp;
 export const deletePropertyPath = (obj: {}, path: string) =&gt; {
   <span class="missing-if-branch" title="if path not taken" >I</span>if (!obj || !path) {
-<span class="cstat-no" title="statement not covered" >    return;</span>
+<span class="cstat-no" title="statement not covered" >    return</span>
   }
-  let splitPath: string[] = path.split('.');
+  const splitPath: string[] = path.split('.')
 &nbsp;
   for (var i = 0; i &lt; splitPath.length - 1; i++) {
-    obj = (obj as any)[splitPath[i]];
+    obj = (obj as any)[splitPath[i]]
 &nbsp;
     <span class="missing-if-branch" title="if path not taken" >I</span>if (typeof obj === 'undefined') {
-<span class="cstat-no" title="statement not covered" >      return;</span>
+<span class="cstat-no" title="statement not covered" >      return</span>
     }
   }
 &nbsp;
-  const pathToDelete = splitPath.pop();
-  <span class="missing-if-branch" title="else path not taken" >E</span>if (typeof pathToDelete === 'string') delete (obj as any)[pathToDelete];
-};
+  const pathToDelete = splitPath.pop()
+  <span class="missing-if-branch" title="else path not taken" >E</span>if (typeof pathToDelete === 'string') delete (obj as any)[pathToDelete]
+}
 &nbsp;
 const validateActions = (actions: Actions) =&gt; {
   <span class="missing-if-branch" title="if path not taken" >I</span>if (typeof actions !== 'string' &amp;&amp; <span class="branch-1 cbranch-no" title="branch not covered" >!Array.isArray(actions))</span> {
-<span class="cstat-no" title="statement not covered" >    throw new Error('actions is required and must be string | string[]');</span>
+<span class="cstat-no" title="statement not covered" >    throw new Error('actions is required and must be string | string[]')</span>
   }
-};
+}
 &nbsp;
 const validateSubject = (subjects: Subjects) =&gt; {
   <span class="missing-if-branch" title="if path not taken" >I</span>if (typeof subjects !== 'string' &amp;&amp; <span class="branch-1 cbranch-no" title="branch not covered" >!Array.isArray(subjects))</span> {
-<span class="cstat-no" title="statement not covered" >    throw new Error('subjects is required and must be string | string[]');</span>
+<span class="cstat-no" title="statement not covered" >    throw new Error('subjects is required and must be string | string[]')</span>
   }
-};
+}
 &nbsp;
 const validateRoles = (roles?: Roles) =&gt; {
   <span class="missing-if-branch" title="if path not taken" >I</span>if (
     roles &amp;&amp;
     (!Array.isArray(roles) || roles.some(role =&gt; typeof role !== 'string'))
   ) {
-<span class="cstat-no" title="statement not covered" >    throw new Error('roles must be type of string[]');</span>
+<span class="cstat-no" title="statement not covered" >    throw new Error('roles must be type of string[]')</span>
   }
-};
+}
 &nbsp;
 const validateConditions = (conditions?: object | string) =&gt; {
   if (conditions) {
     <span class="missing-if-branch" title="if path not taken" >I</span>if (typeof conditions !== 'object' &amp;&amp; typeof conditions !== 'string') {
-<span class="cstat-no" title="statement not covered" >      throw new Error('conditions must be type of string | object');</span>
+<span class="cstat-no" title="statement not covered" >      throw new Error('conditions must be type of string | object')</span>
     }
   }
-};
+}
 &nbsp;
-const optionsValidKeys = 'allowOne,fields,user,when';
+const optionsValidKeys = 'allowOne,fields,user,when'
 const validateOptions = (options?: IAbilityOptions) =&gt; {
   if (options) {
     <span class="missing-if-branch" title="if path not taken" >I</span>if (typeof options !== 'object') {
-<span class="cstat-no" title="statement not covered" >      throw new Error('options must be type of object');</span>
+<span class="cstat-no" title="statement not covered" >      throw new Error('options must be type of object')</span>
     }
     <span class="missing-if-branch" title="if path not taken" >I</span>if (options.allowOne &amp;&amp; <span class="branch-1 cbranch-no" title="branch not covered" >typeof options.allowOne !== 'boolean')</span> {
-<span class="cstat-no" title="statement not covered" >      throw new Error('options.allowOne must be type of boolean');</span>
+<span class="cstat-no" title="statement not covered" >      throw new Error('options.allowOne must be type of boolean')</span>
     }
     <span class="missing-if-branch" title="if path not taken" >I</span>if (
       options.fields &amp;&amp;
       (!Array.isArray(options.fields) ||
         options.fields.some(field =&gt; typeof field !== 'string'))
     ) {
-<span class="cstat-no" title="statement not covered" >      throw new Error('options.fields must be type of string[]');</span>
+<span class="cstat-no" title="statement not covered" >      throw new Error('options.fields must be type of string[]')</span>
     }
     <span class="missing-if-branch" title="if path not taken" >I</span>if (
       options.user &amp;&amp;
       typeof options.user !== 'boolean' &amp;&amp;
       typeof options.user !== 'object'
     ) {
-<span class="cstat-no" title="statement not covered" >      throw new Error('options.fields must be type of boolean | object');</span>
+<span class="cstat-no" title="statement not covered" >      throw new Error('options.fields must be type of boolean | object')</span>
     }
     <span class="missing-if-branch" title="if path not taken" >I</span>if (options.when &amp;&amp; <span class="branch-1 cbranch-no" title="branch not covered" >typeof options.when !== 'function')</span> {
-<span class="cstat-no" title="statement not covered" >      throw new Error('options.when must be type of function');</span>
+<span class="cstat-no" title="statement not covered" >      throw new Error('options.when must be type of function')</span>
     }
     <span class="missing-if-branch" title="if path not taken" >I</span>if (Object.keys(options).some(key =&gt; !optionsValidKeys.includes(key))) {
-<span class="cstat-no" title="statement not covered" >      console.warn('options can be include one of ' + optionsValidKeys);</span>
+<span class="cstat-no" title="statement not covered" >      console.warn('options can be include one of ' + optionsValidKeys)</span>
     }
   }
-};
+}
 &nbsp;
 export const validateAbilityArguments = (
   actions: Actions,
@@ -1073,12 +1073,12 @@ export const validateAbilityArguments = (
   conditions?: object | string,
   options?: IAbilityOptions
 ) =&gt; {
-  validateActions(actions);
-  validateSubject(subjects);
-  validateRoles(roles);
-  validateConditions(conditions);
-  validateOptions(options);
-};
+  validateActions(actions)
+  validateSubject(subjects)
+  validateRoles(roles)
+  validateConditions(conditions)
+  validateOptions(options)
+}
 &nbsp;</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
@@ -1086,7 +1086,7 @@ export const validateAbilityArguments = (
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Tue Jan 21 2020 22:44:00 GMT+0200 (Israel Standard Time)
+                at Tue Jan 21 2020 22:50:21 GMT+0200 (Israel Standard Time)
             </div>
         </div>
         <script src="..\..\prettify.js"></script>

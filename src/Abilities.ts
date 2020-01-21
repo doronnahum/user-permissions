@@ -4,11 +4,12 @@ import { IAbility, Context, IAbilitiesCanResponse } from './types';
 import Ability from 'Ability';
 
 export default class Abilities {
-  private abilities: IAbility[];
+  private readonly abilities: IAbility[];
   constructor(abilities: Ability[]) {
     // Convert abilities class to object
     this.abilities = abilities.map(ability => ability.get());
   }
+
   public get() {
     return {
       abilities: this.abilities,

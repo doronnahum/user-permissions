@@ -13,10 +13,10 @@ export default function(
 ) {
   // Merge data into the template string
   return template.replace(pattern, function(_tag, token): any {
-    var path = token.split('.'),
-      len = path.length,
-      lookup = data,
-      i = 0;
+    var path = token.split('.');
+    var len = path.length;
+    var lookup = data;
+    var i = 0;
 
     for (; i < len; i++) {
       lookup = (lookup as any)[path[i]];

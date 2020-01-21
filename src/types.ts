@@ -2,12 +2,12 @@ export type Actions = string | string[];
 export type Subjects = string | string[];
 
 export type Conditions = string | {};
-export type ParseConditions = {};
+export interface ParseConditions {}
 export type Roles = string[];
-export type Context = {
+export interface Context {
   user?: object;
   roles?: Roles;
-};
+}
 export type When = (context?: Context) => boolean;
 export type UserContext = boolean | object;
 
@@ -34,7 +34,10 @@ export interface IAbilityCanResponse {
   validateData: ValidateData;
 }
 
-export type FieldsWithConditions = { conditions: object; fields: string[] };
+export interface FieldsWithConditions {
+  conditions: object;
+  fields: string[];
+}
 
 export interface IAbilitiesCanResponse extends IAbilityCanResponse {
   $select: null | string[];
