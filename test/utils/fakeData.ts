@@ -5,8 +5,8 @@ export default [
     name: 'Barbara Dodson',
     location: {
       state: 'lorem',
-      address: '870 Decatur Street, Belfair, Tennessee, 8468',
-    },
+      address: '870 Decatur Street, Belfair, Tennessee, 8468'
+    }
   },
   {
     _id: '5e20aa5a138c4a2dc2caf3e2',
@@ -14,7 +14,7 @@ export default [
     name: 'Kristen Wagner',
     location: {
       address: '132 Monitor Street, Villarreal, Northern Mariana Islands, 9384',
-      state: 'ipsum',
-    },
-  },
-];
+      state: 'ipsum'
+    }
+  }
+]

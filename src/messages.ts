@@ -5,8 +5,8 @@ export const messageTypes = {
   NOT_ABLE_BY_USER_CONTEXT: 'NOT_ABLE_BY_USER_CONTEXT',
   NOT_ABLE_BY_WHEN: 'NOT_ABLE_BY_WHEN',
   NOT_ABLE_BY_DATA: 'NOT_ABLE_BY_DATA',
-  VALID: 'VALID',
-};
+  VALID: 'VALID'
+}
 export let renderMessageByTypes = (
   type: string,
   action: string,
@@ -14,21 +14,21 @@ export let renderMessageByTypes = (
 ) => {
   switch (type) {
     case messageTypes.VALID:
-      return 'Valid';
+      return 'Valid'
     case messageTypes.NOT_ABLE_BY_SUBJECT:
-      return `You are not able to use ${subjects}`;
+      return `You are not able to use ${subjects}`
     case messageTypes.NOT_ABLE_BY_ACTION:
-      return `You are not able to ${action} ${subjects}`;
+      return `You are not able to ${action} ${subjects}`
     case messageTypes.NOT_ABLE_BY_ROLE:
     case messageTypes.NOT_ABLE_BY_USER_CONTEXT:
     case messageTypes.NOT_ABLE_BY_WHEN:
-      return 'You are not able, missing permission';
+      return 'You are not able, missing permission'
     case messageTypes.NOT_ABLE_BY_DATA:
-      return `You can't to ${action} ${subjects} in this data structure`;
+      return `You can't to ${action} ${subjects} in this data structure`
     default:
-      return 'You are not able';
+      return 'You are not able'
   }
-};
+}
 
 /**
  * @function setRenderMessageByTypes
@@ -39,8 +39,8 @@ export const setRenderMessageByTypes = (
   handler: (type: string, subjects: string, action: string) => string
 ) => {
   if (typeof handler === 'function') {
-    renderMessageByTypes = handler;
-    return 'done';
+    renderMessageByTypes = handler
+    return 'done'
   }
-  throw new Error('handler must be a function');
-};
+  throw new Error('handler must be a function')
+}

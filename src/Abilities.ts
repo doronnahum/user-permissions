@@ -1,27 +1,27 @@
-import { checkAbilities, validateData } from './utils/utils';
-import { filterData } from './utils/filterData';
-import { IAbility, Context, IAbilitiesCanResponse } from './types';
-import Ability from 'Ability';
+import { checkAbilities, validateData } from './utils/utils'
+import { filterData } from './utils/filterData'
+import { IAbility, Context, IAbilitiesCanResponse } from './types'
+import Ability from 'Ability'
 
 export default class Abilities {
-  private readonly abilities: IAbility[];
-  constructor(abilities: Ability[]) {
+  private readonly abilities: IAbility[]
+  constructor (abilities: Ability[]) {
     // Convert abilities class to object
-    this.abilities = abilities.map(ability => ability.get());
+    this.abilities = abilities.map(ability => ability.get())
   }
 
-  public get() {
+  public get () {
     return {
-      abilities: this.abilities,
-    };
+      abilities: this.abilities
+    }
   }
 
-  public check(
+  public check (
     action: string,
     subject: string,
     context?: Context
   ): IAbilitiesCanResponse {
-    const response = checkAbilities(this.abilities, action, subject, context);
+    const response = checkAbilities(this.abilities, action, subject, context)
     // When checkAbilities is pass then add helpers to handle data
     if (response.can) {
       /**
@@ -32,8 +32,8 @@ export default class Abilities {
        */
       response.validateData = validateData({
         allowOne: response.allowOne,
-        parseConditions: response.where || undefined,
-      });
+        parseConditions: response.where || undefined
+      })
       /**
        * filterData
        * -------------------
@@ -42,14 +42,14 @@ export default class Abilities {
        */
       const hasFieldsToSelect =
         (response.fields && response.fields.length) ||
-        (response.fieldsWithConditions && response.fieldsWithConditions.length);
+        (response.fieldsWithConditions && response.fieldsWithConditions.length)
       if (hasFieldsToSelect) {
         response.filterData = filterData(
           response.fields, // ['user', '-user.password']
           response.fieldsWithConditions //
-        );
+        )
       }
     }
-    return response;
+    return response
   }
 }

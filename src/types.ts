@@ -1,49 +1,49 @@
-export type Actions = string | string[];
-export type Subjects = string | string[];
+export type Actions = string | string[]
+export type Subjects = string | string[]
 
-export type Conditions = string | {};
+export type Conditions = string | {}
 export interface ParseConditions {}
-export type Roles = string[];
+export type Roles = string[]
 export interface Context {
-  user?: object;
-  roles?: Roles;
+  user?: object
+  roles?: Roles
 }
-export type When = (context?: Context) => boolean;
-export type UserContext = boolean | object;
+export type When = (context?: Context) => boolean
+export type UserContext = boolean | object
 
 export interface IAbility extends IAbilityOptions {
-  actions: Actions;
-  subjects: string | string[];
-  roles?: Roles;
-  conditions?: Conditions;
+  actions: Actions
+  subjects: string | string[]
+  roles?: Roles
+  conditions?: Conditions
 }
 
 export interface IAbilityOptions {
-  fields?: string[];
-  user?: UserContext;
-  allowOne?: boolean;
-  when?: When;
+  fields?: string[]
+  user?: UserContext
+  allowOne?: boolean
+  when?: When
 }
 
-export type ValidateData = (data: object | object[]) => boolean;
+export type ValidateData = (data: object | object[]) => boolean
 
 export interface IAbilityCanResponse {
-  can: boolean;
-  message: string;
-  where?: object;
-  validateData: ValidateData;
+  can: boolean
+  message: string
+  where?: object
+  validateData: ValidateData
 }
 
 export interface FieldsWithConditions {
-  conditions: object;
-  fields: string[];
+  conditions: object
+  fields: string[]
 }
 
 export interface IAbilitiesCanResponse extends IAbilityCanResponse {
-  $select: null | string[];
-  fields: null | string[];
-  fieldsWithConditions: null | FieldsWithConditions[];
+  $select: null | string[]
+  fields: null | string[]
+  fieldsWithConditions: null | FieldsWithConditions[]
 
-  allowOne: boolean;
-  filterData: (data: object | object[]) => object | object[];
+  allowOne: boolean
+  filterData: (data: object | object[]) => object | object[]
 }
