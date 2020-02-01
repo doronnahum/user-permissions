@@ -42,7 +42,8 @@ export default (
     fields: null,
     fieldsWithConditions: null,
     validateData: () => false,
-    filterData: () => null
+    filterData: () => null,
+    filterDataIsRequired: false
   };
 
   const checkAbility = (ability: IAbility) => {
@@ -76,33 +77,34 @@ export default (
     allowAllFields = allowAllFields || !hasFields;
 
     if (!allowFullAccess) {
-      let condition;
+      let parsingCondition;
       if (hasConditions) {
         /**
          * parseConditions -
          * Conditions can be a template like ``` { id: {{ user.id }} } ```
          * parseConditions will parse template with the context
          */
-        condition = parseConditions((ability.conditions as Conditions), context);
-        conditions.push(condition);
+        parsingCondition = parseConditions((ability.conditions as Conditions), context);
+        conditions.push(parsingCondition);
       }
       if (hasFields) {
-        if (condition) {
+        if (parsingCondition) {
           response.fieldsWithConditions = response.fieldsWithConditions || [];
           response.fieldsWithConditions.push({
             fields: ability.fields as string[],
-            conditions: condition
+            conditions: parsingCondition
           });
         } else {
           response.fields = response.fields || [];
           response.fields.push(...(ability.fields as string[]));
         }
       } else {
-        if (condition) {
+        if (parsingCondition) {
+          response.filterDataIsRequired = true;
           response.fieldsWithConditions = response.fieldsWithConditions || [];
           response.fieldsWithConditions.push({
             fields: ['*'],
-            conditions: condition
+            conditions: parsingCondition
           });
         }
       }
@@ -121,6 +123,7 @@ export default (
   } else {
     response.message = getMessage(messageTypes.VALID, subject, action);
     if (allowFullAccess) {
+      response.filterDataIsRequired = false;
       response.fields = null;
       response.fieldsWithConditions = null;
       response.$select = null;

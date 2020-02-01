@@ -59,13 +59,33 @@ describe('Test Abilities class', () => {
     expect(res.validateData({ creator: userId })).toBe(true);
     expect(res.validateData({ creator: 'ppp' })).toBe(false);
   });
-  // TODO: Need to figure how to fix this dissonance
-  // it('user can read any posts without a condition', () => {
-  //   const userId = 'd3a1';
-  //   const res = appAbilities.check('read', 'posts', { user: { id: userId } });
-  //   console.dir({res})
-  //   expect(res.conditions).toBe(undefined);
-  // });
+  it('validate that filterDataIsRequired was true when rules are oppose each other', () => {
+    const userId = 'd3a1';
+    const res = appAbilities.check('read', 'posts', { user: { id: userId } });
+    expect(res.filterDataIsRequired).toBe(true);
+    const data = [
+      {
+        title: '1',
+        secret: 2,
+        creator: 'otherUser'
+      },
+      {
+        title: '1',
+        secret: 2,
+        creator: userId
+      }
+    ];
+    expect(res.filterData(data)).toEqual([
+      {
+        title: '1'
+      },
+      {
+        title: '1',
+        secret: 2,
+        creator: userId
+      }
+    ]);
+  });
   it('user can read info field only when he pay', () => {
     expect(
       appAbilities.check('read', 'posts', { user: { isPay: true } }).fields
