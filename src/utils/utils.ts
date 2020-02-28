@@ -95,6 +95,7 @@ export const deletePropertyPath = (obj: {}, path: string) => {
   for (let i = 0; i < splitPath.length - 1; i++) {
     obj = (obj as any)[splitPath[i]];
 
+    // tslint:disable-next-line: strict-type-predicates
     if (typeof obj === 'undefined') {
       return;
     }
@@ -119,6 +120,7 @@ const validateSubject = (subjects: Subjects) => {
 const validateRoles = (roles?: Roles) => {
   if (
     roles &&
+    // tslint:disable-next-line: strict-type-predicates
     (!Array.isArray(roles) || roles.some(role => typeof role !== 'string'))
   ) {
     throw new Error('roles must be type of string[]');
@@ -136,12 +138,14 @@ const validateConditions = (conditions?: object | string) => {
 const optionsValidKeys = 'fields,user,when';
 const validateOptions = (options?: IAbilityOptions) => {
   if (options) {
+    // tslint:disable-next-line: strict-type-predicates
     if (typeof options !== 'object') {
       throw new Error('options must be type of object');
     }
     if (
       options.fields &&
       (!Array.isArray(options.fields) ||
+        // tslint:disable-next-line: strict-type-predicates
         options.fields.some(field => typeof field !== 'string'))
     ) {
       throw new Error('options.fields must be type of string[]');
@@ -149,10 +153,12 @@ const validateOptions = (options?: IAbilityOptions) => {
     if (
       options.user &&
       typeof options.user !== 'boolean' &&
+      // tslint:disable-next-line: strict-type-predicates
       typeof options.user !== 'object'
     ) {
       throw new Error('options.fields must be type of boolean | object');
     }
+    // tslint:disable-next-line: strict-type-predicates
     if (options.when && typeof options.when !== 'function') {
       throw new Error('options.when must be type of function');
     }
@@ -174,4 +180,40 @@ export const validateAbilityArguments = (
   validateRoles(roles);
   validateConditions(conditions);
   validateOptions(options);
+};
+
+export const isObject = (item: any) => {
+  return (typeof item === 'object' && !Array.isArray(item) && item !== null);
+};
+
+export const splitFields = (allowedFields: string[]) => {
+  const positiveFields: string[] = [];
+  const negativeFields: string[] = [];
+  allowedFields.forEach(field => {
+    if (field.startsWith('-')) {
+      negativeFields.push(field.substr(1));
+    } else {
+      positiveFields.push(field);
+    }
+  });
+  return {
+    positiveFields,
+    negativeFields
+  };
+};
+
+export const getAllowedFields = (
+  data: {},
+  fields: null | string[],
+  fieldsWithConditions: null | FieldsWithConditions[]
+) => {
+  const allowedFields = fields ? [...fields] : [];
+  if (fieldsWithConditions) {
+    fieldsWithConditions.forEach(item => {
+      if (checkConditions(item.conditions, data)) {
+        allowedFields.push(...item.fields);
+      }
+    });
+  }
+  return allowedFields;
 };

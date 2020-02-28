@@ -27,7 +27,8 @@ export interface IAbilityOptions {
   when?: When;
 }
 
-export type ValidateData = (data: object | object[]) => boolean;
+export type ValidateDataResponse = {valid: boolean, message?: string};
+export type ValidateData = (data: object | object[]) => ValidateDataResponse;
 
 
 export interface FieldsWithConditions {

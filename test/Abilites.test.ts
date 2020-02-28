@@ -54,12 +54,12 @@ describe('Test Abilities class', () => {
   it('user can create posts only if he is the creator', () => {
     const userId = 'd3a1';
     const res = appAbilities.check('create', 'posts', { user: { id: userId } });
-
     expect(res.can).toBe(true);
-    expect(res.validateData({ creator: userId })).toBe(true);
-    expect(res.validateData({ creator: 'ppp' })).toBe(false);
+    console.log(res.validateData({ creator: userId }));
+    expect(res.validateData({ creator: userId }).valid).toBe(true);
+    expect(res.validateData({ creator: 'ppp' }).valid).toBe(false);
   });
-  it('validate that filterDataIsRequired was true when rules are oppose each other', () => {
+  it('validate that filterDataIsRequired:true when rules are oppose each other', () => {
     const userId = 'd3a1';
     const res = appAbilities.check('read', 'posts', { user: { id: userId } });
     expect(res.filterDataIsRequired).toBe(true);

@@ -2,10 +2,12 @@ import {
   Conditions,
   Context,
   IAbility,
-  IAbilitiesCanResponse
+  IAbilitiesCanResponse,
+  ValidateDataResponse
 } from '../types';
 
-import { filterObject } from './filterData';
+import { filterData } from './filterData';
+import { validateData } from './validateData';
 import { renderMessageByTypes as getMessage, messageTypes } from '../messages';
 import { checkConditions, isConditionEmpty, parseConditions, isFieldsEmpty } from './utils';
 import can from './can';
@@ -41,7 +43,7 @@ export default (
     $select: null,
     fields: null,
     fieldsWithConditions: null,
-    validateData: () => false,
+    validateData: () => { valid: false},
     filterData: () => null,
     filterDataIsRequired: false
   };
@@ -155,15 +157,8 @@ export default (
      */
       const hasField = !isFieldsEmpty(response.fields) || !isFieldsEmpty(response.fieldsWithConditions);
       if (hasField) {
-        response.filterData = (data: object[] | object) => {
-          const isArray = Array.isArray(data);
-          if (isArray) {
-            return (data as Array<{}>).map(item =>
-              filterObject(item, response.fields, response.fieldsWithConditions)
-            );
-          }
-          return filterObject(data, response.fields, response.fieldsWithConditions);
-        };
+        response.filterData = (data: object[] | object) => filterData(data, response.fields, response.fieldsWithConditions);
+        response.validateData = (data: object[] | object) => validateData(data, response.fields, response.fieldsWithConditions)
       }
     }
   }

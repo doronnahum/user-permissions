@@ -1,38 +1,6 @@
-import { checkConditions, deletePropertyPath } from './utils';
+import { getAllowedFields, splitFields, deletePropertyPath } from './utils';
 import { FieldsWithConditions } from '../types';
 import pick from 'pick-deep';
-
-const splitFields = (allowedFields: string[]) => {
-  const positiveFields: string[] = [];
-  const negativeFields: string[] = [];
-  allowedFields.forEach(field => {
-    if (field.startsWith('-')) {
-      negativeFields.push(field.substr(1));
-    } else {
-      positiveFields.push(field);
-    }
-  });
-  return {
-    positiveFields,
-    negativeFields
-  };
-};
-
-const getAllowedFields = (
-  data: {},
-  fields: null | string[],
-  fieldsWithConditions: null | FieldsWithConditions[]
-) => {
-  const allowedFields = fields ? [...fields] : [];
-  if (fieldsWithConditions) {
-    fieldsWithConditions.forEach(item => {
-      if (checkConditions(item.conditions, data)) {
-        allowedFields.push(...item.fields);
-      }
-    });
-  }
-  return allowedFields;
-};
 
 export const filterObject = (
   data: {},

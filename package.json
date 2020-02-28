@@ -42,9 +42,11 @@
     "tslib": "1.10.0",
     "tslint": "^6.0.0",
     "tslint-config-standard": "^9.0.0",
+    "@types/strikeentco__get": "^1.0.0",
     "typescript": "3.7.5"
   },
   "dependencies": {
+    "@strikeentco/get": "^1.0.1",
     "pick-deep": "1.0.0",
     "sift": "^11.0.10"
   }
