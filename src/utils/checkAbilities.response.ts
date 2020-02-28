@@ -80,16 +80,14 @@ export const updateResponseWithAbilityFieldsAndConditons = (response: IAbilities
       fields: ability.fields as string[],
       conditions: parsingCondition
     });
-  }
-  if (!hasFields && parsingCondition) {
+  } else if (!hasFields && parsingCondition) {
     response.fieldsWithConditions = response.fieldsWithConditions || [];
     response.filterDataIsRequired = true;
     response.fieldsWithConditions.push({
       fields: ['*'],
       conditions: parsingCondition
     });
-  }
-  if (hasFields && !parsingCondition) {
+  } else if (hasFields && !parsingCondition) {
     response.fields = response.fields || [];
     response.filterDataIsRequired = true;
     response.fields.push(...(ability.fields as string[]));
