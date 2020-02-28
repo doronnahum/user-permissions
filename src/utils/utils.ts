@@ -62,16 +62,7 @@ export const parseConditions = (
 export const checkConditions = (
   parseConditions: ParseConditions,
   data?: object | object[]
-) => {
-  const isArray = Array.isArray(data);
-  if (isArray) {
-    return (data as object[]).some(dataInArray =>
-      sift(parseConditions)(dataInArray)
-    );
-  } else {
-    return sift(parseConditions)(data);
-  }
-};
+) => sift(parseConditions)(data);
 
 export const isConditionEmpty = (conditions: Conditions | undefined) => {
   if (!conditions) return true;

@@ -55,7 +55,7 @@ describe('Test Abilities class', () => {
     const userId = 'd3a1';
     const res = appAbilities.check('create', 'posts', { user: { id: userId } });
     expect(res.can).toBe(true);
-    console.log(res.validateData({ creator: userId }));
+    console.log(4, res.validateData({ creator: 'ppp' }));
     expect(res.validateData({ creator: userId }).valid).toBe(true);
     expect(res.validateData({ creator: 'ppp' }).valid).toBe(false);
   });

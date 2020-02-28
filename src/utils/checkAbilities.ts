@@ -2,31 +2,53 @@ import {
   Conditions,
   Context,
   IAbility,
-  IAbilitiesCanResponse,
-  ValidateDataResponse
+  IAbilitiesCanResponse
 } from '../types';
 
 import { filterData } from './filterData';
 import { validateData } from './validateData';
 import { renderMessageByTypes as getMessage, messageTypes } from '../messages';
-import { checkConditions, isConditionEmpty, parseConditions, isFieldsEmpty } from './utils';
+import { isConditionEmpty, parseConditions, isFieldsEmpty } from './utils';
 import can from './can';
 
-/**
- * @function checkAbilities
- * --------------
- * ### pass over all the abilities and test them by
- *     action, subject, roles, when, userContext.
- * ### Return an object with a test result:
- * - response = {
- *      - can: boolean,
- *      - messages: string, // 'Valid' or 'You are not allowed to...'
- *      - where: object[] // array of conditions to use as request query
- *      - validateData: function, // (data) => true/false, Validate that data is valid by abilities
- *      - filterData: function // (data) => filteredData, Remove fields thats not allowed
- *      - $select: string[] //includes all the possible fields, empty when all fields are allowed
- * }
- */
+const validateDataWithTrueResponse = (_data: object | object[]) => ({ valid: true });
+const validateDataWithFalseResponse = (_data: object | object[]) => ({ valid: false });
+
+const onAllowFullAccess = (response: IAbilitiesCanResponse, subject: string, action: string) => {
+  response.message = getMessage(messageTypes.VALID, subject, action);
+  response.filterDataIsRequired = false;
+  response.fields = null;
+  response.fieldsWithConditions = null;
+  response.$select = null;
+  response.conditions = undefined;
+  response.validateData = validateDataWithTrueResponse;
+  return response;
+};
+
+const onAllowLimitAccess = (response: IAbilitiesCanResponse, subject: string, action: string, conditions: object[] = []) => {
+  response.message = getMessage(messageTypes.VALID, subject, action);
+  response.conditions = conditions;
+
+// When one or more of the rules includes fields then filterData is added to the response
+  const hasField = !isFieldsEmpty(response.fields) || !isFieldsEmpty(response.fieldsWithConditions);
+  if (hasField) {
+    response.filterData = (data: object[] | object) => filterData(data, response.fields, response.fieldsWithConditions);
+  }
+
+// When one or more of the rules includes fields and\or conditions then add validateData to the response
+  if (hasField || response.conditions) {
+    const mongooseWhere = response.conditions ? { $or:  response.conditions } : undefined;
+    response.validateData = (data: object[] | object) => validateData(data, response.fields, response.fieldsWithConditions, mongooseWhere);
+  }
+  return response;
+};
+
+const onUserNotAllow = (response: IAbilitiesCanResponse, subject: string, action: string) => {
+  response.validateData = validateDataWithFalseResponse;
+  response.message = getMessage(messageTypes.NOT_ABLE_BY_ACTION, action, subject);
+  return response;
+};
+
 export default (
   abilities: IAbility[],
   action: string,
@@ -43,7 +65,7 @@ export default (
     $select: null,
     fields: null,
     fieldsWithConditions: null,
-    validateData: () => { valid: false},
+    validateData: validateDataWithFalseResponse,
     filterData: () => null,
     filterDataIsRequired: false
   };
@@ -113,54 +135,29 @@ export default (
     }
   };
 
-  /**
-   * Pass over all the abilities
-   *  1. check that user can [action] the [subject]
-   *  2. collect all the fields & conditions
-   */
+  /*
+  |-----------------------------------------------------------------
+  | Check abilities
+  |-----------------------------------------------------------------
+  |
+  | Validate if one or more of the rules let the user the right
+  | permission to make this request
+  |
+  | collect all the fields, conditions, meta from the rules
+  |
+  | The result will saved directly on the response object
+  |
+  */
   abilities.forEach(checkAbility);
 
-  if (!response.can) {
-    response.message = getMessage(messageTypes.NOT_ABLE_BY_ACTION, action, subject);
-  } else {
-    response.message = getMessage(messageTypes.VALID, subject, action);
+  if (response.can) {
     if (allowFullAccess) {
-      response.filterDataIsRequired = false;
-      response.fields = null;
-      response.fieldsWithConditions = null;
-      response.$select = null;
-      response.conditions = undefined;
+      return onAllowFullAccess(response, subject, action);
     } else {
-      response.conditions = conditions;
-
-    /**
-     * validateData
-     * -------------------
-     * Validate data is valid by the abilities conditions
-     * @example ```
-     * Abilities.check('create', 'posts').validateData({title: 'Hi'}) === true
-     * ```
-     */
-      response.validateData = (data: object | object[]) => {
-        const mongooseWhere = response.conditions ? { $or:  response.conditions } : undefined;
-        if (!data) return false;
-        if (mongooseWhere) {
-          return checkConditions(mongooseWhere, data);
-        }
-        return true;
-      };
-    /**
-     * filterData
-     * -------------------
-     * When one or more of the rules includes a fields then filterData
-     * can handle this check(...).filterData(data) : filteredData
-     */
-      const hasField = !isFieldsEmpty(response.fields) || !isFieldsEmpty(response.fieldsWithConditions);
-      if (hasField) {
-        response.filterData = (data: object[] | object) => filterData(data, response.fields, response.fieldsWithConditions);
-        response.validateData = (data: object[] | object) => validateData(data, response.fields, response.fieldsWithConditions)
-      }
+      return onAllowLimitAccess(response, subject, action, conditions);
     }
+  } else {
+    return onUserNotAllow(response, subject, action);
   }
-  return response;
+
 };

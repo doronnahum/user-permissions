@@ -1,4 +1,4 @@
-import { getAllowedFields, splitFields, isObject } from './utils';
+import { getAllowedFields, splitFields, isObject, checkConditions } from './utils';
 import { FieldsWithConditions, ValidateDataResponse } from '../types';
 import get from '@strikeentco/get';
 
@@ -59,9 +59,14 @@ export const validateObject = (
 export const validateData = (
   data: object[] | object,
   fields: null | string[],
-  fieldsWithConditions: null | FieldsWithConditions[]): ValidateDataResponse => {
+  fieldsWithConditions: null | FieldsWithConditions[],
+  mongooseWhere?: object 
+  ): ValidateDataResponse => {
   const isArray = Array.isArray(data);
   try {
+    if(mongooseWhere && !checkConditions(mongooseWhere, data)){
+      throw new Error('The data structure does not fit your permissions');
+    }
     if (isArray) {
       (data as Array<{}>).map(item => {
         const checkResult = validateObject(item, fields, fieldsWithConditions);

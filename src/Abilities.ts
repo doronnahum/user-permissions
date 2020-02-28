@@ -15,6 +15,14 @@ export default class Abilities {
     };
   }
 
+  /**
+   * @method check
+   * @description return an object with check result and tools to filter&validate data
+   * @param action
+   * @param subject
+   * @param context
+   * @return { can: boolean, message: string, conditions: object[]...  }
+   */
   public check (
     action: string,
     subject: string,
