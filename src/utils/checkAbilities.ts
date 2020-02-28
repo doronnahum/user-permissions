@@ -70,7 +70,20 @@ export default (
     filterDataIsRequired: false
   };
 
-  const checkAbility = (ability: IAbility) => {
+  /*
+  |-----------------------------------------------------------------
+  | Check abilities
+  |-----------------------------------------------------------------
+  |
+  | Validate if one or more of the rules let the user the right
+  | permission to make this request
+  |
+  | collect all the fields, conditions, meta from the rules
+  |
+  | The result will saved directly on the response object
+  |
+  */
+  abilities.forEach((ability: IAbility) => {
     if (!can(ability, action, subject, context)) return;
     response.can = true; // User can [action] the [subject]
 
@@ -133,22 +146,7 @@ export default (
         }
       }
     }
-  };
-
-  /*
-  |-----------------------------------------------------------------
-  | Check abilities
-  |-----------------------------------------------------------------
-  |
-  | Validate if one or more of the rules let the user the right
-  | permission to make this request
-  |
-  | collect all the fields, conditions, meta from the rules
-  |
-  | The result will saved directly on the response object
-  |
-  */
-  abilities.forEach(checkAbility);
+  });
 
   if (response.can) {
     if (allowFullAccess) {
