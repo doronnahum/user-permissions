@@ -19,6 +19,7 @@ export interface IAbility extends IAbilityOptions {
   fields?: string[];
   user?: UserContext;
   when?: When;
+  meta?: any;
 }
 
 export interface IAbilityOptions {
@@ -36,10 +37,14 @@ export interface FieldsWithConditions {
   fields: string[];
 }
 
+export interface CheckAbilitiesParams {
+  abilities: IAbility[]; action: string; subject: string; context?: Context;
+}
+
 export interface IAbilitiesCanResponse {
   can: boolean;
   message: string;
-  conditions?: object[];
+  conditions?: null | object[];
   validateData: ValidateData;
   $select: null | string[];
   fields: null | string[];
@@ -47,4 +52,5 @@ export interface IAbilitiesCanResponse {
 
   filterData: (data: object | object[]) => object | object[] | null;
   filterDataIsRequired: boolean;
+  meta: any[];
 }

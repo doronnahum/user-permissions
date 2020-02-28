@@ -55,7 +55,6 @@ describe('Test Abilities class', () => {
     const userId = 'd3a1';
     const res = appAbilities.check('create', 'posts', { user: { id: userId } });
     expect(res.can).toBe(true);
-    console.log(4, res.validateData({ creator: 'ppp' }));
     expect(res.validateData({ creator: userId }).valid).toBe(true);
     expect(res.validateData({ creator: 'ppp' }).valid).toBe(false);
   });
@@ -72,6 +71,7 @@ describe('Test Abilities class', () => {
       {
         title: '1',
         secret: 2,
+        rating: 4,
         creator: userId
       }
     ];
@@ -82,6 +82,7 @@ describe('Test Abilities class', () => {
       {
         title: '1',
         secret: 2,
+        rating: 4,
         creator: userId
       }
     ]);

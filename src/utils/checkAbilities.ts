@@ -1,161 +1,98 @@
 import {
-  Conditions,
-  Context,
   IAbility,
-  IAbilitiesCanResponse
+  CheckAbilitiesParams
 } from '../types';
 
-import { filterData } from './filterData';
-import { validateData } from './validateData';
-import { renderMessageByTypes as getMessage, messageTypes } from '../messages';
-import { isConditionEmpty, parseConditions, isFieldsEmpty } from './utils';
+import { isConditionEmpty, isFieldsEmpty } from './utils';
 import can from './can';
+import {
+  getInitialResponse,
+  onAllowFullAccess,
+  onAllowLimitAccess,
+  onUserNotAllow,
+  updateResponseWithAbilityFieldsAndConditons
+} from './checkAbilities.response';
 
-const validateDataWithTrueResponse = (_data: object | object[]) => ({ valid: true });
-const validateDataWithFalseResponse = (_data: object | object[]) => ({ valid: false });
+const checkAbilities = (params: CheckAbilitiesParams) => {
+  const { abilities, action, subject, context } = params;
 
-const onAllowFullAccess = (response: IAbilitiesCanResponse, subject: string, action: string) => {
-  response.message = getMessage(messageTypes.VALID, subject, action);
-  response.filterDataIsRequired = false;
-  response.fields = null;
-  response.fieldsWithConditions = null;
-  response.$select = null;
-  response.conditions = undefined;
-  response.validateData = validateDataWithTrueResponse;
-  return response;
-};
+  /*
+  |-----------------------------------------------------------------
+  | response
+  |-----------------------------------------------------------------
+  | {
+  |   can: boolean; - User able/not able to make this request
+  |   message: string; // 'Valid' or `You are not able to ${action} ${subjects}`
+  |   conditions?: object[]; // Collection of all abilities conditions
+  |   $select: null | string[]; // List of all possible fields, can be uses as query select
+  |   fields: null | string[]; // List of all allowed fields without any condition
+  |   fieldsWithConditions: null | {conditions,fields}[]; // List of fields that allow with condition
+  |   filterDataIsRequired: boolean; // When user is allowed to make the request with a condition/s
+  |   filterData: function; // filters data by abilities (data: object | object[]) => object | object[] | null;
+  |   validateData: function; // Validate data fields and and by conditions (data) => ({valid: boolean})
+  |   meta: []
+  | }
+  |
+  */
+  const response = getInitialResponse();
 
-const onAllowLimitAccess = (response: IAbilitiesCanResponse, subject: string, action: string, conditions: object[] = []) => {
-  response.message = getMessage(messageTypes.VALID, subject, action);
-  response.conditions = conditions;
+  /*
+  |-----------------------------------------------------------------
+  | allowFullAccess
+  |-----------------------------------------------------------------
+  | When at least one ability is allow all fields without any condition
+  |
+  */
+  let allowFullAccess = false;
 
-// When one or more of the rules includes fields then filterData is added to the response
-  const hasField = !isFieldsEmpty(response.fields) || !isFieldsEmpty(response.fieldsWithConditions);
-  if (hasField) {
-    response.filterData = (data: object[] | object) => filterData(data, response.fields, response.fieldsWithConditions);
-  }
-
-// When one or more of the rules includes fields and\or conditions then add validateData to the response
-  if (hasField || response.conditions) {
-    const mongooseWhere = response.conditions ? { $or:  response.conditions } : undefined;
-    response.validateData = (data: object[] | object) => validateData(data, response.fields, response.fieldsWithConditions, mongooseWhere);
-  }
-  return response;
-};
-
-const onUserNotAllow = (response: IAbilitiesCanResponse, subject: string, action: string) => {
-  response.validateData = validateDataWithFalseResponse;
-  response.message = getMessage(messageTypes.NOT_ABLE_BY_ACTION, action, subject);
-  return response;
-};
-
-export default (
-  abilities: IAbility[],
-  action: string,
-  subject: string,
-  context?: Context
-): IAbilitiesCanResponse => {
-  let allowFullAccess = false; // When one of the rules is free from fields&conditions
-  let allowAllFields = false; // When one of the rules is free from fields;
-  let conditions: object[] = [];
-
-  const response: IAbilitiesCanResponse = {
-    can: false,
-    message: '',
-    $select: null,
-    fields: null,
-    fieldsWithConditions: null,
-    validateData: validateDataWithFalseResponse,
-    filterData: () => null,
-    filterDataIsRequired: false
-  };
+  /*
+  |-----------------------------------------------------------------
+  | allowAllFields
+  |-----------------------------------------------------------------
+  | When at least one ability is allow all fields
+  |
+  */
+  let allowAllFields = false;
 
   /*
   |-----------------------------------------------------------------
   | Check abilities
   |-----------------------------------------------------------------
-  |
-  | Validate if one or more of the rules let the user the right
-  | permission to make this request
-  |
-  | collect all the fields, conditions, meta from the rules
-  |
-  | The result will saved directly on the response object
+  | Pass over all abilities and collect fields, condition, meta
   |
   */
   abilities.forEach((ability: IAbility) => {
-    if (!can(ability, action, subject, context)) return;
-    response.can = true; // User can [action] the [subject]
 
-    /**
-     * ## ability.conditions
-     * ---------------------
-     * Rule can allow [action] in a [subject] with a condition,
-     * - for Example:
-     *    - allow to create only unPublish posts be
-     *       ```{actions: ['create'], subject: ['posts'], conditions: { when: true }} ```
-     *
-     */
-    const hasConditions = !isConditionEmpty(ability.conditions);
-    const hasFields = ability.fields && ability.fields.length > 0;
+    const isAbleByCurrentAbility = can(ability, action, subject, context);
 
-    /**
-     * allowFullAccess -
-     * When rule was free from conditions and fields then all the other conditions
-     * are not relevant any more
-     */
-    allowFullAccess = allowFullAccess || (!hasConditions && !hasFields);
-
-    /**
-     * allowAllFields -
-     * When one of the rules not include a fields limitation
-     * Then response.$select will be null
-     */
-    allowAllFields = allowAllFields || !hasFields;
-
-    if (!allowFullAccess) {
-      let parsingCondition;
-      if (hasConditions) {
-        /**
-         * parseConditions -
-         * Conditions can be a template like ``` { id: {{ user.id }} } ```
-         * parseConditions will parse template with the context
-         */
-        parsingCondition = parseConditions((ability.conditions as Conditions), context);
-        conditions.push(parsingCondition);
-      }
-      if (hasFields) {
-        if (parsingCondition) {
-          response.fieldsWithConditions = response.fieldsWithConditions || [];
-          response.fieldsWithConditions.push({
-            fields: ability.fields as string[],
-            conditions: parsingCondition
-          });
-        } else {
-          response.fields = response.fields || [];
-          response.fields.push(...(ability.fields as string[]));
-        }
-      } else {
-        if (parsingCondition) {
-          response.filterDataIsRequired = true;
-          response.fieldsWithConditions = response.fieldsWithConditions || [];
-          response.fieldsWithConditions.push({
-            fields: ['*'],
-            conditions: parsingCondition
-          });
-        }
-      }
+    // Return When The ability is not allowed the request
+    if (!isAbleByCurrentAbility) {
+      return;
     }
+
+    response.can = true; // User can [action] the [subject]
+    if (ability.meta) response.meta.push(ability.meta);
+    const hasFields = !isFieldsEmpty(ability.fields);
+    const hasConditions = !isConditionEmpty(ability.conditions);
+    allowFullAccess = allowFullAccess || (!hasConditions && !hasFields);
+    allowAllFields = allowAllFields || !hasFields;
+    if (!allowFullAccess) updateResponseWithAbilityFieldsAndConditons(response, ability, hasFields, hasConditions, context);
+
   });
 
+  /**
+   * Return
+   */
   if (response.can) {
     if (allowFullAccess) {
       return onAllowFullAccess(response, subject, action);
     } else {
-      return onAllowLimitAccess(response, subject, action, conditions);
+      return onAllowLimitAccess(response, subject, action);
     }
   } else {
     return onUserNotAllow(response, subject, action);
   }
 
 };
+
+export default checkAbilities;

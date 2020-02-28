@@ -28,7 +28,7 @@ export default class Abilities {
     subject: string,
     context?: Context
   ): IAbilitiesCanResponse {
-    return checkAbilities(this.abilities, action, subject, context);
+    return checkAbilities({ abilities: this.abilities, action, subject, context });
   }
 
   public can (

@@ -71,6 +71,7 @@ export const isConditionEmpty = (conditions: Conditions | undefined) => {
   }
   return Object.keys(conditions).length < 1;
 };
+
 export const isFieldsEmpty = (fields: [] | string[] | FieldsWithConditions[] | undefined | null) => {
   if (!fields) return true;
   if (fields.length < 1) return true;
