@@ -1,9 +1,11 @@
 export type Actions = string | string[];
 export type Subjects = string | string[];
 
+export type Fields = string[];
+
 export type Conditions = string | {}; // stringify or object;
 export interface ParseConditions {}
-export type Roles = string[];
+export type Roles = string | string[];
 export interface Context {
   user?: object;
   roles?: Roles;
@@ -11,7 +13,7 @@ export interface Context {
 export type When = (context?: Context) => boolean;
 export type UserContext = boolean | object;
 
-export interface IAbility extends IAbilityOptions {
+export interface IAbility {
   actions: Actions;
   subjects: string | string[];
   roles?: Roles;
@@ -20,12 +22,6 @@ export interface IAbility extends IAbilityOptions {
   user?: UserContext;
   when?: When;
   meta?: any;
-}
-
-export interface IAbilityOptions {
-  fields?: string[];
-  user?: UserContext;
-  when?: When;
 }
 
 export type ValidateDataResponse = {valid: boolean, message?: string};

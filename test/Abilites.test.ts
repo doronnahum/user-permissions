@@ -2,32 +2,19 @@ import { Ability, Abilities } from '../src';
 
 const appAbilities = new Abilities([
   // Everyone can read posts title and body
-  new Ability('read', 'posts', undefined, undefined, {
-    fields: ['title', 'body']
-  }),
+  Ability().actions('read').subjects('posts').fields(['title', 'body']),
   // Logged in user can manage post, when he is the creator
-  new Ability('*', 'posts', undefined, '{"creator": "{{ user.id }}" }', {
-    user: true
-  }),
+  Ability().actions('*').subjects('posts').conditions('{"creator": "{{ user.id }}" }').user(true),
   // Admin user can manage any post
-  new Ability('*', 'posts', ['admin'], undefined),
+  Ability().actions('*').subjects('posts').roles('admin'),
   // Payment user can read the extra info field
-  new Ability('*', 'posts', undefined, undefined, {
-    fields: ['info'],
-    user: { isPay: true }
-  }),
+  Ability().actions('*').subjects('posts').fields(['info']).user({ isPay: true }),
   // Everyone can read comments title fields
-  new Ability('read', 'comments', undefined, undefined, { fields: ['title'] }),
+  Ability().actions('read').subjects('comments').fields(['title']),
   // User can read comments body fields
-  new Ability('read', 'comments', undefined, undefined, {
-    fields: ['body'],
-    user: true
-  }),
+  Ability().actions('read').subjects('comments').fields(['body']).user(true),
   // User can read comments rating only when he is the creator
-  new Ability('read', 'comments', undefined, '{"creator": "{{ user.id }}" }', {
-    fields: ['rating'],
-    user: true
-  })
+  Ability().actions('read').subjects('comments').conditions('{"creator": "{{ user.id }}" }').fields(['rating']).user(true)
 ]);
 
 describe('Test Abilities class', () => {
