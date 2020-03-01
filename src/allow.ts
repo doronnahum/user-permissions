@@ -20,45 +20,7 @@ import {
   IAbility
 } from './types';
 
-// class _Ability {
-//   private readonly actions: Actions;
-//   private readonly subjects: string | string[];
-
-//   private readonly roles?: Roles;
-//   private readonly conditions?: object | string;
-//   private readonly fields?: string[];
-//   private readonly user?: UserContext;
-//   private readonly when?: When;
-//   constructor (
-//     actions: Actions,
-//     subjects: string | string[],
-//     roles?: Roles,
-//     conditions?: object | string,
-//     options?: IAbilityOptions
-//   ) {
-//     validateAbilityArguments(actions, subjects, roles, conditions, options);
-//     this.actions = actions;
-//     this.subjects = subjects;
-//     this.roles = roles;
-//     this.conditions = conditions;
-//     this.fields = options && options.fields;
-//     this.user = options && options.user;
-//     this.when = options && options.when;
-//   }
-
-//   public get (): IAbility {
-//     return {
-//       actions: this.actions,
-//       subjects: this.subjects,
-//       fields: this.fields,
-//       conditions: this.conditions,
-//       roles: this.roles,
-//       user: this.user,
-//       when: this.when
-//     };
-//   }
-// }
-class AbilityClass {
+class Ability {
   private _actions?: Actions;
   private _subjects?: Subjects;
 
@@ -124,5 +86,5 @@ class AbilityClass {
   }
 }
 
-const Ability = () => new AbilityClass();
-export default Ability;
+const allow = () => new Ability();
+export default allow;

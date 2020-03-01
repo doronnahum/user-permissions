@@ -1,2 +1,2 @@
-export { default as Ability } from './Ability';
+export { default as allow } from './allow';
 export { default as Abilities } from './Abilities';
