@@ -10,7 +10,7 @@ export interface Context {
   user?: object;
   roles?: Roles;
 }
-export type When = (context?: Context) => boolean;
+export type When = (context?: Context) => Promise<boolean>;
 export type UserContext = boolean | object;
 
 export interface IAbility {

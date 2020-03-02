@@ -20,7 +20,7 @@ import {
   IAbility
 } from './types';
 
-class Ability {
+export class Ability {
   private _actions?: Actions;
   private _subjects?: Subjects;
 

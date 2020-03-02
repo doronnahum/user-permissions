@@ -5,7 +5,7 @@ import {
 
 import { checkInArray, checkUserContext, matchRoles } from './utils';
 
-export default (
+export default async (
   ability: IAbility,
   action: string,
   subject: string,
@@ -16,7 +16,7 @@ export default (
   return (
     checkInArray(action, ability.actions) &&
     checkInArray(subject, ability.subjects) &&
-    (!ability.when || ability.when(context)) &&
+    (!ability.when || await ability.when(context)) &&
     checkUserContext(ability.user, userData) &&
     matchRoles(ability.roles, roles)
   );

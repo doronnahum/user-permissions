@@ -53,8 +53,8 @@ describe('Test Abilities class', () => {
 
 describe('Test Abilities permissions handlers', () => {
 
-  it('Everyone can read the posts title and body', () => {
-    const res = appAbilities.check('read', 'posts');
+  it('Everyone can read the posts title and body', async () => {
+    const res = await appAbilities.check('read', 'posts');
     expect(res.can).toBe(true);
     expect(res.fields).toEqual(['title', 'body']);
     expect(res.filterData({ title: 'lorem', info: 'ipsum' })).toEqual({
@@ -65,21 +65,22 @@ describe('Test Abilities permissions handlers', () => {
     expect(res.validateData([{ title: 'lorem', body: 'ipsum' }]).valid).toEqual(true);
   });
 
-  it("anonymous user can't create post", () => {
-    expect(appAbilities.check('create', 'posts').can).toBe(false);
+  it("anonymous user can't create post", async () => {
+    const res = await appAbilities.check('create', 'posts');
+    expect(res.can).toBe(false);
   });
 
-  it('Logged in user can manage his posts - try create method', () => {
+  it('Logged in user can manage his posts - try create method', async () => {
     const userId = 'd3a1';
-    const res = appAbilities.check('create', 'posts', { user: { id: userId } });
+    const res = await appAbilities.check('create', 'posts', { user: { id: userId } });
     expect(res.can).toBe(true);
     expect(res.validateData({ creator: userId }).valid).toBe(true);
     expect(res.validateData({ creator: 'ppp' }).valid).toBe(false);
   });
 
-  it('Try filterData function and validate that filterDataIsRequired is true as expected', () => {
+  it('Try filterData function and validate that filterDataIsRequired is true as expected', async () => {
     const userId = 'd3a1';
-    const res = appAbilities.check('read', 'posts', { user: { id: userId } });
+    const res = await appAbilities.check('read', 'posts', { user: { id: userId } });
     expect(res.filterDataIsRequired).toBe(true);
     const data = [
       {
@@ -107,35 +108,34 @@ describe('Test Abilities permissions handlers', () => {
     ]);
   });
 
-  it('A paying user can read the message information field', () => {
+  it('A paying user can read the message information field', async () => {
+    const res = await appAbilities.check('read', 'posts', { user: { isPay: true } });
+    expect(res.fields).toEqual(['title', 'body', 'info']);
+    const res1 = await appAbilities.check('read', 'posts', { user: { isPay: false } });
     expect(
-      appAbilities.check('read', 'posts', { user: { isPay: true } }).fields
-    ).toEqual(['title', 'body', 'info']);
-    expect(
-      appAbilities.check('read', 'posts', { user: { isPay: false } }).fields
+      res1.fields
     ).toEqual(['title', 'body']);
   });
 
-  it('Admin user can manage all posts', () => {
+  it('Admin user can manage all posts', async () => {
+    const res = await appAbilities.check('read', 'posts', { roles: ['admin'] });
     expect(
-      appAbilities.check('read', 'posts', { roles: ['admin'] }).fields
+      res.fields
     ).toBe(null);
   });
 
-  it('Logged in user can read his comments rating', () => {
+  it('Logged in user can read his comments rating', async () => {
     const userId = 'd3a1';
     const comments = [
       { creator: userId, title: 'nice', body: 'lorem', rating: 5 },
       { creator: 'bla', title: 'like', body: 'ipsum', rating: 3 }
     ];
+    const res = await appAbilities.check('read', 'comments');
     expect(
-      appAbilities.check('read', 'comments').filterData(comments)
+      res.filterData(comments)
     ).toEqual([{ title: 'nice' }, { title: 'like' }]);
-    expect(
-      appAbilities
-        .check('read', 'comments', { user: { id: userId } })
-        .filterData(comments)
-    ).toEqual([
+    const res1 = await appAbilities.check('read', 'comments', { user: { id: userId } });
+    expect(res1.filterData(comments)).toEqual([
       { title: 'nice', body: 'lorem', rating: 5 },
       { title: 'like', body: 'ipsum' }
     ]);

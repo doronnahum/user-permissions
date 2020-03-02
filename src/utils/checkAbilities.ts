@@ -3,7 +3,7 @@ import {
   CheckAbilitiesParams
 } from '../types';
 
-import { isConditionEmpty, isFieldsEmpty } from './utils';
+import { isConditionEmpty, isFieldsEmpty, asyncForEach } from './utils';
 import can from './can';
 import {
   getInitialResponse,
@@ -13,7 +13,7 @@ import {
   updateResponseWithAbilityFieldsAndConditons
 } from './checkAbilities.response';
 
-const checkAbilities = (params: CheckAbilitiesParams) => {
+const checkAbilities = async (params: CheckAbilitiesParams) => {
   const { abilities, action, subject, context } = params;
 
   /*
@@ -61,11 +61,11 @@ const checkAbilities = (params: CheckAbilitiesParams) => {
   | Pass over all abilities and collect fields, condition, meta
   |
   */
-  abilities.forEach((ability: IAbility) => {
+  await asyncForEach(abilities, async (ability: IAbility) => {
 
-    const isAbleByCurrentAbility = can(ability, action, subject, context);
+    const isAbleByCurrentAbility = await can(ability, action, subject, context);
 
-    // Return When The ability is not allowed the request
+  // Return When The ability is not allowed the request
     if (!isAbleByCurrentAbility) {
       return;
     }
@@ -77,7 +77,6 @@ const checkAbilities = (params: CheckAbilitiesParams) => {
     allowFullAccess = allowFullAccess || (!hasConditions && !hasFields);
     allowAllFields = allowAllFields || !hasFields;
     if (!allowFullAccess) updateResponseWithAbilityFieldsAndConditons(response, ability, hasFields, hasConditions, context);
-
   });
 
   /**

@@ -1,7 +1,8 @@
 import checkAbilities from './utils/checkAbilities';
 import can from './utils/can';
+import { asyncForEach } from './utils/utils';
 import { IAbility, Context, IAbilitiesCanResponse } from './types';
-import Ability from 'Ability';
+import { Ability } from './allow';
 export default class Abilities {
   private readonly abilities: IAbility[];
   constructor (abilities: Ability[]) {
@@ -23,19 +24,24 @@ export default class Abilities {
    * @param context
    * @return { can: boolean, message: string, conditions: object[]...  }
    */
-  public check (
+  public async check (
     action: string,
     subject: string,
     context?: Context
-  ): IAbilitiesCanResponse {
-    return checkAbilities({ abilities: this.abilities, action, subject, context });
+  ): Promise<IAbilitiesCanResponse> {
+    const res = await checkAbilities({ abilities: this.abilities, action, subject, context });
+    return res;
   }
 
-  public can (
+  public async can (
     action: string,
     subject: string,
     context?: Context
-  ): boolean {
-    return this.abilities.some(ability => can(ability, action, subject, context));
+  ): Promise<boolean> {
+    let result = false;
+    await asyncForEach(this.abilities, async (ability) => {
+      result = result || await can(ability, action, subject, context);
+    });
+    return result;
   }
 }
