@@ -9,7 +9,7 @@ module.exports = (function () {
     // Logged in user can manage post, when he is the creator
     new Ability('*', 'posts', undefined, '{"creator": "{{ user.id }}" }', {
       user: true
-    })
+    }) 
   ])
 
   const canCreate = appAbilities.check('create', 'posts')
