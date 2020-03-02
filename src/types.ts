@@ -25,9 +25,8 @@ export interface IAbility {
   meta?: any;
 }
 
-export type ValidateDataResponse = {valid: boolean, message?: string};
+export interface ValidateDataResponse {valid: boolean; message?: string;}
 export type ValidateData = (data: object | object[]) => ValidateDataResponse;
-
 
 export interface FieldsWithConditions {
   conditions: object;

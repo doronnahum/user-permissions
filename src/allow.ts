@@ -1,6 +1,6 @@
 import {
   getAsArray
- } from './utils/utils';
+} from './utils/utils';
 
 import {
   validateWhen,
@@ -39,36 +39,43 @@ export class Ability {
     this._actions = res;
     return this;
   }
+
   public subjects (res: Subjects) {
     validateSubject(res);
     this._subjects = res;
     return this;
   }
+
   public roles (roles: string | Roles) {
     validateRoles(roles);
     this._roles = getAsArray(roles);
     return this;
   }
+
   public conditions (res: Conditions) {
     validateConditions(res);
     this._conditions = res;
     return this;
   }
+
   public fields (res: string | Fields) {
     validateFields(res);
     this._fields = getAsArray(res);
     return this;
   }
+
   public user (res: UserContext) {
     validateUser(res);
     this._user = res;
     return this;
   }
+
   public when (res: When) {
     validateWhen(res);
     this._when = res;
     return this;
   }
+
   public meta (res: any) {
     this._meta = res;
     return this;

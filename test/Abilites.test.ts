@@ -9,7 +9,7 @@ const appAbilities = new Abilities([
 
   // Admin user can manage all posts
   allow().actions('*').subjects('posts').roles('admin').meta({ populate: true }).when(context => {
-    if(context && context.user && (context.user as {[key: string]: any}).isActive) return true;
+    if (context?.user && (context.user as {[key: string]: any}).isActive) return true;
     return false;
   }),
 
@@ -27,7 +27,6 @@ const appAbilities = new Abilities([
 ]);
 
 describe('Test Abilities class', () => {
-
   it('Validate allow is function', () => {
     expect(typeof allow).toEqual('function');
   });
@@ -51,11 +50,9 @@ describe('Test Abilities class', () => {
     expect(typeof appAbilities.get).toEqual('function');
     expect(typeof appAbilities.get()).toEqual('object');
   });
-
 });
 
 describe('Test Abilities permissions handlers', () => {
-
   it('Everyone can read the posts title and body- test can method', async () => {
     expect(await appAbilities.can('read', 'posts')).toBe(true);
     expect(await appAbilities.can('delete', 'posts')).toBe(false);

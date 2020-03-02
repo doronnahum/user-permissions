@@ -52,7 +52,7 @@ export const parseConditions = (
 ): ParseConditions => {
   const isTemplate = typeof conditions === 'string';
   if (isTemplate) {
-    return parseTemplate((conditions as string), context || {});
+    return parseTemplate((conditions as string), context ?? {});
   }
   return conditions;
 };
@@ -93,7 +93,6 @@ export const deletePropertyPath = (obj: {}, path: string) => {
   const pathToDelete = splitPath.pop();
   if (typeof pathToDelete === 'string') delete (obj as any)[pathToDelete];
 };
-
 
 export const isObject = (item: any) => {
   return (typeof item === 'object' && !Array.isArray(item) && item !== null);

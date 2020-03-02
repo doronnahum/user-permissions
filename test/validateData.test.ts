@@ -56,5 +56,4 @@ describe('test validate data function', () => {
     expect(validateData(fakeData, ['-someFields'], null).valid).toEqual(true);
     expect(validateData(fakeData, ['-name'], null).valid).toEqual(false);
   });
-
 });

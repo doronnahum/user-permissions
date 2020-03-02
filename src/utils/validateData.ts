@@ -5,7 +5,7 @@ import get from '@strikeentco/get';
 const validatePositiveFields = (data: object, fields: string[], _prefix?: string) => {
   try {
     if (fields.length === 0 || fields.includes('*')) return { valid: true };
-    const prefix = _prefix || '';
+    const prefix = _prefix ?? '';
     const keys = Object.keys(data);
     keys.forEach((key) => {
       const fieldName = prefix + key;
@@ -60,11 +60,11 @@ export const validateData = (
   data: object[] | object,
   fields: null | string[],
   fieldsWithConditions: null | FieldsWithConditions[],
-  mongooseWhere?: object 
-  ): ValidateDataResponse => {
+  mongooseWhere?: object
+): ValidateDataResponse => {
   const isArray = Array.isArray(data);
   try {
-    if(mongooseWhere && !checkConditions(mongooseWhere, data)){
+    if (mongooseWhere && !checkConditions(mongooseWhere, data)) {
       throw new Error('The data structure does not fit your permissions');
     }
     if (isArray) {

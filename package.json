@@ -13,7 +13,7 @@
     "test-with-coverage": "tsdx test --coverage && cat ./coverage/lcov.info | codacy-coverage",
     "lint": "tsdx lint",
     "tsdx-format": "tsdx lint --fix",
-    "format": "tslint --project ./tsconfig.json --fix 'src/**/*{.ts,.tsx}' 'test/**/*{.ts,.tsx}'",
+    "format": "tslint -c tslint.json 'src/**/*.ts' 'test/**/*{.ts,.tsx}' --fix",
     "prepare": "tsdx build"
   },
   "peerDependencies": {},

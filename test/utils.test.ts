@@ -44,7 +44,7 @@ describe('test isConditionEmpty utils', () => {
   it('Should pass', () => {
     expect(isConditionEmpty(undefined)).toEqual(true);
     expect(isConditionEmpty({})).toEqual(true);
-    expect(isConditionEmpty({ active: true})).toEqual(false);
+    expect(isConditionEmpty({ active: true })).toEqual(false);
     expect(isConditionEmpty('')).toEqual(true);
     expect(isConditionEmpty('{"active":true}')).toEqual(false);
   });

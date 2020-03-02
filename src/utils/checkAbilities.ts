@@ -62,10 +62,9 @@ const checkAbilities = async (params: CheckAbilitiesParams) => {
   |
   */
   await asyncForEach(abilities, async (ability: IAbility) => {
-
     const isAbleByCurrentAbility = await can(ability, action, subject, context);
 
-  // Return When The ability is not allowed the request
+    // Return When The ability is not allowed the request
     if (!isAbleByCurrentAbility) {
       return;
     }
@@ -91,7 +90,6 @@ const checkAbilities = async (params: CheckAbilitiesParams) => {
   } else {
     return onUserNotAllow(response, subject, action);
   }
-
 };
 
 export default checkAbilities;

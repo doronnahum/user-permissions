@@ -30,7 +30,7 @@ export const validateRoles = (roles: string | Roles) => {
 };
 
 export const validateConditions = (conditions: object | string) => {
-    // tslint:disable-next-line: strict-type-predicates
+  // tslint:disable-next-line: strict-type-predicates
   if (typeof conditions !== 'object' && typeof conditions !== 'string') {
     throw new Error('check-abilities: conditions must be type of string | object');
   }
@@ -57,7 +57,7 @@ export const validateUser = (user: UserContext) => {
 };
 
 export const validateWhen = (when: When) => {
-      // tslint:disable-next-line: strict-type-predicates
+  // tslint:disable-next-line: strict-type-predicates
   if (when && typeof when !== 'function') {
     throw new Error('check-abilities: when must be type of function/ async function');
   }

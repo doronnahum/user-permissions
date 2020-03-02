@@ -13,8 +13,8 @@ export default function (
 ) {
   // Merge data into the template string
   return template.replace(pattern, function (_tag, token): any {
-    let path = token.split('.');
-    let len = path.length;
+    const path = token.split('.');
+    const len = path.length;
     let lookup = data;
     let i = 0;
 
