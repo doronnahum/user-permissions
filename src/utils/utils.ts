@@ -4,11 +4,7 @@ import {
   Conditions,
   Context,
   ParseConditions,
-  Actions,
-  Subjects,
-  FieldsWithConditions,
-  When,
-  Fields
+  FieldsWithConditions
 } from '../types';
 
 import tinytim from './tinytim';
@@ -30,7 +26,7 @@ export const matchRoles = (abilityRoles?: Roles, roles?: Roles) => {
   if (!roles) {
     return false;
   }
-  return getAsArray(abilityRoles).some(role => roles.includes(role));
+  return abilityRoles.some(role => roles.includes(role));
 };
 
 export const parseTemplate = (stringify: string, data: object) => {
@@ -98,64 +94,6 @@ export const deletePropertyPath = (obj: {}, path: string) => {
   if (typeof pathToDelete === 'string') delete (obj as any)[pathToDelete];
 };
 
-export const validateActions = (actions?: Actions) => {
-  if (typeof actions !== 'string' && !Array.isArray(actions)) {
-    throw new Error('actions is required and must be string | string[]');
-  }
-};
-
-export const validateSubject = (subjects?: Subjects) => {
-  if (typeof subjects !== 'string' && !Array.isArray(subjects)) {
-    throw new Error('subjects is required and must be string | string[]');
-  }
-};
-
-export const validateRoles = (roles?: Roles) => {
-  if (
-    roles &&
-    // tslint:disable-next-line: strict-type-predicates
-    (!Array.isArray(roles) || roles.some(role => typeof role !== 'string'))
-  ) {
-    throw new Error('roles must be type of string[]');
-  }
-};
-
-export const validateConditions = (conditions?: object | string) => {
-  if (conditions) {
-    if (typeof conditions !== 'object' && typeof conditions !== 'string') {
-      throw new Error('conditions must be type of string | object');
-    }
-  }
-};
-
-export const validateFields = (fields: Fields) => {
-  if (
-    fields &&
-    (!Array.isArray(fields) ||
-      // tslint:disable-next-line: strict-type-predicates
-      fields.some(field => typeof field !== 'string'))
-  ) {
-    throw new Error('options.fields must be type of string[]');
-  }
-};
-
-export const validateUser = (user: UserContext) => {
-  if (
-    user &&
-    typeof user !== 'boolean' &&
-    // tslint:disable-next-line: strict-type-predicates
-    typeof user !== 'object'
-  ) {
-    throw new Error('user must be type of boolean | object');
-  }
-};
-
-export const validateWhen = (when: When) => {
-      // tslint:disable-next-line: strict-type-predicates
-  if (when && typeof when !== 'function') {
-    throw new Error('when must be type of function');
-  }
-};
 
 export const isObject = (item: any) => {
   return (typeof item === 'object' && !Array.isArray(item) && item !== null);

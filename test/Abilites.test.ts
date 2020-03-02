@@ -8,7 +8,10 @@ const appAbilities = new Abilities([
   allow().actions('*').subjects('posts').conditions('{"creator": "{{ user.id }}" }').user(true),
 
   // Admin user can manage all posts
-  allow().actions('*').subjects('posts').roles('admin'),
+  allow().actions('*').subjects('posts').roles('admin').meta({ populate: true }).when(context => {
+    if(context && context.user && (context.user as {[key: string]: any}).isActive) return true;
+    return false;
+  }),
 
   // A paying user can read the message information field
   allow().actions('read').subjects('posts').fields(['info']).user({ isPay: true }),
@@ -52,6 +55,11 @@ describe('Test Abilities class', () => {
 });
 
 describe('Test Abilities permissions handlers', () => {
+
+  it('Everyone can read the posts title and body- test can method', async () => {
+    expect(await appAbilities.can('read', 'posts')).toBe(true);
+    expect(await appAbilities.can('delete', 'posts')).toBe(false);
+  });
 
   it('Everyone can read the posts title and body', async () => {
     const res = await appAbilities.check('read', 'posts');
@@ -118,10 +126,20 @@ describe('Test Abilities permissions handlers', () => {
   });
 
   it('Admin user can manage all posts', async () => {
-    const res = await appAbilities.check('read', 'posts', { roles: ['admin'] });
+    const res = await appAbilities.check('read', 'posts', { roles: ['admin'], user: { id: 1, isActive: true } });
     expect(
       res.fields
     ).toBe(null);
+    const res1 = await appAbilities.check('read', 'posts', { roles: ['admin'], user: { id: 1, isActive: false } });
+    expect(
+      res1.fields
+    ).not.toBe(null);
+  });
+  it('Test meta is exists', async () => {
+    const res = await appAbilities.check('read', 'posts', { roles: ['admin'], user: { id: 1, isActive: true } });
+    expect(
+      res.meta[0].populate
+    ).toBe(true);
   });
 
   it('Logged in user can read his comments rating', async () => {

@@ -5,12 +5,13 @@ export type Fields = string[];
 
 export type Conditions = string | {}; // stringify or object;
 export interface ParseConditions {}
-export type Roles = string | string[];
+export type Roles = string[];
 export interface Context {
   user?: object;
   roles?: Roles;
+  [key: string]: any;
 }
-export type When = (context?: Context) => Promise<boolean>;
+export type When = (context?: Context) => Promise<boolean> | boolean;
 export type UserContext = boolean | object;
 
 export interface IAbility {

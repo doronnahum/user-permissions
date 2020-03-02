@@ -2,7 +2,7 @@
  * Test validateData function
  */
 
-import _fakeData from './utils/fakeData';
+import _fakeData from './helpers/fakeData';
 import { validateData } from '../src/utils/validateData';
 import clone from 'clone';
 

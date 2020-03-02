@@ -2,7 +2,7 @@
  * Test filterData function
  */
 
-import _fakeData from './utils/fakeData';
+import _fakeData from './helpers/fakeData';
 import { filterData } from '../src/utils/filterData';
 import clone from 'clone';
 

@@ -1,13 +1,16 @@
 import {
+  getAsArray
+ } from './utils/utils';
+
+import {
   validateWhen,
   validateUser,
   validateFields,
   validateConditions,
   validateRoles,
   validateSubject,
-  validateActions,
-  getAsArray
- } from './utils/utils';
+  validateActions
+} from './utils/validators';
 
 import {
   Actions,
@@ -41,10 +44,9 @@ export class Ability {
     this._subjects = res;
     return this;
   }
-  public roles (res: Roles) {
-    const roles = getAsArray(res);
+  public roles (roles: string | Roles) {
     validateRoles(roles);
-    this._roles = roles;
+    this._roles = getAsArray(roles);
     return this;
   }
   public conditions (res: Conditions) {
@@ -52,9 +54,9 @@ export class Ability {
     this._conditions = res;
     return this;
   }
-  public fields (res: Fields) {
+  public fields (res: string | Fields) {
     validateFields(res);
-    this._fields = res;
+    this._fields = getAsArray(res);
     return this;
   }
   public user (res: UserContext) {
