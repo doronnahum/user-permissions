@@ -1,27 +1,7 @@
-# TSDX Bootstrap
+# check-abilities
 
-This project was bootstrapped with [TSDX](https://github.com/jaredpalmer/tsdx).
+[![Build Status](https://travis-ci.com/doronnahum/check-abilities.svg?branch=master)](https://travis-ci.com/doronnahum/check-abilities)
 
-## Local Development
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/45005f2e2b334040abc2787b0dd25954)](https://www.codacy.com?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=doronnahum/check-abilities&amp;utm_campaign=Badge_Grade)
 
-Below is a list of commands you will probably find useful.
-
-### `npm start` or `yarn start`
-
-Runs the project in development/watch mode. Your project will be rebuilt upon changes. TSDX has a special logger for you convenience. Error messages are pretty printed and formatted for compatibility VS Code's Problems tab.
-
-<img src="https://user-images.githubusercontent.com/4060187/52168303-574d3a00-26f6-11e9-9f3b-71dbec9ebfcb.gif" width="600" />
-
-Your library will be rebuilt if you make edits.
-
-### `npm run build` or `yarn build`
-
-Bundles the package to the `dist` folder.
-The package is optimized and bundled with Rollup into multiple formats (CommonJS, UMD, and ES Module).
-
-<img src="https://user-images.githubusercontent.com/4060187/52168322-a98e5b00-26f6-11e9-8cf6-222d716b75ef.gif" width="600" />
-
-### `npm test` or `yarn test`
-
-Runs the test watcher (Jest) in an interactive mode.
-By default, runs tests related to files changed since the last commit.
+![npm bundle size](https://img.shields.io/bundlephobia/minzip/check-abilities)
