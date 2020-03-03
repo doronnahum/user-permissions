@@ -1,5 +1,5 @@
 import checkAbilities from './utils/checkAbilities';
-import { can } from './utils/can';
+import { isAllowed } from './utils/isAllowed';
 import { asyncForEach } from './utils/utils';
 import { IAbility, Context, IAbilitiesCanResponse } from './types';
 import { Ability } from './allow';
@@ -22,7 +22,7 @@ export default class Abilities {
    * @param action
    * @param subject
    * @param context
-   * @return { can: boolean, message: string, conditions: object[]...  }
+   * @return { allow: boolean, message: string, conditions: object[]...  }
    */
   public async check (
     action: string,
@@ -32,14 +32,14 @@ export default class Abilities {
     return await checkAbilities({ abilities: this.abilities, action, subject, context });
   }
 
-  public async can (
+  public async isAllowed (
     action: string,
     subject: string,
     context?: Context
   ): Promise<boolean> {
     let result = false;
     await asyncForEach(this.abilities, async (ability) => {
-      result = result || await can(ability, action, subject, context);
+      result = result || await isAllowed(ability, action, subject, context);
     });
     return result;
   }

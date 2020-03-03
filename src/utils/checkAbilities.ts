@@ -4,7 +4,7 @@ import {
 } from '../types';
 
 import { isConditionEmpty, isFieldsEmpty, asyncForEach } from './utils';
-import { can } from './can';
+import { isAllowed } from './isAllowed';
 import {
   getInitialResponse,
   onAllowFullAccess,
@@ -21,10 +21,10 @@ const checkAbilities = async (params: CheckAbilitiesParams) => {
   | response
   |-----------------------------------------------------------------
   | {
-  |   can: boolean; - User able/not able to make this request
+  |   allow: boolean; - User able/not able to make this request
   |   message: string; // 'Valid' or `You are not able to ${action} ${resources}`
   |   conditions?: object[]; // Collection of all abilities conditions
-  |   $select: null | string[]; // List of all possible fields, can be uses as query select
+  |   $select: null | string[]; // List of all possible fields, allow be uses as query select
   |   fields: null | string[]; // List of all allowed fields without any condition
   |   fieldsWithConditions: null | {conditions,fields}[]; // List of fields that allow with condition
   |   filterDataIsRequired: boolean; // When user is allowed to make the request with a condition/s
@@ -62,14 +62,14 @@ const checkAbilities = async (params: CheckAbilitiesParams) => {
   |
   */
   await asyncForEach(abilities, async (ability: IAbility) => {
-    const isAbleByCurrentAbility = await can(ability, action, subject, context);
+    const isAbleByCurrentAbility = await isAllowed(ability, action, subject, context);
 
     // Return When The ability is not allowed the request
     if (!isAbleByCurrentAbility) {
       return;
     }
 
-    response.can = true; // User can [action] the [subject]
+    response.allow = true; // User allow [action] the [subject]
     if (ability.meta) response.meta.push(ability.meta);
     const hasFields = !isFieldsEmpty(ability.fields);
     const hasConditions = !isConditionEmpty(ability.conditions);
@@ -81,7 +81,7 @@ const checkAbilities = async (params: CheckAbilitiesParams) => {
   /**
    * Return
    */
-  if (response.can) {
+  if (response.allow) {
     if (allowFullAccess) {
       return onAllowFullAccess(response, subject, action);
     } else {

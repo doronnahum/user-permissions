@@ -38,7 +38,7 @@ export interface CheckAbilitiesParams {
 }
 
 export interface IAbilitiesCanResponse {
-  can: boolean;
+  allow: boolean;
   message: string;
   conditions?: null | object[];
   validateData: ValidateData;

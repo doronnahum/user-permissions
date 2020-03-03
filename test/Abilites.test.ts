@@ -5,29 +5,29 @@ let appAbilities: any;
 describe('Test Abilities class', () => {
   beforeAll(() => {
     appAbilities = new Abilities([
-      // Everyone can read the posts title and body
+      // Everyone allow read the posts title and body
       allow().actions('read').resources('posts').fields(['title', 'body']),
     
-      // Logged in user can manage his posts
+      // Logged in user allow manage his posts
       allow().actions('*').resources('posts').conditions('{"creator": "{{ user.id }}" }').user(true),
     
-      // Admin user can manage all posts
+      // Admin user allow manage all posts
       allow().actions('*').resources('posts').roles('admin').meta({ populate: true }).when(context => {
         // tslint:disable-next-line: prefer-type-cast
         if (context?.user && (context.user as {[key: string]: any}).isActive) return true;
         return false;
       }),
     
-      // A paying user can read the message information field
+      // A paying user allow read the message information field
       allow().actions('read').resources('posts').fields(['info']).user({ isPay: true }),
     
-      // Everyone can read the comments title
+      // Everyone allow read the comments title
       allow().actions('read').resources('comments').fields(['title']),
     
-      // Logged in User can read the comments body fields
+      // Logged in User allow read the comments body fields
       allow().actions('read').resources('comments').fields(['body']).user(true),
     
-      // Logged in user can read his comments rating
+      // Logged in user allow read his comments rating
       allow().actions('read').resources('comments').conditions('{"creator": "{{ user.id }}" }').fields(['rating']).user(true)
     ]);
     
@@ -58,14 +58,14 @@ describe('Test Abilities class', () => {
 });
 
 describe('Test Abilities permissions handlers', () => {
-  it('Everyone can read the posts title and body- test can method', async () => {
-    expect(await appAbilities.can('read', 'posts')).toBe(true);
-    expect(await appAbilities.can('delete', 'posts')).toBe(false);
+  it('Everyone allow read the posts title and body- test allow method', async () => {
+    expect(await appAbilities.isAllowed('read', 'posts')).toBe(true);
+    expect(await appAbilities.isAllowed('delete', 'posts')).toBe(false);
   });
 
-  it('Everyone can read the posts title and body', async () => {
+  it('Everyone allow read the posts title and body', async () => {
     const res = await appAbilities.check('read', 'posts');
-    expect(res.can).toBe(true);
+    expect(res.allow).toBe(true);
     expect(res.fields).toEqual(['title', 'body']);
     expect(res.filterData({ title: 'lorem', info: 'ipsum' })).toEqual({
       title: 'lorem'
@@ -75,15 +75,15 @@ describe('Test Abilities permissions handlers', () => {
     expect(res.validateData([{ title: 'lorem', body: 'ipsum' }]).valid).toEqual(true);
   });
 
-  it("anonymous user can't create post", async () => {
+  it("anonymous user allow't create post", async () => {
     const res = await appAbilities.check('create', 'posts');
-    expect(res.can).toBe(false);
+    expect(res.allow).toBe(false);
   });
 
-  it('Logged in user can manage his posts - try create method', async () => {
+  it('Logged in user allow manage his posts - try create method', async () => {
     const userId = 'd3a1';
     const res = await appAbilities.check('create', 'posts', { user: { id: userId } });
-    expect(res.can).toBe(true);
+    expect(res.allow).toBe(true);
     expect(res.validateData({ creator: userId }).valid).toBe(true);
     expect(res.validateData({ creator: 'ppp' }).valid).toBe(false);
   });
@@ -118,7 +118,7 @@ describe('Test Abilities permissions handlers', () => {
     ]);
   });
 
-  it('A paying user can read the message information field', async () => {
+  it('A paying user allow read the message information field', async () => {
     const res = await appAbilities.check('read', 'posts', { user: { isPay: true } });
     expect(res.fields).toEqual(['title', 'body', 'info']);
     const res1 = await appAbilities.check('read', 'posts', { user: { isPay: false } });
@@ -127,7 +127,7 @@ describe('Test Abilities permissions handlers', () => {
     ).toEqual(['title', 'body']);
   });
 
-  it('Admin user can manage all posts', async () => {
+  it('Admin user allow manage all posts', async () => {
     const res = await appAbilities.check('read', 'posts', { roles: ['admin'], user: { id: 1, isActive: true } });
     expect(
       res.fields
@@ -144,7 +144,7 @@ describe('Test Abilities permissions handlers', () => {
     ).toBe(true);
   });
 
-  it('Logged in user can read his comments rating', async () => {
+  it('Logged in user allow read his comments rating', async () => {
     const userId = 'd3a1';
     const comments = [
       { creator: userId, title: 'nice', body: 'lorem', rating: 5 },

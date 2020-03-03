@@ -11,7 +11,7 @@ import { renderMessageByTypes as getMessage, messageTypes } from '../messages';
 import { parseConditions, isFieldsEmpty } from './utils';
 
 export const getInitialResponse = (): IAbilitiesCanResponse => ({
-  can: false,
+  allow: false,
   message: '',
   $select: null,
   fields: null,

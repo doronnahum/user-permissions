@@ -24,7 +24,7 @@ export let renderMessageByTypes = (
     case messageTypes.NOT_ABLE_BY_WHEN:
       return 'You are not able, missing permission';
     case messageTypes.NOT_ABLE_BY_DATA:
-      return `You can't to ${action} ${resources} in this data structure`;
+      return `You allow't to ${action} ${resources} in this data structure`;
     default:
       return 'You are not able';
   }
