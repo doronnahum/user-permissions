@@ -2,7 +2,7 @@ import {
   UserContext,
   Roles,
   Actions,
-  Subjects,
+  Resources,
   When,
   Fields
 } from '../types';
@@ -15,9 +15,9 @@ export const validateActions = (actions: Actions) => {
   return true;
 };
 
-export const validateSubject = (subjects: Subjects) => {
-  if (!isStringOrArrayOfString(subjects)) {
-    throw new Error('check-abilities: subjects is required and must be string | string[]');
+export const validateResource = (resources: Resources) => {
+  if (!isStringOrArrayOfString(resources)) {
+    throw new Error('check-abilities: resources is required and must be string | string[]');
   }
   return true;
 };

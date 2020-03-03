@@ -15,7 +15,7 @@ export const can = async (
   const roles = context ? context.roles : undefined;
   return (
     checkInArray(action, ability.actions) &&
-    checkInArray(subject, ability.subjects) &&
+    checkInArray(subject, ability.resources) &&
     (!ability.when || await ability.when(context)) &&
     checkUserContext(ability.user, userData) &&
     matchRoles(ability.roles, roles)

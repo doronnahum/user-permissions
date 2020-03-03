@@ -2,7 +2,7 @@
 import {
   validateFields,
   validateActions,
-  validateSubject,
+  validateResource,
   validateRoles,
   validateWhen,
   validateUser,
@@ -43,16 +43,16 @@ describe('test validateActions', () => {
   });
 });
 
-describe('test validateSubject', () => {
+describe('test validateResource', () => {
   it('Should by a function', () => {
-    expect(typeof validateSubject).toEqual('function');
+    expect(typeof validateResource).toEqual('function');
   });
   it('Should except only string and string[]', () => {
-    expect(validateSubject('post')).toEqual(true);
-    expect(validateSubject(['post'])).toEqual(true);
+    expect(validateResource('post')).toEqual(true);
+    expect(validateResource(['post'])).toEqual(true);
     try {
       // tslint:disable-next-line: prefer-type-cast
-      validateSubject(({ subject: 'post' } as any));
+      validateResource(({ subject: 'post' } as any));
       expect(false).toEqual(true);
     } catch (error) {
       expect(typeof error.message).toEqual('string');

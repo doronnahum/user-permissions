@@ -1,5 +1,5 @@
 export type Actions = string | string[];
-export type Subjects = string | string[];
+export type Resources = string | string[];
 
 export type Fields = string[];
 
@@ -16,7 +16,7 @@ export type UserContext = boolean | object;
 
 export interface IAbility {
   actions: Actions;
-  subjects: string | string[];
+  resources: string | string[];
   roles?: Roles;
   conditions?: Conditions;
   fields?: string[];

@@ -6,29 +6,29 @@ describe('Test Abilities class', () => {
   beforeAll(() => {
     appAbilities = new Abilities([
       // Everyone can read the posts title and body
-      allow().actions('read').subjects('posts').fields(['title', 'body']),
+      allow().actions('read').resources('posts').fields(['title', 'body']),
     
       // Logged in user can manage his posts
-      allow().actions('*').subjects('posts').conditions('{"creator": "{{ user.id }}" }').user(true),
+      allow().actions('*').resources('posts').conditions('{"creator": "{{ user.id }}" }').user(true),
     
       // Admin user can manage all posts
-      allow().actions('*').subjects('posts').roles('admin').meta({ populate: true }).when(context => {
+      allow().actions('*').resources('posts').roles('admin').meta({ populate: true }).when(context => {
         // tslint:disable-next-line: prefer-type-cast
         if (context?.user && (context.user as {[key: string]: any}).isActive) return true;
         return false;
       }),
     
       // A paying user can read the message information field
-      allow().actions('read').subjects('posts').fields(['info']).user({ isPay: true }),
+      allow().actions('read').resources('posts').fields(['info']).user({ isPay: true }),
     
       // Everyone can read the comments title
-      allow().actions('read').subjects('comments').fields(['title']),
+      allow().actions('read').resources('comments').fields(['title']),
     
       // Logged in User can read the comments body fields
-      allow().actions('read').subjects('comments').fields(['body']).user(true),
+      allow().actions('read').resources('comments').fields(['body']).user(true),
     
       // Logged in user can read his comments rating
-      allow().actions('read').subjects('comments').conditions('{"creator": "{{ user.id }}" }').fields(['rating']).user(true)
+      allow().actions('read').resources('comments').conditions('{"creator": "{{ user.id }}" }').fields(['rating']).user(true)
     ]);
     
   })
@@ -39,7 +39,7 @@ describe('Test Abilities class', () => {
   it('Validate allow return Ability class with the expected method', () => {
     const newAllow = allow();
     expect(typeof newAllow.actions).toEqual('function');
-    expect(typeof newAllow.subjects).toEqual('function');
+    expect(typeof newAllow.resources).toEqual('function');
     expect(typeof newAllow.conditions).toEqual('function');
     expect(typeof newAllow.user).toEqual('function');
     expect(typeof newAllow.fields).toEqual('function');

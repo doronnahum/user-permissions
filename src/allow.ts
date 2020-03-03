@@ -8,13 +8,13 @@ import {
   validateFields,
   validateConditions,
   validateRoles,
-  validateSubject,
+  validateResource,
   validateActions
 } from './utils/validators';
 
 import {
   Actions,
-  Subjects,
+  Resources,
   Conditions,
   Fields,
   UserContext,
@@ -27,7 +27,7 @@ const ALL_ACTIONS = ['*'];
 const ALL_SUBJECTS = ['*'];
 export class Ability {
   private _actions?: Actions;
-  private _subjects?: Subjects;
+  private _resources?: Resources;
 
   private _roles?: Roles;
   private _conditions?: Conditions;
@@ -42,9 +42,9 @@ export class Ability {
     return this;
   }
 
-  public subjects (res: Subjects) {
-    validateSubject(res);
-    this._subjects = res;
+  public resources (res: Resources) {
+    validateResource(res);
+    this._resources = res;
     return this;
   }
 
@@ -86,7 +86,7 @@ export class Ability {
   public get (): IAbility {
     return {
       actions: this._actions || ALL_ACTIONS,
-      subjects: this._subjects || ALL_SUBJECTS,
+      resources: this._resources || ALL_SUBJECTS,
       fields: this._fields,
       conditions: this._conditions,
       roles: this._roles,

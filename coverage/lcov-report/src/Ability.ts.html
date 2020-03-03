@@ -1,58 +1,58 @@
-
 <!doctype html>
 <html lang="en">
 
 <head>
-    <title>Code coverage report for src/Ability.ts</title>
-    <meta charset="utf-8" />
-    <link rel="stylesheet" href="..\prettify.css" />
-    <link rel="stylesheet" href="..\base.css" />
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <style type='text/css'>
-        .coverage-summary .sorter {
-            background-image: url(..\sort-arrow-sprite.png);
-        }
-    </style>
+  <title>Code coverage report for src/Ability.ts</title>
+  <meta charset="utf-8" />
+  <link rel="stylesheet" href="..\prettify.css" />
+  <link rel="stylesheet" href="..\base.css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style type='text/css'>
+    .coverage-summary .sorter {
+      background-image: url(..\sort-arrow-sprite.png);
+    }
+  </style>
 </head>
-    
+
 <body>
-<div class='wrapper'>
+  <div class='wrapper'>
     <div class='pad1'>
-        <h1><a href="..\index.html">All files</a> / <a href="index.html">src</a> Ability.ts</h1>
-        <div class='clearfix'>
-            
-            <div class='fl pad1y space-right2'>
-                <span class="strong">87.5% </span>
-                <span class="quiet">Statements</span>
-                <span class='fraction'>35/40</span>
-            </div>
-        
-            
-            <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
-                <span class="quiet">Branches</span>
-                <span class='fraction'>0/0</span>
-            </div>
-        
-            
-            <div class='fl pad1y space-right2'>
-                <span class="strong">81.82% </span>
-                <span class="quiet">Functions</span>
-                <span class='fraction'>9/11</span>
-            </div>
-        
-            
-            <div class='fl pad1y space-right2'>
-                <span class="strong">87.18% </span>
-                <span class="quiet">Lines</span>
-                <span class='fraction'>34/39</span>
-            </div>
-        
-            
+      <h1><a href="..\index.html">All files</a> / <a href="index.html">src</a> Ability.ts</h1>
+      <div class='clearfix'>
+
+        <div class='fl pad1y space-right2'>
+          <span class="strong">87.5% </span>
+          <span class="quiet">Statements</span>
+          <span class='fraction'>35/40</span>
         </div>
-        <p class="quiet">
-            Press <em>n</em> or <em>j</em> to go to the next uncovered block, <em>b</em>, <em>p</em> or <em>k</em> for the previous block.
-        </p>
+
+
+        <div class='fl pad1y space-right2'>
+          <span class="strong">100% </span>
+          <span class="quiet">Branches</span>
+          <span class='fraction'>0/0</span>
+        </div>
+
+
+        <div class='fl pad1y space-right2'>
+          <span class="strong">81.82% </span>
+          <span class="quiet">Functions</span>
+          <span class='fraction'>9/11</span>
+        </div>
+
+
+        <div class='fl pad1y space-right2'>
+          <span class="strong">87.18% </span>
+          <span class="quiet">Lines</span>
+          <span class='fraction'>34/39</span>
+        </div>
+
+
+      </div>
+      <p class="quiet">
+        Press <em>n</em> or <em>j</em> to go to the next uncovered block, <em>b</em>, <em>p</em> or <em>k</em> for the
+        previous block.
+      </p>
     </div>
     <div class='status-line high'></div>
     <pre><table class="coverage">
@@ -318,14 +318,14 @@
   validateFields,
   validateConditions,
   validateRoles,
-  validateSubject,
+  validateResource,
   validateActions,
   getAsArray
  } from './utils/utils';
 &nbsp;
 import {
   Actions,
-  Subjects,
+  Resources,
   Conditions,
   Fields,
   UserContext,
@@ -336,7 +336,7 @@ import {
 &nbsp;
 // class _Ability {
 //   private readonly actions: Actions;
-//   private readonly subjects: string | string[];
+//   private readonly resources: string | string[];
 &nbsp;
 //   private readonly roles?: Roles;
 //   private readonly conditions?: object | string;
@@ -345,14 +345,14 @@ import {
 //   private readonly when?: When;
 //   constructor (
 //     actions: Actions,
-//     subjects: string | string[],
+//     resources: string | string[],
 //     roles?: Roles,
 //     conditions?: object | string,
 //     options?: IAbilityOptions
 //   ) {
-//     validateAbilityArguments(actions, subjects, roles, conditions, options);
+//     validateAbilityArguments(actions, resources, roles, conditions, options);
 //     this.actions = actions;
-//     this.subjects = subjects;
+//     this.resources = resources;
 //     this.roles = roles;
 //     this.conditions = conditions;
 //     this.fields = options &amp;&amp; options.fields;
@@ -363,7 +363,7 @@ import {
 //   public get (): IAbility {
 //     return {
 //       actions: this.actions,
-//       subjects: this.subjects,
+//       resources: this.resources,
 //       fields: this.fields,
 //       conditions: this.conditions,
 //       roles: this.roles,
@@ -374,7 +374,7 @@ import {
 // }
 class AbilityClass {
   private _actions?: Actions;
-  private _subjects?: Subjects;
+  private _resources?: Resources;
 &nbsp;
   private _roles?: Roles;
   private _conditions?: Conditions;
@@ -388,9 +388,9 @@ class AbilityClass {
     this._actions = res;
     return this;
   }
-  public subjects (res: Subjects) {
-    validateSubject(res);
-    this._subjects = res;
+  public resources (res: Resources) {
+    validateResource(res);
+    this._resources = res;
     return this;
   }
   public roles (res: Roles) {
@@ -427,7 +427,7 @@ class AbilityClass {
   public get () {
     return {
       actions: this._actions,
-      subjects: this._subjects,
+      resources: this._resources,
       fields: this._fields,
       conditions: this._conditions,
       roles: this._roles,
@@ -440,24 +440,28 @@ class AbilityClass {
 &nbsp;
 const Ability = () =&gt; new AbilityClass();
 export default Ability;
-&nbsp;</pre></td></tr></table></pre>
+&nbsp;</pre>
+    </td>
+    </tr>
+    </table>
+    </pre>
 
-                <div class='push'></div><!-- for sticky footer -->
-            </div><!-- /wrapper -->
-            <div class='footer quiet pad2 space-top1 center small'>
-                Code coverage generated by
-                <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Sat Feb 29 2020 21:05:43 GMT+0200 (Israel Standard Time)
-            </div>
-        </div>
-        <script src="..\prettify.js"></script>
-        <script>
-            window.onload = function () {
-                prettyPrint();
-            };
-        </script>
-        <script src="..\sorter.js"></script>
-        <script src="..\block-navigation.js"></script>
-    </body>
+    <div class='push'></div><!-- for sticky footer -->
+  </div><!-- /wrapper -->
+  <div class='footer quiet pad2 space-top1 center small'>
+    Code coverage generated by
+    <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
+    at Sat Feb 29 2020 21:05:43 GMT+0200 (Israel Standard Time)
+  </div>
+  </div>
+  <script src="..\prettify.js"></script>
+  <script>
+    window.onload = function () {
+      prettyPrint();
+    };
+  </script>
+  <script src="..\sorter.js"></script>
+  <script src="..\block-navigation.js"></script>
+</body>
+
 </html>
-    

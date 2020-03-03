@@ -10,21 +10,21 @@ export const messageTypes = {
 export let renderMessageByTypes = (
   type: string,
   action: string,
-  subjects: string
+  resources: string
 ) => {
   switch (type) {
     case messageTypes.VALID:
       return 'Valid';
     case messageTypes.NOT_ABLE_BY_SUBJECT:
-      return `You are not able to use ${subjects}`;
+      return `You are not able to use ${resources}`;
     case messageTypes.NOT_ABLE_BY_ACTION:
-      return `You are not able to ${action} ${subjects}`;
+      return `You are not able to ${action} ${resources}`;
     case messageTypes.NOT_ABLE_BY_ROLE:
     case messageTypes.NOT_ABLE_BY_USER_CONTEXT:
     case messageTypes.NOT_ABLE_BY_WHEN:
       return 'You are not able, missing permission';
     case messageTypes.NOT_ABLE_BY_DATA:
-      return `You can't to ${action} ${subjects} in this data structure`;
+      return `You can't to ${action} ${resources} in this data structure`;
     default:
       return 'You are not able';
   }
@@ -36,7 +36,7 @@ export let renderMessageByTypes = (
  * @param handler
  */
 export const setRenderMessageByTypes = (
-  handler: (type: string, subjects: string, action: string) => string
+  handler: (type: string, resources: string, action: string) => string
 ) => {
   // tslint:disable-next-line: strict-type-predicates
   if (typeof handler === 'function') {

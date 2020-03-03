@@ -22,7 +22,7 @@ const checkAbilities = async (params: CheckAbilitiesParams) => {
   |-----------------------------------------------------------------
   | {
   |   can: boolean; - User able/not able to make this request
-  |   message: string; // 'Valid' or `You are not able to ${action} ${subjects}`
+  |   message: string; // 'Valid' or `You are not able to ${action} ${resources}`
   |   conditions?: object[]; // Collection of all abilities conditions
   |   $select: null | string[]; // List of all possible fields, can be uses as query select
   |   fields: null | string[]; // List of all allowed fields without any condition
