@@ -1,9 +1,13 @@
 language: node_js
+sudo: false
 node_js:
+  - 10
+  - 9
   - 8
-before_install:
-  - sudo apt-get install jq
-  - curl -LSs "$(curl -LSs https://api.github.com/repos/codacy/codacy-coverage-reporter/releases/latest | jq -r '.assets | map({name, browser_download_url} | select(.name | endswith(".jar"))) | .[0].browser_download_url')" -o codacy-coverage-reporter-assembly.jar
-
-after_success:
-  - java -jar codacy-coverage-reporter-assembly.jar report -l Java -r build/reports/jacoco/test/jacocoTestReport.xml
+  - 7
+  - 6
+install:
+  - npm install
+script:
+  - npm test
+  - codecov -f coverage/*.json
