@@ -1,11 +1,7 @@
 {
-  "version": "0.1.0",
+  "name": "check-abilities",
+  "version": "0.1.1",
   "license": "MIT",
-  "main": "dist/index.js",
-  "typings": "dist/index.d.ts",
-  "files": [
-    "dist"
-  ],
   "scripts": {
     "start": "tsdx watch",
     "build": "tsdx build",
@@ -16,6 +12,27 @@
     "format": "tslint -c tslint.json 'src/**/*.ts' 'test/**/*{.ts,.tsx}' --fix",
     "prepare": "tsdx build"
   },
+  "main": "dist/index.js",
+  "typings": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/doronnahum/check-abilities.git"
+  },
+  "keywords": [
+    "access control",
+    "authorization",
+    "acl",
+    "cancan",
+    "rabc",
+    "security",
+    "permissions",
+    "nodejs",
+    "browser"
+  ],
+  "author": "Doron Nahum <doron.nahum@gmail.com>",
   "peerDependencies": {},
   "husky": {
     "hooks": {
@@ -28,8 +45,6 @@
     "singleQuote": true,
     "trailingComma": "es5"
   },
-  "name": "check-abilities",
-  "author": "doronnahum",
   "module": "dist/check-abilities.esm.js",
   "devDependencies": {
     "@types/clone": "^0.1.30",
