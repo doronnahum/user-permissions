@@ -2,11 +2,11 @@
  * Test filterData function
  */
 
-import _fakeData from './helpers/fakeData';
+import { fakeData } from './helpers/fakeData';
 import { filterData } from '../src/utils/filterData';
 import clone from 'clone';
 
-const getFakeData = () => clone(_fakeData);
+const getFakeData = () => clone(fakeData);
 
 describe('test filter data function', () => {
   it('Should by return a function', () => {
@@ -20,7 +20,8 @@ describe('test filter data function', () => {
   it('test negative field', () => {
     const fakeData = getFakeData();
     const _filterData = filterData(fakeData, ['-name', '-_id'], null);
-    const data = (_filterData as any)[0];
+    // tslint:disable-next-line: prefer-type-cast
+    const data = (_filterData as { [key: string]: any }[])[0];
     expect(data.name).toEqual(undefined);
     expect(data._id).toEqual(undefined);
     expect(typeof data.isActive).toEqual('boolean');
@@ -28,7 +29,8 @@ describe('test filter data function', () => {
   it('test negative field', () => {
     const fakeData = getFakeData();
     const _filterData = filterData(fakeData, ['-name', '-_id', 'age'], null);
-    const dataItem = (_filterData as any)[0];
+    // tslint:disable-next-line: prefer-type-cast
+    const dataItem = (_filterData as { [key: string]: any }[])[0];
     expect(dataItem.name).toEqual(undefined);
     expect(dataItem._id).toEqual(undefined);
     expect(dataItem.isActive).toEqual(undefined);
@@ -36,7 +38,8 @@ describe('test filter data function', () => {
   it('test positive field', () => {
     const fakeData = getFakeData();
     const _filterData = filterData(fakeData, ['name', 'isActive'], null);
-    const dataItem = (_filterData as any)[0];
+    // tslint:disable-next-line: prefer-type-cast
+    const dataItem = (_filterData as { [key: string]: any }[])[0];
     expect(dataItem.name).not.toEqual(undefined);
     expect(dataItem.isActive).not.toEqual(undefined);
     expect(dataItem._id).toEqual(undefined);
@@ -44,7 +47,8 @@ describe('test filter data function', () => {
   it('test positive deep field', () => {
     const fakeData = getFakeData();
     const _filterData = filterData(fakeData, ['location.address'], null);
-    const dataItem = (_filterData as any)[0];
+    // tslint:disable-next-line: prefer-type-cast
+    const dataItem = (_filterData as { [key: string]: any }[])[0];
     expect(dataItem.name).toEqual(undefined);
     expect(dataItem.isActive).toEqual(undefined);
     expect(dataItem._id).toEqual(undefined);
@@ -54,21 +58,24 @@ describe('test filter data function', () => {
   it('test positive deep nested field', () => {
     const fakeData = getFakeData();
     const _filterData = filterData(fakeData, ['location.address', 'location'], null);
-    const dataItem = (_filterData as any)[0];
+    // tslint:disable-next-line: prefer-type-cast
+    const dataItem = (_filterData as { [key: string]: any }[])[0];
     expect(dataItem.location.state).not.toEqual(undefined);
     expect(dataItem.location.address).not.toEqual(undefined);
   });
   it('test positive deep nested field', () => {
     const fakeData = getFakeData();
     const _filterData = filterData(fakeData, ['location', 'location.address'], null);
-    const dataItem = (_filterData as any)[0];
+    // tslint:disable-next-line: prefer-type-cast
+    const dataItem = (_filterData as { [key: string]: any }[])[0];
     expect(dataItem.location.state).not.toEqual(undefined);
     expect(dataItem.location.address).not.toEqual(undefined);
   });
   it('test negative deep field', () => {
     const fakeData = getFakeData();
     const _filterData = filterData(fakeData, ['-location.address'], null);
-    const dataItem = (_filterData as any)[0];
+    // tslint:disable-next-line: prefer-type-cast
+    const dataItem = (_filterData as { [key: string]: any }[])[0];
     expect(dataItem.name).not.toEqual(undefined);
     expect(dataItem.isActive).not.toEqual(undefined);
     expect(dataItem._id).not.toEqual(undefined);

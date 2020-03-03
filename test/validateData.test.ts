@@ -2,11 +2,11 @@
  * Test validateData function
  */
 
-import _fakeData from './helpers/fakeData';
+import { fakeData } from './helpers/fakeData';
 import { validateData } from '../src/utils/validateData';
 import clone from 'clone';
 
-const getFakeData = () => clone(_fakeData);
+const getFakeData = () => clone(fakeData);
 
 describe('test validate data function', () => {
   it('Should by return a function', () => {

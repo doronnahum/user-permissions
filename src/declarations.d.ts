@@ -1,4 +1,4 @@
 declare module 'sift' {
-  function Sift (query: {}, options?: {}): (value: any) => any;
-  export default Sift;
+  function sift (query: {}, options?: {}): (value: any) => any;
+  export default sift;
 }

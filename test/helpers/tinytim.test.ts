@@ -1,11 +1,16 @@
 import tinytim from '../../src/utils/tinytim';
 
+let stringify: any;
+let obj: any;
 describe('Test tinytime', () => {
+  beforeAll(() => {
+    stringify = tinytim(template, data);
+    obj = JSON.parse(stringify);
+  })
   const template =
     '{"name": "{{ name }}", "city": "{{ location.city }}", "age": "{{ age }}"}';
   const data = { name: 'Dan', location: { city: 'Ny' } };
-  const stringify = tinytim(template, data);
-  const obj = JSON.parse(stringify);
+
   it('Res string from tinytim', () => {
     expect(typeof stringify).toEqual('string');
   });

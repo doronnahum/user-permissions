@@ -35,7 +35,7 @@ const validateNegativeFields = (data: object, fields: string[]) => {
   try {
     if (fields.length === 0) return { valid: true };
     fields.forEach((field: string) => {
-      if (typeof get(data, field) !== 'undefined') {
+      if (get(data, field) != undefined) {
         throw new Error(`${field} is not allowed`);
       }
     });
@@ -68,7 +68,8 @@ export const validateData = (
       throw new Error('The data structure does not fit your permissions');
     }
     if (isArray) {
-      (data as Array<{}>).map(item => {
+      // tslint:disable-next-line: prefer-type-cast
+      (data as object[]).map(item => {
         const checkResult = validateObject(item, fields, fieldsWithConditions);
         if (!checkResult.valid) {
           throw new Error(checkResult.message);

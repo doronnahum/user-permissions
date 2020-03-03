@@ -5,7 +5,7 @@ import {
 
 import { checkInArray, checkUserContext, matchRoles } from './utils';
 
-export default async (
+export const can = async (
   ability: IAbility,
   action: string,
   subject: string,

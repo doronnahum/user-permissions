@@ -23,6 +23,8 @@ import {
   IAbility
 } from './types';
 
+const ALL_ACTIONS = ['*'];
+const ALL_SUBJECTS = ['*'];
 export class Ability {
   private _actions?: Actions;
   private _subjects?: Subjects;
@@ -81,17 +83,17 @@ export class Ability {
     return this;
   }
 
-  public get () {
+  public get (): IAbility {
     return {
-      actions: this._actions,
-      subjects: this._subjects,
+      actions: this._actions || ALL_ACTIONS,
+      subjects: this._subjects || ALL_SUBJECTS,
       fields: this._fields,
       conditions: this._conditions,
       roles: this._roles,
       user: this._user,
       when: this._when,
       meta: this._meta
-    } as IAbility;
+    };
   }
 }
 

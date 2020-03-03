@@ -12,17 +12,18 @@ export default function (
   _defaultValue: string = ''
 ) {
   // Merge data into the template string
-  return template.replace(pattern, function (_tag, token): any {
+  return template.replace(pattern, (_tag, token): any => {
     const path = token.split('.');
     const len = path.length;
     let lookup = data;
     let i = 0;
 
     for (; i < len; i++) {
+      // tslint:disable-next-line: prefer-type-cast
       lookup = (lookup as any)[path[i]];
 
       // Property not found
-      if (typeof lookup === 'undefined') {
+      if (lookup == undefined) {
         return undefined;
       }
 

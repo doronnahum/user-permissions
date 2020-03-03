@@ -4,7 +4,7 @@ import {
 } from '../types';
 
 import { isConditionEmpty, isFieldsEmpty, asyncForEach } from './utils';
-import can from './can';
+import { can } from './can';
 import {
   getInitialResponse,
   onAllowFullAccess,

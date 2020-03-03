@@ -17,6 +17,7 @@ describe('test validateFields', () => {
     expect(validateFields('name')).toEqual(true);
     expect(validateFields(['name'])).toEqual(true);
     try {
+      // tslint:disable-next-line: prefer-type-cast
       validateFields(({ field: 'name' } as any));
       expect(false).toEqual(true);
     } catch (error) {
@@ -33,6 +34,7 @@ describe('test validateActions', () => {
     expect(validateActions('create')).toEqual(true);
     expect(validateActions(['create'])).toEqual(true);
     try {
+      // tslint:disable-next-line: prefer-type-cast
       validateActions(({ action: 'create' } as any));
       expect(false).toEqual(true);
     } catch (error) {
@@ -49,6 +51,7 @@ describe('test validateSubject', () => {
     expect(validateSubject('post')).toEqual(true);
     expect(validateSubject(['post'])).toEqual(true);
     try {
+      // tslint:disable-next-line: prefer-type-cast
       validateSubject(({ subject: 'post' } as any));
       expect(false).toEqual(true);
     } catch (error) {
@@ -65,6 +68,7 @@ describe('test validateRoles', () => {
     expect(validateRoles('admin')).toEqual(true);
     expect(validateRoles(['admin'])).toEqual(true);
     try {
+      // tslint:disable-next-line: prefer-type-cast
       validateRoles(({ role: 'admin' } as any));
       expect(false).toEqual(true);
     } catch (error) {
@@ -83,6 +87,7 @@ describe('test validateWhen', () => {
     expect(validateWhen(func)).toEqual(true);
     expect(validateWhen(asyncFunc)).toEqual(true);
     try {
+      // tslint:disable-next-line: prefer-type-cast
       validateWhen((true as any));
       expect(false).toEqual(true);
     } catch (error) {
@@ -100,6 +105,7 @@ describe('test validateUser', () => {
     expect(validateUser(false)).toEqual(true);
     expect(validateUser({ paid: true })).toEqual(true);
     try {
+      // tslint:disable-next-line: prefer-type-cast
       validateUser(('string' as any));
       expect(false).toEqual(true);
     } catch (error) {
@@ -116,6 +122,7 @@ describe('test validateConditions', () => {
     expect(validateConditions('{{email}}: "test@gmail.com"}')).toEqual(true);
     expect(validateConditions({ paid: true })).toEqual(true);
     try {
+      // tslint:disable-next-line: prefer-type-cast
       validateConditions((true as any));
       expect(false).toEqual(true);
     } catch (error) {

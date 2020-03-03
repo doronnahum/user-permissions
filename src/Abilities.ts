@@ -1,5 +1,5 @@
 import checkAbilities from './utils/checkAbilities';
-import can from './utils/can';
+import { can } from './utils/can';
 import { asyncForEach } from './utils/utils';
 import { IAbility, Context, IAbilitiesCanResponse } from './types';
 import { Ability } from './allow';
@@ -29,8 +29,7 @@ export default class Abilities {
     subject: string,
     context?: Context
   ): Promise<IAbilitiesCanResponse> {
-    const res = await checkAbilities({ abilities: this.abilities, action, subject, context });
-    return res;
+    return await checkAbilities({ abilities: this.abilities, action, subject, context });
   }
 
   public async can (

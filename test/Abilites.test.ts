@@ -1,32 +1,37 @@
 import { allow, Abilities } from '../src';
 
-const appAbilities = new Abilities([
-  // Everyone can read the posts title and body
-  allow().actions('read').subjects('posts').fields(['title', 'body']),
-
-  // Logged in user can manage his posts
-  allow().actions('*').subjects('posts').conditions('{"creator": "{{ user.id }}" }').user(true),
-
-  // Admin user can manage all posts
-  allow().actions('*').subjects('posts').roles('admin').meta({ populate: true }).when(context => {
-    if (context?.user && (context.user as {[key: string]: any}).isActive) return true;
-    return false;
-  }),
-
-  // A paying user can read the message information field
-  allow().actions('read').subjects('posts').fields(['info']).user({ isPay: true }),
-
-  // Everyone can read the comments title
-  allow().actions('read').subjects('comments').fields(['title']),
-
-  // Logged in User can read the comments body fields
-  allow().actions('read').subjects('comments').fields(['body']).user(true),
-
-  // Logged in user can read his comments rating
-  allow().actions('read').subjects('comments').conditions('{"creator": "{{ user.id }}" }').fields(['rating']).user(true)
-]);
+let appAbilities: any;
 
 describe('Test Abilities class', () => {
+  beforeAll(() => {
+    appAbilities = new Abilities([
+      // Everyone can read the posts title and body
+      allow().actions('read').subjects('posts').fields(['title', 'body']),
+    
+      // Logged in user can manage his posts
+      allow().actions('*').subjects('posts').conditions('{"creator": "{{ user.id }}" }').user(true),
+    
+      // Admin user can manage all posts
+      allow().actions('*').subjects('posts').roles('admin').meta({ populate: true }).when(context => {
+        // tslint:disable-next-line: prefer-type-cast
+        if (context?.user && (context.user as {[key: string]: any}).isActive) return true;
+        return false;
+      }),
+    
+      // A paying user can read the message information field
+      allow().actions('read').subjects('posts').fields(['info']).user({ isPay: true }),
+    
+      // Everyone can read the comments title
+      allow().actions('read').subjects('comments').fields(['title']),
+    
+      // Logged in User can read the comments body fields
+      allow().actions('read').subjects('comments').fields(['body']).user(true),
+    
+      // Logged in user can read his comments rating
+      allow().actions('read').subjects('comments').conditions('{"creator": "{{ user.id }}" }').fields(['rating']).user(true)
+    ]);
+    
+  })
   it('Validate allow is function', () => {
     expect(typeof allow).toEqual('function');
   });

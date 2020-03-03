@@ -1,6 +1,6 @@
 {
-  "extends": "tslint-config-standard",
+  "extends": "tslint-microsoft-contrib/recommended",
   "rules": {
-    "semicolon": [true, "always"]
+    "no-relative-imports": [false]
   }
 }

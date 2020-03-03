@@ -68,6 +68,7 @@ describe('test messages function', () => {
   });
   it('setRenderMessageByTypes Should by a function', () => {
     try {
+      // tslint:disable-next-line: prefer-type-cast
       setRenderMessageByTypes('' as any); // Throw error
       expect(true).toBe(false);
     } catch (error) {

@@ -1,4 +1,4 @@
-export default [
+export const fakeData  = [
   {
     _id: '5e20aa5a0c1789a3fe0a79af',
     isActive: true,

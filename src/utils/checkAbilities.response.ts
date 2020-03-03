@@ -67,6 +67,7 @@ export const onUserNotAllow = (response: IAbilitiesCanResponse, subject: string,
 };
 
 export const updateResponseWithAbilityFieldsAndConditons = (response: IAbilitiesCanResponse, ability: IAbility, hasFields: boolean, hasConditions: boolean, context?: Context) => {
+  // tslint:disable-next-line: prefer-type-cast
   const parsingCondition = hasConditions ? parseConditions((ability.conditions as Conditions), context) : undefined;
   if (parsingCondition) {
     response.conditions = response.conditions ?? [];
@@ -77,6 +78,7 @@ export const updateResponseWithAbilityFieldsAndConditons = (response: IAbilities
     response.fieldsWithConditions = response.fieldsWithConditions ?? [];
     response.filterDataIsRequired = true;
     response.fieldsWithConditions.push({
+      // tslint:disable-next-line: prefer-type-cast
       fields: ability.fields as string[],
       conditions: parsingCondition
     });
@@ -90,6 +92,7 @@ export const updateResponseWithAbilityFieldsAndConditons = (response: IAbilities
   } else if (hasFields && !parsingCondition) {
     response.fields = response.fields ?? [];
     response.filterDataIsRequired = true;
+    // tslint:disable-next-line: prefer-type-cast
     response.fields.push(...(ability.fields as string[]));
   }
 };

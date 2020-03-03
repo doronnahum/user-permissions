@@ -52,6 +52,7 @@ export const parseConditions = (
 ): ParseConditions => {
   const isTemplate = typeof conditions === 'string';
   if (isTemplate) {
+    // tslint:disable-next-line: prefer-type-cast
     return parseTemplate((conditions as string), context ?? {});
   }
   return conditions;
@@ -82,15 +83,17 @@ export const deletePropertyPath = (obj: {}, path: string) => {
   const splitPath: string[] = path.split('.');
 
   for (let i = 0; i < splitPath.length - 1; i++) {
+    // tslint:disable-next-line: prefer-type-cast
     obj = (obj as any)[splitPath[i]];
 
     // tslint:disable-next-line: strict-type-predicates
-    if (typeof obj === 'undefined') {
+    if (obj == undefined) {
       return;
     }
   }
 
   const pathToDelete = splitPath.pop();
+  // tslint:disable-next-line: prefer-type-cast
   if (typeof pathToDelete === 'string') delete (obj as any)[pathToDelete];
 };
 
