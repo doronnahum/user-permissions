@@ -1,6 +1,6 @@
 {
   "name": "check-abilities",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Small authorization library for NodeJS and browser",
   "license": "MIT",
   "scripts": {
