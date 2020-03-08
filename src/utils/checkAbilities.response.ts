@@ -1,5 +1,5 @@
 import {
-  IAbilitiesCanResponse,
+  IAbilitiesIsALlowedResponse,
   IAbility,
   Context,
   Conditions
@@ -10,7 +10,7 @@ import { validateData } from './validateData';
 import { renderMessageByTypes as getMessage, messageTypes } from '../messages';
 import { parseConditions, isFieldsEmpty } from './utils';
 
-export const getInitialResponse = (): IAbilitiesCanResponse => ({
+export const getInitialResponse = (): IAbilitiesIsALlowedResponse => ({
   allow: false,
   message: '',
   $select: null,
@@ -41,13 +41,13 @@ export const validateDataWithFalseResponse = (_data: object | object[]) => ({ va
 
 /**
  * @function onAllowFullAccess
- * @description return IAbilitiesCanResponse with full access
+ * @description return IAbilitiesIsALlowedResponse with full access
  * full access is ability to make the request without conditions/fields limits
  * @param response
  * @param subject
  * @param action
  */
-export const onAllowFullAccess = (response: IAbilitiesCanResponse, subject: string, action: string) => {
+export const onAllowFullAccess = (response: IAbilitiesIsALlowedResponse, subject: string, action: string) => {
   response.message = getMessage(messageTypes.VALID, subject, action);
   response.filterDataIsRequired = false;
   response.fields = null;
@@ -58,7 +58,7 @@ export const onAllowFullAccess = (response: IAbilitiesCanResponse, subject: stri
   return response;
 };
 
-export const onUserNotAllow = (response: IAbilitiesCanResponse, subject: string, action: string) => {
+export const onUserNotAllow = (response: IAbilitiesIsALlowedResponse, subject: string, action: string) => {
   response.conditions = null;
   response.fields = null;
   response.validateData = validateDataWithFalseResponse;
@@ -66,7 +66,7 @@ export const onUserNotAllow = (response: IAbilitiesCanResponse, subject: string,
   return response;
 };
 
-export const updateResponseWithAbilityFieldsAndConditons = (response: IAbilitiesCanResponse, ability: IAbility, hasFields: boolean, hasConditions: boolean, context?: Context) => {
+export const updateResponseWithAbilityFieldsAndConditons = (response: IAbilitiesIsALlowedResponse, ability: IAbility, hasFields: boolean, hasConditions: boolean, context?: Context) => {
   // tslint:disable-next-line: prefer-type-cast
   const parsingCondition = hasConditions ? parseConditions((ability.conditions as Conditions), context) : undefined;
   if (parsingCondition) {
@@ -99,14 +99,14 @@ export const updateResponseWithAbilityFieldsAndConditons = (response: IAbilities
 
 /**
  * @function onAllowFullAccess
- * @description return IAbilitiesCanResponse with limit access
+ * @description return IAbilitiesIsALlowedResponse with limit access
  * limit access is ability to make the request with some conditions/fields limits
  * @param response
  * @param subject
  * @param action
  * @param conditions
  */
-export const onAllowLimitAccess = (response: IAbilitiesCanResponse, subject: string, action: string) => {
+export const onAllowLimitAccess = (response: IAbilitiesIsALlowedResponse, subject: string, action: string) => {
   response.message = getMessage(messageTypes.VALID, subject, action);
   // When one or more of the rules includes fields then filterData is added to the response
   const hasField = !isFieldsEmpty(response.fields) || !isFieldsEmpty(response.fieldsWithConditions);

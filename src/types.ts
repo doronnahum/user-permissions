@@ -37,7 +37,7 @@ export interface CheckAbilitiesParams {
   abilities: IAbility[]; action: string; subject: string; context?: Context;
 }
 
-export interface IAbilitiesCanResponse {
+export interface IAbilitiesIsALlowedResponse {
   allow: boolean;
   message: string;
   conditions?: null | object[];

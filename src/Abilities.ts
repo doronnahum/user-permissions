@@ -1,7 +1,7 @@
 import checkAbilities from './utils/checkAbilities';
 import { isAllowed } from './utils/isAllowed';
 import { asyncForEach } from './utils/utils';
-import { IAbility, Context, IAbilitiesCanResponse } from './types';
+import { IAbility, Context, IAbilitiesIsALlowedResponse } from './types';
 import { Ability } from './allow';
 export default class Abilities {
   private readonly abilities: IAbility[];
@@ -28,7 +28,7 @@ export default class Abilities {
     action: string,
     subject: string,
     context?: Context
-  ): Promise<IAbilitiesCanResponse> {
+  ): Promise<IAbilitiesIsALlowedResponse> {
     return await checkAbilities({ abilities: this.abilities, action, subject, context });
   }
 

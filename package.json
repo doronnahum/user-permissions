@@ -1,6 +1,6 @@
 {
   "name": "check-abilities",
-  "version": "0.1.2",
+  "version": "0.2.0",
   "description": "Small authorization library for NodeJS and browser",
   "license": "MIT",
   "scripts": {
@@ -11,7 +11,7 @@
     "lint": "tsdx lint",
     "tsdx-format": "tsdx lint --fix",
     "format": "tslint -c tslint.json 'src/**/*.ts' 'test/**/*{.ts,.tsx}' --fix",
-    "prepare": "tsdx build"
+    "prepare": "npm run test && tsdx build"
   },
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
