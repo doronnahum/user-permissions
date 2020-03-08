@@ -7,3 +7,5 @@
 ![npm bundle size](https://img.shields.io/bundlephobia/minzip/check-abilities)
 
 [![codecov](https://codecov.io/gh/doronnahum/check-abilities/branch/master/graph/badge.svg)](https://codecov.io/gh/doronnahum/check-abilities)
+
+[![Known Vulnerabilities](https://snyk.io/test/github/doronnahum/check-abilities/badge.svg?targetFile=package.json)](https://snyk.io/test/github/doronnahum/check-abilities?targetFile=package.json)
