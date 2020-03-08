@@ -138,3 +138,8 @@ export const asyncForEach = async (array: any[], callback: (item: any, index: nu
     await callback(array[index], index, array);
   }
 };
+
+export const getNotAllowMessage = (
+  action: string,
+  resources: string
+) => `You are not authorized to ${action} ${resources}`;

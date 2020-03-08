@@ -11,6 +11,9 @@ export interface Context {
   roles?: Roles;
   [key: string]: any;
 }
+export interface Config {
+  getMessage? : (action: string, subject: string)=> string
+}
 export type When = (context?: Context) => Promise<boolean> | boolean;
 export type UserContext = boolean | object;
 
@@ -31,10 +34,6 @@ export type ValidateData = (data: object | object[]) => ValidateDataResponse;
 export interface FieldsWithConditions {
   conditions: object;
   fields: string[];
-}
-
-export interface CheckAbilitiesParams {
-  abilities: IAbility[]; action: string; subject: string; context?: Context;
 }
 
 export interface IAbilitiesCheckResponse {

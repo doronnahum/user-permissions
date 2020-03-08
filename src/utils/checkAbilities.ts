@@ -1,6 +1,5 @@
 import {
-  IAbility,
-  CheckAbilitiesParams
+  IAbility, Context, Config,
 } from '../types';
 
 import { isConditionEmpty, isFieldsEmpty, asyncForEach } from './utils';
@@ -13,8 +12,8 @@ import {
   updateResponseWithAbilityFieldsAndConditons
 } from './checkAbilities.response';
 
-const checkAbilities = async (params: CheckAbilitiesParams) => {
-  const { abilities, action, subject, context } = params;
+
+const checkAbilities = async (abilities: IAbility[], action: string, resource: string, context?: Context, config?: Config) => {
 
   /*
   |-----------------------------------------------------------------
@@ -62,14 +61,14 @@ const checkAbilities = async (params: CheckAbilitiesParams) => {
   |
   */
   await asyncForEach(abilities, async (ability: IAbility) => {
-    const isAbleByCurrentAbility = await isAllowed(ability, action, subject, context);
+    const isAbleByCurrentAbility = await isAllowed(ability, action, resource, context);
 
     // Return When The ability is not allowed the request
     if (!isAbleByCurrentAbility) {
       return;
     }
 
-    response.allow = true; // User allow [action] the [subject]
+    response.allow = true; // User allow [action] the [resource]
     if (ability.meta) response.meta.push(ability.meta);
     const hasFields = !isFieldsEmpty(ability.fields);
     const hasConditions = !isConditionEmpty(ability.conditions);
@@ -83,12 +82,12 @@ const checkAbilities = async (params: CheckAbilitiesParams) => {
    */
   if (response.allow) {
     if (allowFullAccess) {
-      return onAllowFullAccess(response, subject, action);
+      return onAllowFullAccess(response);
     } else {
-      return onAllowLimitAccess(response, subject, action);
+      return onAllowLimitAccess(response);
     }
   } else {
-    return onUserNotAllow(response, subject, action);
+    return onUserNotAllow(response, resource, action, config);
   }
 };
 

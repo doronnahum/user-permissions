@@ -2,13 +2,13 @@ import {
   IAbilitiesCheckResponse,
   IAbility,
   Context,
-  Conditions
+  Conditions,
+  Config
 } from '../types';
 
 import { filterData } from './filterData';
 import { validateData } from './validateData';
-import { renderMessageByTypes as getMessage, messageTypes } from '../messages';
-import { parseConditions, isFieldsEmpty } from './utils';
+import { parseConditions, isFieldsEmpty, getNotAllowMessage } from './utils';
 
 export const getInitialResponse = (): IAbilitiesCheckResponse => ({
   allow: false,
@@ -44,11 +44,8 @@ export const validateDataWithFalseResponse = (_data: object | object[]) => ({ va
  * @description return IAbilitiesCheckResponse with full access
  * full access is ability to make the request without conditions/fields limits
  * @param response
- * @param subject
- * @param action
  */
-export const onAllowFullAccess = (response: IAbilitiesCheckResponse, subject: string, action: string) => {
-  response.message = getMessage(messageTypes.VALID, subject, action);
+export const onAllowFullAccess = (response: IAbilitiesCheckResponse) => {
   response.filterDataIsRequired = false;
   response.fields = null;
   response.fieldsWithConditions = null;
@@ -58,11 +55,12 @@ export const onAllowFullAccess = (response: IAbilitiesCheckResponse, subject: st
   return response;
 };
 
-export const onUserNotAllow = (response: IAbilitiesCheckResponse, subject: string, action: string) => {
+export const onUserNotAllow = (response: IAbilitiesCheckResponse, subject: string, action: string, config?: Config) => {
+  const getMessage = config && config.getMessage ? config.getMessage : getNotAllowMessage;
   response.conditions = null;
   response.fields = null;
   response.validateData = validateDataWithFalseResponse;
-  response.message = getMessage(messageTypes.NOT_ABLE_BY_ACTION, action, subject);
+  response.message = getMessage(action, subject);
   return response;
 };
 
@@ -102,12 +100,8 @@ export const updateResponseWithAbilityFieldsAndConditons = (response: IAbilities
  * @description return IAbilitiesCheckResponse with limit access
  * limit access is ability to make the request with some conditions/fields limits
  * @param response
- * @param subject
- * @param action
- * @param conditions
  */
-export const onAllowLimitAccess = (response: IAbilitiesCheckResponse, subject: string, action: string) => {
-  response.message = getMessage(messageTypes.VALID, subject, action);
+export const onAllowLimitAccess = (response: IAbilitiesCheckResponse) => {
   // When one or more of the rules includes fields then filterData is added to the response
   const hasField = !isFieldsEmpty(response.fields) || !isFieldsEmpty(response.fieldsWithConditions);
   if (hasField) {

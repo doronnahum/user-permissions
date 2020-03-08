@@ -1,8 +1,19 @@
 import {
   matchRoles,
   parseConditions,
-  isConditionEmpty
+  isConditionEmpty,
+  getNotAllowMessage
 } from '../src/utils/utils';
+
+describe('test getNotAllowMessage utils', () => {
+  it('Should by a function', () => {
+    expect(typeof getNotAllowMessage).toEqual('function');
+  });
+
+  it('Should return string', () => {
+    expect(typeof getNotAllowMessage('create', 'post')).toEqual('string');
+  });
+});
 
 describe('test matchRoles utils', () => {
   it('Should by a function', () => {

@@ -1,13 +1,15 @@
 import checkAbilities from './utils/checkAbilities';
 import { isAllowed } from './utils/isAllowed';
 import { asyncForEach } from './utils/utils';
-import { IAbility, Context, IAbilitiesCheckResponse } from './types';
+import { IAbility, Context, IAbilitiesCheckResponse, Config } from './types';
 import { Ability } from './allow';
 export default class Abilities {
   private readonly abilities: IAbility[];
-  constructor (abilities: Ability[]) {
+  private readonly config?: Config;
+  constructor (abilities: Ability[], config: Config) {
     // Convert abilities class to object
     this.abilities = abilities.map(ability => ability.get());
+    this.config = config;
   }
 
   public get () {
@@ -29,7 +31,7 @@ export default class Abilities {
     subject: string,
     context?: Context
   ): Promise<IAbilitiesCheckResponse> {
-    return await checkAbilities({ abilities: this.abilities, action, subject, context });
+    return await checkAbilities(this.abilities, action, subject, context, this.config);
   }
 
   public async isAllowed (
