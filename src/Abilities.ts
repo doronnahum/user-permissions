@@ -2,11 +2,11 @@ import checkAbilities from './utils/checkAbilities';
 import { isAllowed } from './utils/isAllowed';
 import { asyncForEach } from './utils/utils';
 import { IAbility, Context, IAbilitiesCheckResponse, Config } from './types';
-import { Ability } from './allow';
+import { Allow } from './Allow';
 export default class Abilities {
   private readonly abilities: IAbility[];
   private readonly config?: Config;
-  constructor (abilities: Ability[], config: Config) {
+  constructor (abilities: Allow[], config?: Config) {
     // Convert abilities class to object
     this.abilities = abilities.map(ability => ability.get());
     this.config = config;
@@ -20,11 +20,11 @@ export default class Abilities {
 
   /**
    * @method check
-   * @description return an object with check result and tools to filter&validate data
+   * @description Return an object with check result and tools to filter & validate data
    * @param action
    * @param subject
    * @param context
-   * @return { allow: boolean, message: string, conditions: object[]...  }
+   * @return {Promise} { allow: boolean, message: string, conditions: object[]...  }
    */
   public async check (
     action: string,
@@ -34,6 +34,14 @@ export default class Abilities {
     return await checkAbilities(this.abilities, action, subject, context, this.config);
   }
 
+  /**
+   * @method isAllowed
+   * @description Return true when user can [action] a [subject]
+   * @param {string} action 
+   * @param {string} subject 
+   * @param {object} context
+   * @returns {Promise}
+   */
   public async isAllowed (
     action: string,
     subject: string,

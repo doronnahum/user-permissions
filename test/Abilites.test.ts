@@ -1,4 +1,4 @@
-import { allow, Abilities } from '../src';
+import { Allow, Abilities } from '../src';
 
 let appAbilities: any;
 
@@ -6,38 +6,38 @@ describe('Test Abilities class', () => {
   beforeAll(() => {
     appAbilities = new Abilities([
       // Everyone allow read the posts title and body
-      allow().actions('read').resources('posts').fields(['title', 'body']),
+      new Allow().actions('read').resources('posts').fields(['title', 'body']),
     
       // Logged in user allow manage his posts
-      allow().actions('*').resources('posts').conditions('{"creator": "{{ user.id }}" }').user(true),
+      new Allow().actions('*').resources('posts').conditions('{"creator": "{{ user.id }}" }').user(true),
     
       // Admin user allow manage all posts
-      allow().actions('*').resources('posts').roles('admin').meta({ populate: true }).when(context => {
+      new Allow().actions('*').resources('posts').roles('admin').meta({ populate: true }).when(context => {
         // tslint:disable-next-line: prefer-type-cast
         if (context?.user && (context.user as {[key: string]: any}).isActive) return true;
         return false;
       }),
     
       // A paying user allow read the message information field
-      allow().actions('read').resources('posts').fields(['info']).user({ isPay: true }),
+      new Allow().actions('read').resources('posts').fields(['info']).user({ isPay: true }),
     
       // Everyone allow read the comments title
-      allow().actions('read').resources('comments').fields(['title']),
+      new Allow().actions('read').resources('comments').fields(['title']),
     
       // Logged in User allow read the comments body fields
-      allow().actions('read').resources('comments').fields(['body']).user(true),
+      new Allow().actions('read').resources('comments').fields(['body']).user(true),
     
       // Logged in user allow read his comments rating
-      allow().actions('read').resources('comments').conditions('{"creator": "{{ user.id }}" }').fields(['rating']).user(true)
+      new Allow().actions('read').resources('comments').conditions('{"creator": "{{ user.id }}" }').fields(['rating']).user(true)
     ]);
     
   })
   it('Validate allow is function', () => {
-    expect(typeof allow).toEqual('function');
+    expect(typeof Allow).toEqual('function');
   });
 
   it('Validate allow return Ability class with the expected method', () => {
-    const newAllow = allow();
+    const newAllow = new Allow();
     expect(typeof newAllow.actions).toEqual('function');
     expect(typeof newAllow.resources).toEqual('function');
     expect(typeof newAllow.conditions).toEqual('function');

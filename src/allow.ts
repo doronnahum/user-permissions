@@ -25,7 +25,7 @@ import {
 
 const ALL_ACTIONS = ['*'];
 const ALL_SUBJECTS = ['*'];
-export class Ability {
+export class Allow {
   private _actions?: Actions;
   private _resources?: Resources;
 
@@ -96,6 +96,3 @@ export class Ability {
     };
   }
 }
-
-const allow = () => new Ability();
-export default allow;

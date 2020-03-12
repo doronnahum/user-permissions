@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1583702442898" clover="3.2.0">
-  <project timestamp="1583702442898" name="All files">
-    <metrics statements="320" coveredstatements="317" conditionals="203" coveredconditionals="182" methods="78" coveredmethods="75" elements="601" coveredelements="574" complexity="0" loc="320" ncloc="320" packages="2" files="12" classes="12"/>
+<coverage generated="1584038360641" clover="3.2.0">
+  <project timestamp="1584038360641" name="All files">
+    <metrics statements="318" coveredstatements="315" conditionals="203" coveredconditionals="182" methods="77" coveredmethods="74" elements="598" coveredelements="571" complexity="0" loc="318" ncloc="318" packages="2" files="12" classes="12"/>
     <package name="src">
-      <metrics statements="59" coveredstatements="59" conditionals="8" coveredconditionals="6" methods="19" coveredmethods="19"/>
+      <metrics statements="57" coveredstatements="57" conditionals="8" coveredconditionals="6" methods="18" coveredmethods="18"/>
       <file name="Abilities.ts" path="C:\Users\doron\myprojects\check-abilities\src\Abilities.ts">
         <metrics statements="16" coveredstatements="16" conditionals="4" coveredconditionals="4" methods="8" coveredmethods="8"/>
         <line num="1" count="1" type="stmt"/>
@@ -16,15 +16,15 @@
         <line num="16" count="1" type="stmt"/>
         <line num="29" count="1" type="stmt"/>
         <line num="34" count="11" type="cond" truecount="2" falsecount="0"/>
-        <line num="37" count="1" type="stmt"/>
-        <line num="42" count="2" type="stmt"/>
-        <line num="43" count="14" type="stmt"/>
-        <line num="44" count="20" type="cond" truecount="2" falsecount="0"/>
-        <line num="46" count="2" type="stmt"/>
-        <line num="48" count="1" type="stmt"/>
+        <line num="45" count="1" type="stmt"/>
+        <line num="50" count="2" type="stmt"/>
+        <line num="51" count="14" type="stmt"/>
+        <line num="52" count="20" type="cond" truecount="2" falsecount="0"/>
+        <line num="54" count="2" type="stmt"/>
+        <line num="56" count="1" type="stmt"/>
       </file>
-      <file name="allow.ts" path="C:\Users\doron\myprojects\check-abilities\src\allow.ts">
-        <metrics statements="41" coveredstatements="41" conditionals="4" coveredconditionals="2" methods="11" coveredmethods="11"/>
+      <file name="Allow.ts" path="C:\Users\doron\myprojects\check-abilities\src\Allow.ts">
+        <metrics statements="39" coveredstatements="39" conditionals="4" coveredconditionals="2" methods="10" coveredmethods="10"/>
         <line num="1" count="1" type="stmt"/>
         <line num="5" count="1" type="stmt"/>
         <line num="26" count="1" type="stmt"/>
@@ -64,8 +64,6 @@
         <line num="86" count="1" type="stmt"/>
         <line num="87" count="7" type="stmt"/>
         <line num="98" count="1" type="stmt"/>
-        <line num="100" count="8" type="stmt"/>
-        <line num="101" count="1" type="stmt"/>
       </file>
       <file name="declarations.d.ts" path="C:\Users\doron\myprojects\check-abilities\src\declarations.d.ts">
         <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
