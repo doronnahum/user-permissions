@@ -52,7 +52,7 @@ describe('test validateResource', () => {
     expect(validateResource(['post'])).toEqual(true);
     try {
       // tslint:disable-next-line: prefer-type-cast
-      validateResource(({ subject: 'post' } as any));
+      validateResource(({ resource: 'post' } as any));
       expect(false).toEqual(true);
     } catch (error) {
       expect(typeof error.message).toEqual('string');

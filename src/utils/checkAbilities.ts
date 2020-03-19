@@ -5,53 +5,22 @@ import {
 import { isConditionEmpty, isFieldsEmpty, asyncForEach } from './utils';
 import { isAllowed } from './isAllowed';
 import {
-  getInitialResponse,
   onAllowFullAccess,
-  onAllowLimitAccess,
   onUserNotAllow,
   updateResponseWithAbilityFieldsAndConditons
 } from './checkAbilities.response';
+import {AbilitiesResponse} from '../AbilitiesResponse'
 
+const defaultConfig = {
+  abortEarly: true,
+};
 
-const checkAbilities = async (abilities: IAbility[], action: string, resource: string, context?: Context, config?: Config) => {
+const checkAbilities = async (abilities: IAbility[], action: string, resource: string, context?: Context, _config?: Config) => {
+  const response = new AbilitiesResponse(action, resource);
+  const config = Object.assign({}, defaultConfig, _config);
 
-  /*
-  |-----------------------------------------------------------------
-  | response
-  |-----------------------------------------------------------------
-  | {
-  |   allow: boolean; - User able/not able to make this request
-  |   message: string; // 'Valid' or `You are not able to ${action} ${resources}`
-  |   conditions?: object[]; // Collection of all abilities conditions
-  |   $select: null | string[]; // List of all possible fields, allow be uses as query select
-  |   fields: null | string[]; // List of all allowed fields without any condition
-  |   fieldsWithConditions: null | {conditions,fields}[]; // List of fields that allow with condition
-  |   filterDataIsRequired: boolean; // When user is allowed to make the request with a condition/s
-  |   filterData: function; // filters data by abilities (data: object | object[]) => object | object[] | null;
-  |   validateData: function; // Validate data fields and and by conditions (data) => ({valid: boolean})
-  |   meta: []
-  | }
-  |
-  */
-  const response = getInitialResponse();
-
-  /*
-  |-----------------------------------------------------------------
-  | allowFullAccess
-  |-----------------------------------------------------------------
-  | When at least one ability is allow all fields without any condition
-  |
-  */
-  let allowFullAccess = false;
-
-  /*
-  |-----------------------------------------------------------------
-  | allowAllFields
-  |-----------------------------------------------------------------
-  | When at least one ability is allow all fields
-  |
-  */
-  let allowAllFields = false;
+  let allowFullAccess = false; // When at least one ability is allow all fields without any condition
+  let allowAllFields = false; // When at least one ability is allow all fields
 
   /*
   |-----------------------------------------------------------------
@@ -61,15 +30,15 @@ const checkAbilities = async (abilities: IAbility[], action: string, resource: s
   |
   */
   await asyncForEach(abilities, async (ability: IAbility) => {
-    const isAbleByCurrentAbility = await isAllowed(ability, action, resource, context);
+    const isAbleByCurrentAbility = allowFullAccess || await isAllowed(ability, action, resource, context);
 
     // Return When The ability is not allowed the request
-    if (!isAbleByCurrentAbility) {
+    if (!isAbleByCurrentAbility && config.abortEarly) {
       return;
     }
 
-    response.allow = true; // User allow [action] the [resource]
-    if (ability.meta) response.meta.push(ability.meta);
+    response.setAllow(true); // User allow [action] the [resource]
+    if (ability.meta) response.pushMeta(ability.meta);
     const hasFields = !isFieldsEmpty(ability.fields);
     const hasConditions = !isConditionEmpty(ability.conditions);
     allowFullAccess = allowFullAccess || (!hasConditions && !hasFields);
@@ -80,14 +49,14 @@ const checkAbilities = async (abilities: IAbility[], action: string, resource: s
   /**
    * Return
    */
-  if (response.allow) {
+  if (response.isAllow()) {
     if (allowFullAccess) {
       return onAllowFullAccess(response);
     } else {
-      return onAllowLimitAccess(response);
+      return response;
     }
   } else {
-    return onUserNotAllow(response, resource, action, config);
+    return onUserNotAllow(response);
   }
 };
 

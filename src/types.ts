@@ -12,7 +12,7 @@ export interface Context {
   [key: string]: any;
 }
 export interface Config {
-  getMessage? : (action: string, subject: string)=> string
+  getMessage? : (action: string, resource: string)=> string
 }
 export type When = (context?: Context) => Promise<boolean> | boolean;
 export type UserContext = boolean | object;
@@ -41,9 +41,12 @@ export interface IAbilitiesCheckResponse {
   message: string;
   conditions?: null | object[];
   validateData: ValidateData;
-  $select: null | string[];
-  fields: null | string[];
-  fieldsWithConditions: null | FieldsWithConditions[];
+  fields: {
+    allowAll: boolean,
+    allowed: null | string[],
+    allowedByCondition: null | FieldsWithConditions[],
+    all: null | string[]
+  },
 
   filterData: (data: object | object[]) => object | object[] | null;
   filterDataIsRequired: boolean;

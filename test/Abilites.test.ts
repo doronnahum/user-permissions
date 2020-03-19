@@ -66,7 +66,7 @@ describe('Test Abilities permissions handlers', () => {
   it('Everyone allow read the posts title and body', async () => {
     const res = await appAbilities.check('read', 'posts');
     expect(res.allow).toBe(true);
-    expect(res.fields).toEqual(['title', 'body']);
+    expect(res.fields.allowed).toEqual(['title', 'body']);
     expect(res.filterData({ title: 'lorem', info: 'ipsum' })).toEqual({
       title: 'lorem'
     });
@@ -120,21 +120,21 @@ describe('Test Abilities permissions handlers', () => {
 
   it('A paying user allow read the message information field', async () => {
     const res = await appAbilities.check('read', 'posts', { user: { isPay: true } });
-    expect(res.fields).toEqual(['title', 'body', 'info']);
+    expect(res.fields.allowed).toEqual(['title', 'body', 'info']);
     const res1 = await appAbilities.check('read', 'posts', { user: { isPay: false } });
     expect(
-      res1.fields
+      res1.fields.allowed
     ).toEqual(['title', 'body']);
   });
 
   it('Admin user allow manage all posts', async () => {
     const res = await appAbilities.check('read', 'posts', { roles: ['admin'], user: { id: 1, isActive: true } });
     expect(
-      res.fields
+      res.fields.allowed
     ).toBe(null);
     const res1 = await appAbilities.check('read', 'posts', { roles: ['admin'], user: { id: 1, isActive: false } });
     expect(
-      res1.fields
+      res1.fields.allowed
     ).not.toBe(null);
   });
   it('Test meta is exists', async () => {

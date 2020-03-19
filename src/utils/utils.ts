@@ -143,3 +143,4 @@ export const getNotAllowMessage = (
   action: string,
   resources: string
 ) => `You are not authorized to ${action} ${resources}`;
+

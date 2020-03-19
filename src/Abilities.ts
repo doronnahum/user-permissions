@@ -22,34 +22,34 @@ export default class Abilities {
    * @method check
    * @description Return an object with check result and tools to filter & validate data
    * @param action
-   * @param subject
+   * @param resource
    * @param context
    * @return {Promise} { allow: boolean, message: string, conditions: object[]...  }
    */
   public async check (
     action: string,
-    subject: string,
+    resource: string,
     context?: Context
   ): Promise<IAbilitiesCheckResponse> {
-    return await checkAbilities(this.abilities, action, subject, context, this.config);
+    return await checkAbilities(this.abilities, action, resource, context, this.config);
   }
 
   /**
    * @method isAllowed
-   * @description Return true when user can [action] a [subject]
+   * @description Return true when user can [action] a [resource]
    * @param {string} action 
-   * @param {string} subject 
+   * @param {string} resource 
    * @param {object} context
    * @returns {Promise}
    */
   public async isAllowed (
     action: string,
-    subject: string,
+    resource: string,
     context?: Context
   ): Promise<boolean> {
     let result = false;
     await asyncForEach(this.abilities, async (ability) => {
-      result = result || await isAllowed(ability, action, subject, context);
+      result = result || await isAllowed(ability, action, resource, context);
     });
     return result;
   }

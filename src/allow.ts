@@ -24,7 +24,7 @@ import {
 } from './types';
 
 const ALL_ACTIONS = ['*'];
-const ALL_SUBJECTS = ['*'];
+const ALL_RESOURCES = ['*'];
 export class Allow {
   private _actions?: Actions;
   private _resources?: Resources;
@@ -86,7 +86,7 @@ export class Allow {
   public get (): IAbility {
     return {
       actions: this._actions || ALL_ACTIONS,
-      resources: this._resources || ALL_SUBJECTS,
+      resources: this._resources || ALL_RESOURCES,
       fields: this._fields,
       conditions: this._conditions,
       roles: this._roles,
