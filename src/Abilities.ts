@@ -1,14 +1,14 @@
 import checkAbilities from './utils/checkAbilities';
-import { isAllowed } from './utils/isAllowed';
 import { asyncForEach } from './utils/utils';
-import { IAbility, Context, IAbilitiesCheckResponse, Config } from './types';
+import { Context, Config } from './types';
+import {AbilitiesResponse} from './AbilitiesResponse';
 import { Allow } from './Allow';
 export default class Abilities {
-  private readonly abilities: IAbility[];
+  private readonly abilities: Allow[];
   private readonly config?: Config;
   constructor (abilities: Allow[], config?: Config) {
     // Convert abilities class to object
-    this.abilities = abilities.map(ability => ability.get());
+    this.abilities = abilities;
     this.config = config;
   }
 
@@ -30,7 +30,7 @@ export default class Abilities {
     action: string,
     resource: string,
     context?: Context
-  ): Promise<IAbilitiesCheckResponse> {
+  ): Promise<AbilitiesResponse> {
     return await checkAbilities(this.abilities, action, resource, context, this.config);
   }
 
@@ -48,8 +48,8 @@ export default class Abilities {
     context?: Context
   ): Promise<boolean> {
     let result = false;
-    await asyncForEach(this.abilities, async (ability) => {
-      result = result || await isAllowed(ability, action, resource, context);
+    await asyncForEach(this.abilities, async (ability: Allow) => {
+      result = result || await ability.isAllowed(action, resource, context);
     });
     return result;
   }

@@ -1,26 +1,20 @@
 import {
-  IAbility, Context, Config,
+  Context, Config,
 } from '../types';
-
-import { isConditionEmpty, isFieldsEmpty, asyncForEach } from './utils';
-import { isAllowed } from './isAllowed';
-import {
-  onAllowFullAccess,
-  onUserNotAllow,
-  updateResponseWithAbilityFieldsAndConditons
-} from './checkAbilities.response';
+import {Allow} from '../Allow';
+import { asyncForEach } from './utils';
 import {AbilitiesResponse} from '../AbilitiesResponse'
 
 const defaultConfig = {
   abortEarly: true,
 };
 
-const checkAbilities = async (abilities: IAbility[], action: string, resource: string, context?: Context, _config?: Config) => {
-  const response = new AbilitiesResponse(action, resource);
+const checkAbilities = async (abilities: Allow[], action: string, resource: string, context?: Context, _config?: Config) => {
   const config = Object.assign({}, defaultConfig, _config);
+  const response = new AbilitiesResponse(action, resource, config, context);
 
-  let allowFullAccess = false; // When at least one ability is allow all fields without any condition
-  let allowAllFields = false; // When at least one ability is allow all fields
+  let allowFullAccess = false; // When at least one ability is allowed all fields without any condition
+  let allowAllFields = false; // When at least one ability is allowed all fields
 
   /*
   |-----------------------------------------------------------------
@@ -29,35 +23,41 @@ const checkAbilities = async (abilities: IAbility[], action: string, resource: s
   | Pass over all abilities and collect fields, condition, meta
   |
   */
-  await asyncForEach(abilities, async (ability: IAbility) => {
-    const isAbleByCurrentAbility = allowFullAccess || await isAllowed(ability, action, resource, context);
+  await asyncForEach(abilities, async (ability: Allow) => {
+    // When allowFullAccess os true and abortEarly is apply we can skip
+    const skip = allowFullAccess && config.abortEarly;
+    if(skip) return;
+    
+    // Skip when not Allowed by current ability
+    if(!await ability.isAllowed(action, resource, context)) return;
 
-    // Return When The ability is not allowed the request
-    if (!isAbleByCurrentAbility && config.abortEarly) {
-      return;
-    }
+    // User Allowed by current ability
+    response.setAllow(true);
 
-    response.setAllow(true); // User allow [action] the [resource]
-    if (ability.meta) response.pushMeta(ability.meta);
-    const hasFields = !isFieldsEmpty(ability.fields);
-    const hasConditions = !isConditionEmpty(ability.conditions);
+    const meta = ability.getMeta()
+    // Collect meta
+    if (meta) response.pushMeta(meta);
+    
+    // Handle fields
+    const hasFields = ability.hasFields();
+    const hasConditions = ability.hasConditions();
     allowFullAccess = allowFullAccess || (!hasConditions && !hasFields);
     allowAllFields = allowAllFields || !hasFields;
-    if (!allowFullAccess) updateResponseWithAbilityFieldsAndConditons(response, ability, hasFields, hasConditions, context);
+    if (!allowFullAccess) response.updateFieldsAndConditions(ability);
   });
 
   /**
-   * Return
+   * Summary
    */
-  if (response.isAllow()) {
-    if (allowFullAccess) {
-      return onAllowFullAccess(response);
-    } else {
-      return response;
-    }
-  } else {
-    return onUserNotAllow(response);
-  }
+  const isUserAllowed = response.isAllow();
+  if(isUserAllowed){
+    if(allowFullAccess) response.onUserNotAllow();
+  }else{
+    response.onUserNotAllow();
+  };
+
+
+  return response;
 };
 
 export default checkAbilities;

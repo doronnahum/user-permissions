@@ -15,18 +15,11 @@ export interface Config {
   getMessage? : (action: string, resource: string)=> string
 }
 export type When = (context?: Context) => Promise<boolean> | boolean;
+export type IsAllowed = (action: string,
+  resource: string,
+  context?: Context) => Promise<boolean>;
 export type UserContext = boolean | object;
 
-export interface IAbility {
-  actions: Actions;
-  resources: string | string[];
-  roles?: Roles;
-  conditions?: Conditions;
-  fields?: string[];
-  user?: UserContext;
-  when?: When;
-  meta?: any;
-}
 
 export interface ValidateDataResponse {valid: boolean; message?: string;}
 export type ValidateData = (data: object | object[]) => ValidateDataResponse;

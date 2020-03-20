@@ -1,5 +1,8 @@
 import {
-  getAsArray
+  getAsArray,
+  checkInArray, checkUserContext, matchRoles,
+  isFieldsEmpty,
+  isConditionEmpty
 } from './utils/utils';
 
 import {
@@ -20,7 +23,7 @@ import {
   UserContext,
   When,
   Roles,
-  IAbility
+  Context,
 } from './types';
 
 const ALL_ACTIONS = ['*'];
@@ -35,6 +38,8 @@ export class Allow {
   private _user?: UserContext;
   private _when?: When;
   private _meta?: any;
+  private _hasFields: boolean = false;
+  private _hasConditions: boolean = false;
 
   public actions (res: Actions) {
     validateActions(res);
@@ -57,13 +62,23 @@ export class Allow {
   public conditions (res: Conditions) {
     validateConditions(res);
     this._conditions = res;
+    this._hasConditions = !isConditionEmpty(this._conditions);
     return this;
+  }
+
+  public hasConditions(){
+    return this._hasConditions;
   }
 
   public fields (res: string | Fields) {
     validateFields(res);
     this._fields = getAsArray(res);
+    this._hasFields = !isFieldsEmpty(this._fields)
     return this;
+  }
+
+  public hasFields(){
+    return this._hasFields;
   }
 
   public user (res: UserContext) {
@@ -83,16 +98,29 @@ export class Allow {
     return this;
   }
 
-  public get (): IAbility {
-    return {
-      actions: this._actions || ALL_ACTIONS,
-      resources: this._resources || ALL_RESOURCES,
-      fields: this._fields,
-      conditions: this._conditions,
-      roles: this._roles,
-      user: this._user,
-      when: this._when,
-      meta: this._meta
-    };
+  public isAllowed = async (
+    action: string,
+    resource: string,
+    context?: Context
+  ) => {
+    const userData = context ? context.user : undefined;
+    const roles = context ? context.roles : undefined;
+    return (
+      checkInArray(action, this._actions || ALL_ACTIONS) &&
+      checkInArray(resource, this._resources || ALL_RESOURCES) &&
+      (!this._when || await this._when(context)) &&
+      checkUserContext(this._user, userData) &&
+      matchRoles(this._roles, roles)
+    );
+  };
+
+  public getConditions () {
+    return this._conditions;
+  }
+  public getMeta () {
+    return this._meta;
+  }
+  public getFields () {
+    return this._fields;
   }
 }

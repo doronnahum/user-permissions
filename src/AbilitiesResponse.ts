@@ -3,11 +3,15 @@ import {
   FieldsWithConditions,
   Config,
   Fields,
+  Context,
+  Conditions,
 } from './types';
 
 import {validateData} from './utils/validateData';
 import {filterData} from './utils/filterData';
 import { getNotAllowMessage } from './utils/utils';
+import { parseConditions } from './utils/utils';
+import { Allow } from 'Allow';
 
 export class AbilitiesResponse {
   private action: string;
@@ -27,13 +31,14 @@ export class AbilitiesResponse {
   private filterDataIsRequired: boolean;
   private meta: null | any[];
   private getNotAllowMessage: (action: string, resource: string) => string; 
-
-  constructor(action: string, resource: string, config?: Config){
+  private context?: Context;
+  constructor(action: string, resource: string, config: Config, context?: Context){
     this.action = action;
     this.resource = resource;
     this.allow = false;
     this.filterDataIsRequired = false;
     this.meta = null;
+    this.context = context;
     this.validateData = (data: object | object[]) => {
       if(this.allow){
         if(this.fields.allowAll){
@@ -114,6 +119,32 @@ export class AbilitiesResponse {
     this.conditions = null;
     this.setAllow(false);
     this.message = this.getNotAllowMessage(this.action,this.resource);
+  }
+
+  updateFieldsAndConditions (ability: Allow) {
+    const hasFields = ability.hasFields();
+    const hasConditions = ability.hasConditions();
+    const fields = ability.getFields()
+    const conditions = ability.getConditions();
+    // tslint:disable-next-line: prefer-type-cast
+    const parsingCondition = hasConditions ? parseConditions(<Conditions>conditions, this.context) : undefined;
+    if (parsingCondition) {
+      this.pushConditions(parsingCondition);
+    }
+    if (hasFields && parsingCondition) {
+      this.pushFieldsWithConditions({
+        // tslint:disable-next-line: prefer-type-cast
+        fields: fields as string[],
+        conditions: parsingCondition
+      });
+    } else if (!hasFields && parsingCondition) {
+      this.pushFieldsWithConditions({
+        fields: ['*'],
+        conditions: parsingCondition
+      });
+    } else if (hasFields && !parsingCondition) {
+      this.pushFields(<Fields>fields);
+    }
   }
 
   public get(){
