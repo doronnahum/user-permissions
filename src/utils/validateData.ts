@@ -1,5 +1,5 @@
 import { getAllowedFields, splitFields, isObject, checkConditions, mergeConfigWithDefaults } from './utils';
-import { FieldsWithConditions, ValidateDataResponse, Config } from '../types';
+import { FieldsWithConditions, ValidateDataResponse, Config, ConfigFull } from '../types';
 import get from '@strikeentco/get';
 
 const validatePositiveFields = (data: object, fields: string[], _prefix?: string) => {
@@ -63,7 +63,7 @@ export const validateData = (
   mongooseWhere: object | null = null,
   _config?: Config,
 ): ValidateDataResponse => {
-  const config = mergeConfigWithDefaults(_config);
+  const config: ConfigFull = mergeConfigWithDefaults(_config);
   const isArray = Array.isArray(data);
   try {
     if (mongooseWhere && !checkConditions(mongooseWhere, data)) {

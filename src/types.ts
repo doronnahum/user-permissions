@@ -19,6 +19,14 @@ export interface Config {
   };
   throwErr?: boolean
 }
+export interface ConfigFull {
+  abortEarly: boolean;
+  onNotAllowed : (action: string, resource: string)=> string;
+  validateData: {
+    throwErr: boolean;
+  };
+  throwErr: boolean
+}
 export type When = (context?: Context) => Promise<boolean> | boolean;
 export type IsAllowed = (action: string,
   resource: string,
