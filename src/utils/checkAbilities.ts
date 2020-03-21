@@ -5,12 +5,9 @@ import {Allow} from '../Allow';
 import { asyncForEach } from './utils';
 import {AbilitiesResponse} from '../AbilitiesResponse'
 
-const defaultConfig = {
-  abortEarly: true,
-};
+;
 
-const checkAbilities = async (abilities: Allow[], action: string, resource: string, context?: Context, _config?: Config) => {
-  const config = Object.assign({}, defaultConfig, _config);
+const checkAbilities = async (abilities: Allow[], action: string, resource: string, context: Context | undefined, config: Config) => {
   const response = new AbilitiesResponse(action, resource, config, context);
 
   let allowFullAccess = false; // When at least one ability is allowed all fields without any condition
@@ -57,7 +54,7 @@ const checkAbilities = async (abilities: Allow[], action: string, resource: stri
   };
 
 
-  return response;
+  return response.get();
 };
 
 export default checkAbilities;

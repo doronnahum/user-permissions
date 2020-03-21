@@ -1,15 +1,23 @@
 import checkAbilities from './utils/checkAbilities';
-import { asyncForEach } from './utils/utils';
+import { asyncForEach, onNotAllowed } from './utils/utils';
 import { Context, Config } from './types';
-import {AbilitiesResponse} from './AbilitiesResponse';
 import { Allow } from './Allow';
+
+const defaultConfig = {
+  abortEarly: true,
+  validateData: {
+    throwErr: false
+  },
+  throwErr: false,
+  onNotAllowed
+}
 export default class Abilities {
   private readonly abilities: Allow[];
-  private readonly config?: Config;
+  private readonly config: Config;
   constructor (abilities: Allow[], config?: Config) {
     // Convert abilities class to object
     this.abilities = abilities;
-    this.config = config;
+    this.config = Object.assign({}, defaultConfig, config);
   }
 
   public get () {
@@ -30,8 +38,12 @@ export default class Abilities {
     action: string,
     resource: string,
     context?: Context
-  ): Promise<AbilitiesResponse> {
-    return await checkAbilities(this.abilities, action, resource, context, this.config);
+  ){
+    const response = await checkAbilities(this.abilities, action, resource, context, this.config);
+    if(response.allow === false && this.config.throwErr){
+      throw new Error(<string>response.message)
+    }
+    return response;
   }
 
   /**

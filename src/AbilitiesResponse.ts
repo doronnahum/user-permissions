@@ -9,7 +9,6 @@ import {
 
 import {validateData} from './utils/validateData';
 import {filterData} from './utils/filterData';
-import { getNotAllowMessage } from './utils/utils';
 import { parseConditions } from './utils/utils';
 import { Allow } from 'Allow';
 
@@ -30,8 +29,8 @@ export class AbilitiesResponse {
   private filterData: (data: object | object[]) => object | object[] | null;
   private filterDataIsRequired: boolean;
   private meta: null | any[];
-  private getNotAllowMessage: (action: string, resource: string) => string; 
   private context?: Context;
+  private config: Config;
   constructor(action: string, resource: string, config: Config, context?: Context){
     this.action = action;
     this.resource = resource;
@@ -44,11 +43,17 @@ export class AbilitiesResponse {
         if(this.fields.allowAll){
           return { valid: true};
         }
-        const mongooseWhere = this.conditions ? { $or: this.conditions } : undefined;
-        return validateData(data, this.fields.allowed, this.fields.allowedByCondition, mongooseWhere)
+        const mongooseWhere = this.conditions ? { $or: this.conditions } : null;
+        return validateData(data, this.fields.allowed, this.fields.allowedByCondition, mongooseWhere, this.config)
+      }else{
+        const errMessage = 'Not allowed to make this request'
+        if(config.validateData.throwErr){
+          throw new Error(errMessage)
+        }
+        return { valid: false, message: errMessage };
       }
-      return { valid: false, message: 'Not allowed to make this request' };
     };
+    this.config = config;
     this.fields = {
       allowAll: false,
       allowed: null,
@@ -72,7 +77,6 @@ export class AbilitiesResponse {
       }
       return filterData(data, this.fields.allowed, this.fields.allowedByCondition) 
     }
-    this.getNotAllowMessage = config && config.getMessage ? config.getMessage : getNotAllowMessage;
   }
 
   public isAllow () {
@@ -115,10 +119,12 @@ export class AbilitiesResponse {
     this.conditions = null;
   }
   public onUserNotAllow(){
-    this.setAllowAllFields(true);
+    this.fields.allowAll = false;
+    this.fields.allowed = null;
+    this.fields.allowedByCondition = null;
     this.conditions = null;
     this.setAllow(false);
-    this.message = this.getNotAllowMessage(this.action,this.resource);
+    this.message = this.config.onNotAllowed(this.action,this.resource)
   }
 
   updateFieldsAndConditions (ability: Allow) {
@@ -158,7 +164,7 @@ export class AbilitiesResponse {
       meta: this.meta,
       filterData: this.filterData,
       validateData: this.validateData,
-      filterDataIsRequired: this.filterDataIsRequired
+      filterDataIsRequired: this.filterDataIsRequired,
     }
   }
 }

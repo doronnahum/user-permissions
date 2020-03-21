@@ -139,7 +139,7 @@ export const asyncForEach = async (array: any[], callback: (item: any, index: nu
   }
 };
 
-export const getNotAllowMessage = (
+export const onNotAllowed = (
   action: string,
   resources: string
 ) => `You are not authorized to ${action} ${resources}`;
