@@ -1,7 +1,7 @@
 import {
   ValidateData,
   FieldsWithConditions,
-  Config,
+  ConfigFull,
   Fields,
   Context,
   Conditions,
@@ -30,8 +30,8 @@ export class AbilitiesResponse {
   private filterDataIsRequired: boolean;
   private meta: null | any[];
   private context?: Context;
-  private config: Config;
-  constructor(action: string, resource: string, config: Config, context?: Context){
+  private config: ConfigFull;
+  constructor(action: string, resource: string, config: ConfigFull, context?: Context){
     this.action = action;
     this.resource = resource;
     this.allow = false;
