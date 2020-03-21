@@ -12,13 +12,12 @@ export interface Context {
   [key: string]: any;
 }
 export interface Config {
-  abortEarly: boolean;
-  onNotAllowed : (action: string, resource: string)=> string;
-  validateData: {
-    throwErr: boolean;
+  abortEarly?: boolean;
+  onNotAllowed? : (action: string, resource: string)=> string;
+  validateData?: {
+    throwErr?: boolean;
   };
-  throwErr: boolean
-
+  throwErr?: boolean
 }
 export type When = (context?: Context) => Promise<boolean> | boolean;
 export type IsAllowed = (action: string,

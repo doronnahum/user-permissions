@@ -4,7 +4,8 @@ import {
   Conditions,
   Context,
   ParseConditions,
-  FieldsWithConditions
+  FieldsWithConditions,
+  Config
 } from '../types';
 
 import tinytim from './tinytim';
@@ -144,3 +145,13 @@ export const onNotAllowed = (
   resources: string
 ) => `You are not authorized to ${action} ${resources}`;
 
+export const mergeConfigWithDefaults = (config?: Config) => {
+  return{
+    abortEarly: config?.abortEarly ?? true,
+    validateData: {
+      throwErr: config?.validateData?.throwErr ?? false
+    },
+    throwErr: config?.throwErr ?? false,
+    onNotAllowed: config?.onNotAllowed ?? onNotAllowed
+  }
+}

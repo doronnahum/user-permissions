@@ -1,10 +1,11 @@
 import { Allow, Abilities } from '../src';
 
 let appAbilities: any;
+let appAbilitiesThrow: any;
 
 describe('Test Abilities class', () => {
   beforeAll(() => {
-    appAbilities = new Abilities([
+    const abilities = [
       // Everyone allow read the posts title and body
       new Allow().actions('read').resources('posts').fields(['title', 'body']),
     
@@ -29,7 +30,9 @@ describe('Test Abilities class', () => {
     
       // Logged in user allow read his comments rating
       new Allow().actions('read').resources('comments').conditions('{"creator": "{{ user.id }}" }').fields(['rating']).user(true)
-    ]);
+    ];
+    appAbilities = new Abilities(abilities);
+    appAbilitiesThrow = new Abilities(abilities, {throwErr: true});
     
   })
   it('Validate allow is function', () => {
@@ -57,6 +60,22 @@ describe('Test Abilities class', () => {
   });
 });
 
+describe('Test Allow class', () => {
+  let withoutActions: any;
+  let withoutResource: any;
+  let withoutAll: any;
+  beforeAll(() => {
+    withoutActions = new Allow().resources('posts');
+    withoutResource = new Allow().actions('read');
+    withoutAll = new Allow();
+  });
+  it('Support empty action and resource', async () => {
+    expect(await <any>withoutActions.isAllowed('read', 'posts')).toBe(true);
+    expect(await <any>withoutResource.isAllowed('read', 'posts')).toBe(true);
+    expect(await <any>withoutAll.isAllowed('delete', 'posts')).toBe(true);
+  });
+
+})
 describe('Test Abilities permissions handlers', () => {
   it('Everyone allow read the posts title and body- test allow method', async () => {
     expect(await appAbilities.isAllowed('read', 'posts')).toBe(true);
@@ -78,6 +97,16 @@ describe('Test Abilities permissions handlers', () => {
   it("anonymous user allow't create post", async () => {
     const res = await appAbilities.check('create', 'posts');
     expect(res.allow).toBe(false);
+  });
+
+  it("should throw error when throwErr is true in the config", async () => {
+    let error;
+    try {
+      await appAbilitiesThrow.check('create', 'posts');
+    } catch (e) {
+      error = e;
+    }
+    expect(error instanceof Error).toEqual(true);
   });
 
   it('Logged in user allow manage his posts - try create method', async () => {

@@ -1,7 +1,6 @@
 /**
  * Test validateData function
  */
-
 import { fakeData } from './helpers/fakeData';
 import { validateData } from '../src/utils/validateData';
 import clone from 'clone';
@@ -50,6 +49,12 @@ describe('test validate data function', () => {
     expect(validateData(fakeData, ['location.state'], null).valid).toEqual(false);
     expect(validateData(fakeData, ['product.name'], null).valid).toEqual(false);
     expect(validateData(fakeData, ['product'], null).valid).toEqual(false);
+  });
+  it('Test throwErr config option', () => {
+      const fakeData = { location: getFakeData()[0].location };
+      expect(() => {
+        validateData(fakeData, ['location.state'], null, null, { validateData:{throwErr: true} })
+      }).toThrow();
   });
   it('test negative fields', () => {
     const fakeData = getFakeData();
