@@ -57,7 +57,11 @@ describe('test filter data function', () => {
   });
   it('test positive deep nested field', () => {
     const fakeData = getFakeData();
-    const _filterData = filterData(fakeData, ['location.address', 'location'], null);
+    const _filterData = filterData(
+      fakeData,
+      ['location.address', 'location'],
+      null
+    );
     // tslint:disable-next-line: prefer-type-cast
     const dataItem = (_filterData as { [key: string]: any }[])[0];
     expect(dataItem.location.state).not.toEqual(undefined);
@@ -65,7 +69,11 @@ describe('test filter data function', () => {
   });
   it('test positive deep nested field', () => {
     const fakeData = getFakeData();
-    const _filterData = filterData(fakeData, ['location', 'location.address'], null);
+    const _filterData = filterData(
+      fakeData,
+      ['location', 'location.address'],
+      null
+    );
     // tslint:disable-next-line: prefer-type-cast
     const dataItem = (_filterData as { [key: string]: any }[])[0];
     expect(dataItem.location.state).not.toEqual(undefined);

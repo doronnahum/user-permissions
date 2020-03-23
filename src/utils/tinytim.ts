@@ -6,7 +6,7 @@ const end = '}}';
 const path = '[a-z0-9_$][\\.a-z0-9_]*'; // e.g. config.person.name
 const pattern = new RegExp(start + '\\s*(' + path + ')\\s*' + end, 'gi');
 
-export default function (
+export default function(
   template: string,
   data: object = {},
   _defaultValue: string = ''
@@ -23,7 +23,7 @@ export default function (
       lookup = (lookup as any)[path[i]];
 
       // Property not found
-      if (lookup == undefined) {
+      if (lookup === undefined) {
         return undefined;
       }
 

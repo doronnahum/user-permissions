@@ -5,12 +5,11 @@
   "license": "MIT",
   "scripts": {
     "start": "tsdx watch",
-    "build": "tsdx build",
+    "build": "npm run lint && tsdx build",
     "test": "tsdx test --collectCoverage",
     "test-with-coverage": "tsdx test --coverage && cat ./coverage/lcov.info | codacy-coverage",
     "lint": "tsdx lint",
-    "tsdx-format": "tsdx lint --fix",
-    "format": "tslint -c tslint.json 'src/**/*.ts' 'test/**/*{.ts,.tsx}' --fix",
+    "format": "tsdx lint --fix",
     "prepare": "npm run test && tsdx build"
   },
   "main": "dist/index.js",

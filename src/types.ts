@@ -13,28 +13,32 @@ export interface Context {
 }
 export interface Config {
   abortEarly?: boolean;
-  onNotAllowed? : (action: string, resource: string)=> string;
+  onNotAllowed?: (action: string, resource: string) => string;
   validateData?: {
     throwErr?: boolean;
   };
-  throwErr?: boolean
+  throwErr?: boolean;
 }
 export interface ConfigFull {
   abortEarly: boolean;
-  onNotAllowed : (action: string, resource: string) => string;
+  onNotAllowed: (action: string, resource: string) => string;
   validateData: {
     throwErr: boolean;
   };
-  throwErr: boolean
+  throwErr: boolean;
 }
 export type When = (context?: Context) => Promise<boolean> | boolean;
-export type IsAllowed = (action: string,
+export type IsAllowed = (
+  action: string,
   resource: string,
-  context?: Context) => Promise<boolean>;
+  context?: Context
+) => Promise<boolean>;
 export type UserContext = boolean | object;
 
-
-export interface ValidateDataResponse {valid: boolean; message?: string;}
+export interface ValidateDataResponse {
+  valid: boolean;
+  message?: string;
+}
 export type ValidateData = (data: object | object[]) => ValidateDataResponse;
 
 export interface FieldsWithConditions {
@@ -48,11 +52,11 @@ export interface IAbilitiesCheckResponse {
   conditions?: null | object[];
   validateData: ValidateData;
   fields: {
-    allowAll: boolean,
-    allowed: null | string[],
-    allowedByCondition: null | FieldsWithConditions[],
-    all: null | string[]
-  },
+    allowAll: boolean;
+    allowed: null | string[];
+    allowedByCondition: null | FieldsWithConditions[];
+    all: null | string[];
+  };
 
   filterData: (data: object | object[]) => object | object[] | null;
   filterDataIsRequired: boolean;

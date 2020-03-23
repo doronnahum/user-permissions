@@ -1,8 +1,10 @@
 import {
   getAsArray,
-  checkInArray, checkUserContext, matchRoles,
+  checkInArray,
+  checkUserContext,
+  matchRoles,
   isFieldsEmpty,
-  isConditionEmpty
+  isConditionEmpty,
 } from './utils/utils';
 
 import {
@@ -12,7 +14,7 @@ import {
   validateConditions,
   validateRoles,
   validateResource,
-  validateActions
+  validateActions,
 } from './utils/validators';
 
 import {
@@ -41,59 +43,59 @@ class Allow {
   private _hasFields: boolean = false;
   private _hasConditions: boolean = false;
 
-  public actions (res: Actions) {
+  public actions(res: Actions) {
     validateActions(res);
     this._actions = res;
     return this;
   }
 
-  public resources (res: Resources) {
+  public resources(res: Resources) {
     validateResource(res);
     this._resources = res;
     return this;
   }
 
-  public roles (roles: string | Roles) {
+  public roles(roles: string | Roles) {
     validateRoles(roles);
     this._roles = getAsArray(roles);
     return this;
   }
 
-  public conditions (res: Conditions) {
+  public conditions(res: Conditions) {
     validateConditions(res);
     this._conditions = res;
     this._hasConditions = !isConditionEmpty(this._conditions);
     return this;
   }
 
-  public hasConditions(){
+  public hasConditions() {
     return this._hasConditions;
   }
 
-  public fields (res: string | Fields) {
+  public fields(res: string | Fields) {
     validateFields(res);
     this._fields = getAsArray(res);
-    this._hasFields = !isFieldsEmpty(this._fields)
+    this._hasFields = !isFieldsEmpty(this._fields);
     return this;
   }
 
-  public hasFields(){
+  public hasFields() {
     return this._hasFields;
   }
 
-  public user (res: UserContext) {
+  public user(res: UserContext) {
     validateUser(res);
     this._user = res;
     return this;
   }
 
-  public when (res: When) {
+  public when(res: When) {
     validateWhen(res);
     this._when = res;
     return this;
   }
 
-  public meta (res: any) {
+  public meta(res: any) {
     this._meta = res;
     return this;
   }
@@ -108,19 +110,19 @@ class Allow {
     return (
       checkInArray(action, this._actions || ALL_ACTIONS) &&
       checkInArray(resource, this._resources || ALL_RESOURCES) &&
-      (!this._when || await this._when(context)) &&
+      (!this._when || (await this._when(context))) &&
       checkUserContext(this._user, userData) &&
       matchRoles(this._roles, roles)
     );
   };
 
-  public getConditions () {
+  public getConditions() {
     return this._conditions;
   }
-  public getMeta () {
+  public getMeta() {
     return this._meta;
   }
-  public getFields () {
+  public getFields() {
     return this._fields;
   }
 }

@@ -1,20 +1,20 @@
 import checkAbilities from './utils/checkAbilities';
 import { asyncForEach, mergeConfigWithDefaults } from './utils/utils';
-import { Context, Config } from './types';
+import { Context, Config, ConfigFull } from './types';
 import Allow from './Allow';
 
 export default class Abilities {
   private readonly abilities: Allow[];
-  private readonly config: Config;
-  constructor (abilities: Allow[], config?: Config) {
+  private readonly config: ConfigFull;
+  constructor(abilities: Allow[], config?: Config) {
     // Convert abilities class to object
     this.abilities = abilities;
     this.config = mergeConfigWithDefaults(config);
   }
-  
-  public get () {
+
+  public get() {
     return {
-      abilities: this.abilities
+      abilities: this.abilities,
     };
   }
 
@@ -26,14 +26,16 @@ export default class Abilities {
    * @param context
    * @return {Promise} { allow: boolean, message: string, conditions: object[]...  }
    */
-  public async check (
-    action: string,
-    resource: string,
-    context?: Context
-  ){
-    const response = await checkAbilities(this.abilities, action, resource, context, this.config);
-    if(!response.allow && this.config.throwErr){
-      throw new Error(<string>response.message)
+  public async check(action: string, resource: string, context?: Context) {
+    const response = await checkAbilities(
+      this.abilities,
+      action,
+      resource,
+      context,
+      this.config
+    );
+    if (!response.allow && this.config.throwErr) {
+      throw new Error(response.message as string);
     }
     return response;
   }
@@ -41,19 +43,19 @@ export default class Abilities {
   /**
    * @method isAllowed
    * @description Return true when user can [action] a [resource]
-   * @param {string} action 
-   * @param {string} resource 
+   * @param {string} action
+   * @param {string} resource
    * @param {object} context
    * @returns {Promise}
    */
-  public async isAllowed (
+  public async isAllowed(
     action: string,
     resource: string,
     context?: Context
   ): Promise<boolean> {
     let result = false;
     await asyncForEach(this.abilities, async (ability: Allow) => {
-      result = result || await ability.isAllowed(action, resource, context);
+      result = result || (await ability.isAllowed(action, resource, context));
     });
     return result;
   }

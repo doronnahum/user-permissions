@@ -1,13 +1,15 @@
-import {
-  Context, Config,
-} from '../types';
-import {Allow} from '../Allow';
+import { Context, Config } from '../types';
+import Allow from '../Allow';
 import { asyncForEach } from './utils';
-import {AbilitiesResponse} from '../AbilitiesResponse'
+import { AbilitiesResponse } from '../AbilitiesResponse';
 
-;
-
-const checkAbilities = async (abilities: Allow[], action: string, resource: string, context: Context | undefined, config: Config) => {
+const checkAbilities = async (
+  abilities: Allow[],
+  action: string,
+  resource: string,
+  context: Context | undefined,
+  config: Config
+) => {
   const response = new AbilitiesResponse(action, resource, config, context);
 
   let allowFullAccess = false; // When at least one ability is allowed all fields without any condition
@@ -23,18 +25,18 @@ const checkAbilities = async (abilities: Allow[], action: string, resource: stri
   await asyncForEach(abilities, async (ability: Allow) => {
     // When allowFullAccess os true and abortEarly is apply we can skip
     const skip = allowFullAccess && config.abortEarly;
-    if(skip) return;
-    
+    if (skip) return;
+
     // Skip when not Allowed by current ability
-    if(!await ability.isAllowed(action, resource, context)) return;
+    if (!(await ability.isAllowed(action, resource, context))) return;
 
     // User Allowed by current ability
     response.setAllow(true);
 
-    const meta = ability.getMeta()
+    const meta = ability.getMeta();
     // Collect meta
     if (meta) response.pushMeta(meta);
-    
+
     // Handle fields
     const hasFields = ability.hasFields();
     const hasConditions = ability.hasConditions();
@@ -47,12 +49,11 @@ const checkAbilities = async (abilities: Allow[], action: string, resource: stri
    * Summary
    */
   const isUserAllowed = response.isAllow();
-  if(isUserAllowed){
-    if(allowFullAccess) response.onUserNotAllow();
-  }else{
+  if (isUserAllowed) {
+    if (allowFullAccess) response.onUserNotAllow();
+  } else {
     response.onUserNotAllow();
-  };
-
+  }
 
   return response.get();
 };

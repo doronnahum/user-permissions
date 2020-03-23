@@ -1,23 +1,42 @@
-import { getAllowedFields, splitFields, isObject, checkConditions, mergeConfigWithDefaults } from './utils';
-import { FieldsWithConditions, ValidateDataResponse, Config, ConfigFull } from '../types';
+import {
+  getAllowedFields,
+  splitFields,
+  isObject,
+  checkConditions,
+  mergeConfigWithDefaults,
+} from './utils';
+import {
+  FieldsWithConditions,
+  ValidateDataResponse,
+  Config,
+  ConfigFull,
+} from '../types';
 import get from '@strikeentco/get';
 
-const validatePositiveFields = (data: object, fields: string[], _prefix?: string) => {
+const validatePositiveFields = (
+  data: object,
+  fields: string[],
+  _prefix?: string
+) => {
   try {
     if (fields.length === 0 || fields.includes('*')) return { valid: true };
     const prefix = _prefix ?? '';
     const keys = Object.keys(data);
-    keys.forEach((key) => {
+    keys.forEach(key => {
       const fieldName = prefix + key;
       if (fields.some(item => item === fieldName)) {
         return true;
       }
       const value = get(data, key);
       if (isObject(value)) {
-        if (fields.some((item) => item.startsWith(`${fieldName}.`))) {
-          const deepCheck = validatePositiveFields(value, fields, `${fieldName}.`);
+        if (fields.some(item => item.startsWith(`${fieldName}.`))) {
+          const deepCheck = validatePositiveFields(
+            value,
+            fields,
+            `${fieldName}.`
+          );
           if (deepCheck.valid) {
-          	return true;
+            return true;
           }
           throw new Error(deepCheck.message);
         }
@@ -35,7 +54,7 @@ const validateNegativeFields = (data: object, fields: string[]) => {
   try {
     if (fields.length === 0) return { valid: true };
     fields.forEach((field: string) => {
-      if (get(data, field) != undefined) {
+      if (get(data, field) !== undefined) {
         throw new Error(`${field} is not allowed`);
       }
     });
@@ -61,7 +80,7 @@ export const validateData = (
   fields: null | string[],
   fieldsWithConditions: null | FieldsWithConditions[],
   mongooseWhere: object | null = null,
-  _config?: Config,
+  _config?: Config
 ): ValidateDataResponse => {
   const config: ConfigFull = mergeConfigWithDefaults(_config);
   const isArray = Array.isArray(data);
@@ -71,7 +90,7 @@ export const validateData = (
     }
     if (isArray) {
       // tslint:disable-next-line: prefer-type-cast
-      (data as object[]).map(item => {
+      (data as object[]).forEach(item => {
         const checkResult = validateObject(item, fields, fieldsWithConditions);
         if (!checkResult.valid) {
           throw new Error(checkResult.message);
@@ -80,14 +99,14 @@ export const validateData = (
       return { valid: true };
     } else {
       const res = validateObject(data, fields, fieldsWithConditions);
-      if(!res.valid && config.validateData.throwErr){
-        throw new Error(res.message)
+      if (!res.valid && config.validateData.throwErr) {
+        throw new Error(res.message);
       }
       return res;
     }
   } catch (error) {
-    if(config.validateData.throwErr){
-      throw new Error(error.message)
+    if (config.validateData.throwErr) {
+      throw new Error(error.message);
     }
     return { valid: false, message: error.message };
   }

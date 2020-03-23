@@ -5,7 +5,8 @@ import {
   Context,
   ParseConditions,
   FieldsWithConditions,
-  Config
+  Config,
+  ConfigFull,
 } from '../types';
 
 import tinytim from './tinytim';
@@ -54,7 +55,7 @@ export const parseConditions = (
   const isTemplate = typeof conditions === 'string';
   if (isTemplate) {
     // tslint:disable-next-line: prefer-type-cast
-    return parseTemplate((conditions as string), context ?? {});
+    return parseTemplate(conditions as string, context ?? {});
   }
   return conditions;
 };
@@ -71,7 +72,9 @@ export const isConditionEmpty = (conditions: Conditions | undefined) => {
   return Object.keys(conditions).length < 1;
 };
 
-export const isFieldsEmpty = (fields: [] | string[] | FieldsWithConditions[] | undefined | null) => {
+export const isFieldsEmpty = (
+  fields: [] | string[] | FieldsWithConditions[] | undefined | null
+) => {
   if (!fields) return true;
   if (fields.length < 1) return true;
   return false;
@@ -88,7 +91,7 @@ export const deletePropertyPath = (obj: {}, path: string) => {
     obj = (obj as any)[splitPath[i]];
 
     // tslint:disable-next-line: strict-type-predicates
-    if (obj == undefined) {
+    if (obj === undefined) {
       return;
     }
   }
@@ -99,7 +102,7 @@ export const deletePropertyPath = (obj: {}, path: string) => {
 };
 
 export const isObject = (item: any) => {
-  return (typeof item === 'object' && !Array.isArray(item) && item !== null);
+  return typeof item === 'object' && !Array.isArray(item) && item !== null;
 };
 
 export const splitFields = (allowedFields: string[]) => {
@@ -114,7 +117,7 @@ export const splitFields = (allowedFields: string[]) => {
   });
   return {
     positiveFields,
-    negativeFields
+    negativeFields,
   };
 };
 
@@ -134,24 +137,25 @@ export const getAllowedFields = (
   return allowedFields;
 };
 
-export const asyncForEach = async (array: any[], callback: (item: any, index: number, array: any[]) => Promise<any>) => {
+export const asyncForEach = async (
+  array: any[],
+  callback: (item: any, index: number, array: any[]) => Promise<any>
+) => {
   for (let index = 0; index < array.length; index++) {
     await callback(array[index], index, array);
   }
 };
 
-export const onNotAllowed = (
-  action: string,
-  resources: string
-) => `You are not authorized to ${action} ${resources}`;
+export const onNotAllowed = (action: string, resources: string) =>
+  `You are not authorized to ${action} ${resources}`;
 
-export const mergeConfigWithDefaults = (config?: Config) => {
-  return{
+export const mergeConfigWithDefaults = (config?: Config): ConfigFull => {
+  return {
     abortEarly: config?.abortEarly ?? true,
     validateData: {
-      throwErr: config?.validateData?.throwErr ?? false
+      throwErr: config?.validateData?.throwErr ?? false,
     },
     throwErr: config?.throwErr ?? false,
-    onNotAllowed: config?.onNotAllowed ?? onNotAllowed
-  }
-}
+    onNotAllowed: config?.onNotAllowed ?? onNotAllowed,
+  };
+};

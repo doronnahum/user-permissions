@@ -2,7 +2,7 @@ import {
   matchRoles,
   parseConditions,
   isConditionEmpty,
-  onNotAllowed
+  onNotAllowed,
 } from '../src/utils/utils';
 
 describe('test onNotAllowed utils', () => {
@@ -19,7 +19,7 @@ describe('test matchRoles utils', () => {
   it('Should by a function', () => {
     expect(typeof matchRoles).toEqual('function');
   });
-  const roles = ['admin','sys_admin'];
+  const roles = ['admin', 'sys_admin'];
 
   it('Should pass', () => {
     expect(matchRoles(roles, ['admin'])).toEqual(true);
@@ -43,7 +43,9 @@ describe('test parseConditions utils', () => {
     expect(parseConditions(parsing, { user })).toEqual(parsing);
   });
   it('Should failed', () => {
-    expect(parseConditions(template, { user: { id: 'a2' } })).not.toEqual(parsing);
+    expect(parseConditions(template, { user: { id: 'a2' } })).not.toEqual(
+      parsing
+    );
   });
 });
 

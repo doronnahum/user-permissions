@@ -1,4 +1,3 @@
-
 import {
   validateFields,
   validateActions,
@@ -6,7 +5,7 @@ import {
   validateRoles,
   validateWhen,
   validateUser,
-  validateConditions
+  validateConditions,
 } from '../src/utils/validators';
 
 describe('test validateFields', () => {
@@ -18,7 +17,7 @@ describe('test validateFields', () => {
     expect(validateFields(['name'])).toEqual(true);
     try {
       // tslint:disable-next-line: prefer-type-cast
-      validateFields(({ field: 'name' } as any));
+      validateFields({ field: 'name' } as any);
       expect(false).toEqual(true);
     } catch (error) {
       expect(typeof error.message).toEqual('string');
@@ -35,7 +34,7 @@ describe('test validateActions', () => {
     expect(validateActions(['create'])).toEqual(true);
     try {
       // tslint:disable-next-line: prefer-type-cast
-      validateActions(({ action: 'create' } as any));
+      validateActions({ action: 'create' } as any);
       expect(false).toEqual(true);
     } catch (error) {
       expect(typeof error.message).toEqual('string');
@@ -52,7 +51,7 @@ describe('test validateResource', () => {
     expect(validateResource(['post'])).toEqual(true);
     try {
       // tslint:disable-next-line: prefer-type-cast
-      validateResource(({ resource: 'post' } as any));
+      validateResource({ resource: 'post' } as any);
       expect(false).toEqual(true);
     } catch (error) {
       expect(typeof error.message).toEqual('string');
@@ -69,7 +68,7 @@ describe('test validateRoles', () => {
     expect(validateRoles(['admin'])).toEqual(true);
     try {
       // tslint:disable-next-line: prefer-type-cast
-      validateRoles(({ role: 'admin' } as any));
+      validateRoles({ role: 'admin' } as any);
       expect(false).toEqual(true);
     } catch (error) {
       expect(typeof error.message).toEqual('string');
@@ -88,7 +87,7 @@ describe('test validateWhen', () => {
     expect(validateWhen(asyncFunc)).toEqual(true);
     try {
       // tslint:disable-next-line: prefer-type-cast
-      validateWhen((true as any));
+      validateWhen(true as any);
       expect(false).toEqual(true);
     } catch (error) {
       expect(typeof error.message).toEqual('string');
@@ -106,7 +105,7 @@ describe('test validateUser', () => {
     expect(validateUser({ paid: true })).toEqual(true);
     try {
       // tslint:disable-next-line: prefer-type-cast
-      validateUser(('string' as any));
+      validateUser('string' as any);
       expect(false).toEqual(true);
     } catch (error) {
       expect(typeof error.message).toEqual('string');
@@ -123,7 +122,7 @@ describe('test validateConditions', () => {
     expect(validateConditions({ paid: true })).toEqual(true);
     try {
       // tslint:disable-next-line: prefer-type-cast
-      validateConditions((true as any));
+      validateConditions(true as any);
       expect(false).toEqual(true);
     } catch (error) {
       expect(typeof error.message).toEqual('string');

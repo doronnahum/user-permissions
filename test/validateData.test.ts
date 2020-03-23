@@ -27,16 +27,24 @@ describe('test validate data function', () => {
   it('Test field with conditions', () => {
     const fakeData = getFakeData();
     const notAllKeys = Object.keys(fakeData[0]).filter(item => item !== 'name');
-    const fieldsWithValidConditions = [{
-      fields: ['name'],
-      conditions: { name: { $in: fakeData.map(item => item.name) } }
-    }];
-    const fieldsWithUnValidConditions = [{
-      fields: ['name'],
-      conditions: { name: 'dd' }
-    }];
-    expect(validateData(fakeData, notAllKeys, fieldsWithValidConditions).valid).toEqual(true);
-    expect(validateData(fakeData, notAllKeys, fieldsWithUnValidConditions).valid).toEqual(false);
+    const fieldsWithValidConditions = [
+      {
+        fields: ['name'],
+        conditions: { name: { $in: fakeData.map(item => item.name) } },
+      },
+    ];
+    const fieldsWithUnValidConditions = [
+      {
+        fields: ['name'],
+        conditions: { name: 'dd' },
+      },
+    ];
+    expect(
+      validateData(fakeData, notAllKeys, fieldsWithValidConditions).valid
+    ).toEqual(true);
+    expect(
+      validateData(fakeData, notAllKeys, fieldsWithUnValidConditions).valid
+    ).toEqual(false);
   });
   it('test negative fields', () => {
     const fakeData = getFakeData();
@@ -45,16 +53,22 @@ describe('test validate data function', () => {
   });
   it('Validate deep fields', () => {
     const fakeData = { location: getFakeData()[0].location };
-    expect(validateData(fakeData, ['location.state', 'location.address'], null).valid).toEqual(true);
-    expect(validateData(fakeData, ['location.state'], null).valid).toEqual(false);
+    expect(
+      validateData(fakeData, ['location.state', 'location.address'], null).valid
+    ).toEqual(true);
+    expect(validateData(fakeData, ['location.state'], null).valid).toEqual(
+      false
+    );
     expect(validateData(fakeData, ['product.name'], null).valid).toEqual(false);
     expect(validateData(fakeData, ['product'], null).valid).toEqual(false);
   });
   it('Test throwErr config option', () => {
-      const fakeData = { location: getFakeData()[0].location };
-      expect(() => {
-        validateData(fakeData, ['location.state'], null, null, { validateData:{throwErr: true} })
-      }).toThrow();
+    const fakeData = { location: getFakeData()[0].location };
+    expect(() => {
+      validateData(fakeData, ['location.state'], null, null, {
+        validateData: { throwErr: true },
+      });
+    }).toThrow();
   });
   it('test negative fields', () => {
     const fakeData = getFakeData();

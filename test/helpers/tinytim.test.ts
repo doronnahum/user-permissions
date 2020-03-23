@@ -6,7 +6,7 @@ describe('Test tinytime', () => {
   beforeAll(() => {
     stringify = tinytim(template, data);
     obj = JSON.parse(stringify);
-  })
+  });
   const template =
     '{"name": "{{ name }}", "city": "{{ location.city }}", "age": "{{ age }}"}';
   const data = { name: 'Dan', location: { city: 'Ny' } };

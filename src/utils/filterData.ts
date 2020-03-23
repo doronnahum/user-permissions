@@ -20,7 +20,8 @@ export const filterObject = (
 export const filterData = (
   data: object[] | object,
   fields: null | string[],
-  fieldsWithConditions: null | FieldsWithConditions[]): object | object[] => {
+  fieldsWithConditions: null | FieldsWithConditions[]
+): object | object[] => {
   const isArray = Array.isArray(data);
   if (isArray) {
     // tslint:disable-next-line: prefer-type-cast
