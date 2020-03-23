@@ -1,4 +1,5 @@
-import { Allow, Abilities } from '../src';
+import Abilities from '../src/Abilities';
+import Allow from '../src/Allow';
 
 let appAbilities: any;
 let appAbilitiesThrow: any;
