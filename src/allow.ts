@@ -28,7 +28,7 @@ import {
 
 const ALL_ACTIONS = ['*'];
 const ALL_RESOURCES = ['*'];
-export class Allow {
+class Allow {
   private _actions?: Actions;
   private _resources?: Resources;
 
@@ -124,3 +124,5 @@ export class Allow {
     return this._fields;
   }
 }
+
+export default Allow;

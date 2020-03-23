@@ -21,7 +21,7 @@ export interface Config {
 }
 export interface ConfigFull {
   abortEarly: boolean;
-  onNotAllowed : (action: string, resource: string)=> string;
+  onNotAllowed : (action: string, resource: string) => string;
   validateData: {
     throwErr: boolean;
   };

@@ -1,7 +1,7 @@
 import checkAbilities from './utils/checkAbilities';
 import { asyncForEach, mergeConfigWithDefaults } from './utils/utils';
 import { Context, Config } from './types';
-import { Allow } from './Allow';
+import Allow from './Allow';
 
 export default class Abilities {
   private readonly abilities: Allow[];

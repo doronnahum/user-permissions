@@ -10,7 +10,7 @@ import {
 import {validateData} from './utils/validateData';
 import {filterData} from './utils/filterData';
 import { parseConditions } from './utils/utils';
-import { Allow } from 'Allow';
+import Allow from 'Allow';
 
 export class AbilitiesResponse {
   private action: string;
