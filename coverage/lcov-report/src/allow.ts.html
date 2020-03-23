@@ -24,7 +24,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>63/63</span>
+                <span class='fraction'>64/64</span>
             </div>
         
             
@@ -45,7 +45,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>58/58</span>
+                <span class='fraction'>59/59</span>
             </div>
         
             
@@ -181,7 +181,14 @@
 <a name='L123'></a><a href='#L123'>123</a>
 <a name='L124'></a><a href='#L124'>124</a>
 <a name='L125'></a><a href='#L125'>125</a>
-<a name='L126'></a><a href='#L126'>126</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
+<a name='L126'></a><a href='#L126'>126</a>
+<a name='L127'></a><a href='#L127'>127</a>
+<a name='L128'></a><a href='#L128'>128</a>
+<a name='L129'></a><a href='#L129'>129</a>
+<a name='L130'></a><a href='#L130'>130</a>
+<a name='L131'></a><a href='#L131'>131</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -306,11 +313,16 @@
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">19x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span></td><td class="text"><pre class="prettyprint lang-js">import {
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import {
   getAsArray,
-  checkInArray, checkUserContext, matchRoles,
+  checkInArray,
+  checkUserContext,
+  matchRoles,
   isFieldsEmpty,
-  isConditionEmpty
+  isConditionEmpty,
 } from './utils/utils';
 &nbsp;
 import {
@@ -320,7 +332,7 @@ import {
   validateConditions,
   validateRoles,
   validateResource,
-  validateActions
+  validateActions,
 } from './utils/validators';
 &nbsp;
 import {
@@ -336,7 +348,7 @@ import {
 &nbsp;
 const ALL_ACTIONS = ['*'];
 const ALL_RESOURCES = ['*'];
-export class Allow {
+class Allow {
   private _actions?: Actions;
   private _resources?: Resources;
 &nbsp;
@@ -349,59 +361,59 @@ export class Allow {
   private _hasFields: boolean = false;
   private _hasConditions: boolean = false;
 &nbsp;
-  public actions (res: Actions) {
+  public actions(res: Actions) {
     validateActions(res);
     this._actions = res;
     return this;
   }
 &nbsp;
-  public resources (res: Resources) {
+  public resources(res: Resources) {
     validateResource(res);
     this._resources = res;
     return this;
   }
 &nbsp;
-  public roles (roles: string | Roles) {
+  public roles(roles: string | Roles) {
     validateRoles(roles);
     this._roles = getAsArray(roles);
     return this;
   }
 &nbsp;
-  public conditions (res: Conditions) {
+  public conditions(res: Conditions) {
     validateConditions(res);
     this._conditions = res;
     this._hasConditions = !isConditionEmpty(this._conditions);
     return this;
   }
 &nbsp;
-  public hasConditions(){
+  public hasConditions() {
     return this._hasConditions;
   }
 &nbsp;
-  public fields (res: string | Fields) {
+  public fields(res: string | Fields) {
     validateFields(res);
     this._fields = getAsArray(res);
-    this._hasFields = !isFieldsEmpty(this._fields)
+    this._hasFields = !isFieldsEmpty(this._fields);
     return this;
   }
 &nbsp;
-  public hasFields(){
+  public hasFields() {
     return this._hasFields;
   }
 &nbsp;
-  public user (res: UserContext) {
+  public user(res: UserContext) {
     validateUser(res);
     this._user = res;
     return this;
   }
 &nbsp;
-  public when (res: When) {
+  public when(res: When) {
     validateWhen(res);
     this._when = res;
     return this;
   }
 &nbsp;
-  public meta (res: any) {
+  public meta(res: any) {
     this._meta = res;
     return this;
   }
@@ -416,29 +428,32 @@ export class Allow {
     return (
       checkInArray(action, this._actions || ALL_ACTIONS) &amp;&amp;
       checkInArray(resource, this._resources || ALL_RESOURCES) &amp;&amp;
-      (!this._when || await this._when(context)) &amp;&amp;
+      (!this._when || (await this._when(context))) &amp;&amp;
       checkUserContext(this._user, userData) &amp;&amp;
       matchRoles(this._roles, roles)
     );
   };
 &nbsp;
-  public getConditions () {
+  public getConditions() {
     return this._conditions;
   }
-  public getMeta () {
+  public getMeta() {
     return this._meta;
   }
-  public getFields () {
+  public getFields() {
     return this._fields;
   }
-}</pre></td></tr></table></pre>
+}
+&nbsp;
+export default Allow;
+&nbsp;</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
             </div><!-- /wrapper -->
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Sat Mar 21 2020 23:58:14 GMT+0200 (Israel Standard Time)
+                at Mon Mar 23 2020 21:30:21 GMT+0200 (Israel Standard Time)
             </div>
         </div>
         <script src="..\prettify.js"></script>

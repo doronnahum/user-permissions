@@ -1,4 +1,4 @@
-import { Context, Config } from '../types';
+import { Context, ConfigFull } from '../types';
 import Allow from '../Allow';
 import { asyncForEach } from './utils';
 import { AbilitiesResponse } from '../AbilitiesResponse';
@@ -8,7 +8,7 @@ const checkAbilities = async (
   action: string,
   resource: string,
   context: Context | undefined,
-  config: Config
+  config: ConfigFull
 ) => {
   const response = new AbilitiesResponse(action, resource, config, context);
 

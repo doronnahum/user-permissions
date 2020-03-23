@@ -43,9 +43,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">97.26% </span>
+                <span class="strong">97.3% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>71/73</span>
+                <span class='fraction'>72/74</span>
             </div>
         
             
@@ -212,7 +212,13 @@
 <a name='L154'></a><a href='#L154'>154</a>
 <a name='L155'></a><a href='#L155'>155</a>
 <a name='L156'></a><a href='#L156'>156</a>
-<a name='L157'></a><a href='#L157'>157</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L157'></a><a href='#L157'>157</a>
+<a name='L158'></a><a href='#L158'>158</a>
+<a name='L159'></a><a href='#L159'>159</a>
+<a name='L160'></a><a href='#L160'>160</a>
+<a name='L161'></a><a href='#L161'>161</a>
+<a name='L162'></a><a href='#L162'>162</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -286,6 +292,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">5x</span>
 <span class="cline-any cline-yes">5x</span>
 <span class="cline-any cline-yes">5x</span>
@@ -348,19 +356,21 @@
 <span class="cline-any cline-yes">44x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">14x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">112x</span>
 <span class="cline-any cline-yes">196x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">4x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">5x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-yes">20x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -375,7 +385,8 @@
   Context,
   ParseConditions,
   FieldsWithConditions,
-  Config
+  Config,
+  ConfigFull,
 } from '../types';
 &nbsp;
 import tinytim from './tinytim';
@@ -424,7 +435,7 @@ export const parseConditions = (
   const isTemplate = typeof conditions === 'string';
   if (isTemplate) {
     // tslint:disable-next-line: prefer-type-cast
-    return parseTemplate((conditions as string), context ?? <span class="branch-1 cbranch-no" title="branch not covered" >{})</span>;
+    return parseTemplate(conditions as string, context ?? <span class="branch-1 cbranch-no" title="branch not covered" >{})</span>;
   }
   return conditions;
 };
@@ -441,7 +452,9 @@ export const isConditionEmpty = (conditions: Conditions | undefined) =&gt; {
   return Object.keys(conditions).length &lt; 1;
 };
 &nbsp;
-export const isFieldsEmpty = (fields: [] | string[] | FieldsWithConditions[] | undefined | null) =&gt; {
+export const isFieldsEmpty = (
+  fields: [] | string[] | FieldsWithConditions[] | undefined | null
+) =&gt; {
   <span class="missing-if-branch" title="if path not taken" >I</span>if (!fields) <span class="cstat-no" title="statement not covered" >return true;</span>
   <span class="missing-if-branch" title="if path not taken" >I</span>if (fields.length &lt; 1) <span class="cstat-no" title="statement not covered" >return true;</span>
   return false;
@@ -458,7 +471,7 @@ export const deletePropertyPath = (obj: {}, path: string) =&gt; {
     obj = (obj as any)[splitPath[i]];
 &nbsp;
     // tslint:disable-next-line: strict-type-predicates
-    <span class="missing-if-branch" title="if path not taken" >I</span>if (obj == undefined) {
+    <span class="missing-if-branch" title="if path not taken" >I</span>if (obj === undefined) {
 <span class="cstat-no" title="statement not covered" >      return;</span>
     }
   }
@@ -469,7 +482,7 @@ export const deletePropertyPath = (obj: {}, path: string) =&gt; {
 };
 &nbsp;
 export const isObject = (item: any) =&gt; {
-  return (typeof item === 'object' &amp;&amp; !Array.isArray(item) &amp;&amp; item !== null);
+  return typeof item === 'object' &amp;&amp; !Array.isArray(item) &amp;&amp; item !== null;
 };
 &nbsp;
 export const splitFields = (allowedFields: string[]) =&gt; {
@@ -484,7 +497,7 @@ export const splitFields = (allowedFields: string[]) =&gt; {
   });
   return {
     positiveFields,
-    negativeFields
+    negativeFields,
   };
 };
 &nbsp;
@@ -504,34 +517,36 @@ export const getAllowedFields = (
   return allowedFields;
 };
 &nbsp;
-export const asyncForEach = async (array: any[], callback: (item: any, index: number, array: any[]) =&gt; Promise&lt;any&gt;) =&gt; {
+export const asyncForEach = async (
+  array: any[],
+  callback: (item: any, index: number, array: any[]) =&gt; Promise&lt;any&gt;
+) =&gt; {
   for (let index = 0; index &lt; array.length; index++) {
     await callback(array[index], index, array);
   }
 };
 &nbsp;
-export const onNotAllowed = (
-  action: string,
-  resources: string
-) =&gt; `You are not authorized to ${action} ${resources}`;
+export const onNotAllowed = (action: string, resources: string) =&gt;
+  `You are not authorized to ${action} ${resources}`;
 &nbsp;
-export const mergeConfigWithDefaults = (config?: Config) =&gt; {
-  return{
+export const mergeConfigWithDefaults = (config?: Config): ConfigFull =&gt; {
+  return {
     abortEarly: config?.abortEarly ?? true,
     validateData: {
-      throwErr: config?.validateData?.throwErr ?? false
+      throwErr: config?.validateData?.throwErr ?? false,
     },
     throwErr: config?.throwErr ?? false,
-    onNotAllowed: config?.onNotAllowed ?? onNotAllowed
-  }
-}</pre></td></tr></table></pre>
+    onNotAllowed: config?.onNotAllowed ?? onNotAllowed,
+  };
+};
+&nbsp;</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
             </div><!-- /wrapper -->
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Sat Mar 21 2020 23:58:14 GMT+0200 (Israel Standard Time)
+                at Mon Mar 23 2020 21:30:21 GMT+0200 (Israel Standard Time)
             </div>
         </div>
         <script src="..\..\prettify.js"></script>
