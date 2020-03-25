@@ -1,28 +1,28 @@
 import { Context, ConfigFull } from '../types';
 import Allow from '../Allow';
 import { asyncForEach } from './utils';
-import { AbilitiesResponse } from '../AbilitiesResponse';
+import { PermissionsResponse } from '../PermissionsResponse';
 
-const checkAbilities = async (
-  abilities: Allow[],
+const checkPermissions = async (
+  permissions: Allow[],
   action: string,
   resource: string,
   context: Context | undefined,
   config: ConfigFull
 ) => {
-  const response = new AbilitiesResponse(action, resource, config, context);
+  const response = new PermissionsResponse(action, resource, config, context);
 
   let allowFullAccess = false; // When at least one ability is allowed all fields without any condition
   let allowAllFields = false; // When at least one ability is allowed all fields
 
   /*
   |-----------------------------------------------------------------
-  | Check abilities
+  | Check permissions
   |-----------------------------------------------------------------
-  | Pass over all abilities and collect fields, condition, meta
+  | Pass over all permissions and collect fields, condition, meta
   |
   */
-  await asyncForEach(abilities, async (ability: Allow) => {
+  await asyncForEach(permissions, async (ability: Allow) => {
     // When allowFullAccess os true and abortEarly is apply we can skip
     const skip = allowFullAccess && config.abortEarly;
     if (skip) return;
@@ -58,4 +58,4 @@ const checkAbilities = async (
   return response.get();
 };
 
-export default checkAbilities;
+export default checkPermissions;

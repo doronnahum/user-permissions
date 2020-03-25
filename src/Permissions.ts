@@ -1,20 +1,20 @@
-import checkAbilities from './utils/checkAbilities';
+import checkPermissions from './utils/checkPermissions';
 import { asyncForEach, mergeConfigWithDefaults } from './utils/utils';
 import { Context, Config, ConfigFull } from './types';
 import Allow from './Allow';
 
-export default class Abilities {
-  private readonly abilities: Allow[];
+export default class Permissions {
+  private readonly permissions: Allow[];
   private readonly config: ConfigFull;
-  constructor(abilities: Allow[], config?: Config) {
-    // Convert abilities class to object
-    this.abilities = abilities;
+  constructor(permissions: Allow[], config?: Config) {
+    // Convert permissions class to object
+    this.permissions = permissions;
     this.config = mergeConfigWithDefaults(config);
   }
 
   public get() {
     return {
-      abilities: this.abilities,
+      permissions: this.permissions,
     };
   }
 
@@ -27,8 +27,8 @@ export default class Abilities {
    * @return {Promise} { allow: boolean, message: string, conditions: object[]...  }
    */
   public async check(action: string, resource: string, context?: Context) {
-    const response = await checkAbilities(
-      this.abilities,
+    const response = await checkPermissions(
+      this.permissions,
       action,
       resource,
       context,
@@ -54,7 +54,7 @@ export default class Abilities {
     context?: Context
   ): Promise<boolean> {
     let result = false;
-    await asyncForEach(this.abilities, async (ability: Allow) => {
+    await asyncForEach(this.permissions, async (ability: Allow) => {
       result = result || (await ability.isAllowed(action, resource, context));
     });
     return result;

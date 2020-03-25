@@ -1,5 +1,5 @@
 {
-  "name": "check-abilities",
+  "name": "check-permissions",
   "version": "0.2.1",
   "description": "Small authorization library for NodeJS and browser",
   "license": "MIT",
@@ -19,7 +19,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/doronnahum/check-abilities.git"
+    "url": "https://github.com/doronnahum/check-permissions.git"
   },
   "keywords": [
     "access control",
@@ -45,7 +45,7 @@
     "singleQuote": true,
     "trailingComma": "es5"
   },
-  "module": "dist/check-abilities.esm.js",
+  "module": "dist/check-permissions.esm.js",
   "devDependencies": {
     "@types/clone": "^0.1.30",
     "@types/dot": "1.1.3",

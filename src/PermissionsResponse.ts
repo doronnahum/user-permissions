@@ -12,7 +12,7 @@ import { filterData } from './utils/filterData';
 import { parseConditions } from './utils/utils';
 import Allow from 'Allow';
 
-export class AbilitiesResponse {
+export class PermissionsResponse {
   private action: string;
   private resource: string;
   private allow: boolean;

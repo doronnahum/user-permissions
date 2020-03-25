@@ -46,7 +46,7 @@ export interface FieldsWithConditions {
   fields: string[];
 }
 
-export interface IAbilitiesCheckResponse {
+export interface IPermissionsCheckResponse {
   allow: boolean;
   message: string;
   conditions?: null | object[];
