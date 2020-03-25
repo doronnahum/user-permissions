@@ -23,7 +23,7 @@ export class PermissionsResponse {
     allowAll: boolean;
     allowed: null | string[];
     allowedByCondition: null | FieldsWithConditions[];
-    getAll: () => string[];
+    getFieldsToSelect: () => string[];
   };
 
   private filterData: (data: object | object[]) => object | object[] | null;
@@ -69,7 +69,7 @@ export class PermissionsResponse {
       allowAll: false,
       allowed: null,
       allowedByCondition: null,
-      getAll: () => {
+      getFieldsToSelect: () => {
         const fields: string[] = [];
         if (this.fields.allowed) {
           fields.push(...this.fields.allowed);
