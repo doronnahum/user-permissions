@@ -1,4 +1,4 @@
-# User permissions
+# User Permissions
 
 ### user permissions is a small powerful authorization library that manage what resources a user allowed to access
 
@@ -21,7 +21,9 @@ e.g `new Allow().resources('posts').conditions('{"creator": "" }')`
 ✔ Utils to Filter/Validate data by permission  
 e.g `appAbilities.check('read', 'posts').validateData(data)`
 
-### Install
+### [DEMO](https://scrimba.com/c/cdVN9vCW)
+
+## Install
 
 `npm i user-permissions`
 
@@ -149,5 +151,5 @@ console.log('Posts response', response)
 
 ```
 
-### [Play with this code](https://scrimba.com/c/cdVN9vCW)
+### 
 
