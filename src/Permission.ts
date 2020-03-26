@@ -5,6 +5,7 @@ import {
   matchRoles,
   isFieldsEmpty,
   isConditionEmpty,
+  hasOwnProperty,
 } from './utils/utils';
 
 import {
@@ -26,11 +27,12 @@ import {
   When,
   Roles,
   Context,
+  IPermissionConstructor,
 } from './types';
 
 const ALL_ACTIONS = ['*'];
 const ALL_RESOURCES = ['*'];
-class Allow {
+class Permission {
   private _actions?: Actions;
   private _resources?: Resources;
 
@@ -43,6 +45,34 @@ class Allow {
   private _hasFields: boolean = false;
   private _hasConditions: boolean = false;
 
+  constructor(params?: IPermissionConstructor) {
+    if (params) {
+      if (hasOwnProperty(params, 'actions')) {
+        this.actions(params.actions as Actions);
+      }
+      if (hasOwnProperty(params, 'resources')) {
+        this.resources(params.resources as Resources);
+      }
+      if (hasOwnProperty(params, 'roles')) {
+        this.roles(params.roles as Roles);
+      }
+      if (hasOwnProperty(params, 'conditions')) {
+        this.conditions(params.conditions as Conditions);
+      }
+      if (hasOwnProperty(params, 'fields')) {
+        this.fields(params.fields as Fields);
+      }
+      if (hasOwnProperty(params, 'user')) {
+        this.user(params.user as UserContext);
+      }
+      if (hasOwnProperty(params, 'when')) {
+        this.when(params.when as When);
+      }
+      if (hasOwnProperty(params, 'meta')) {
+        this.meta(params.meta as any);
+      }
+    }
+  }
   public actions(res: Actions) {
     validateActions(res);
     this._actions = res;
@@ -100,7 +130,7 @@ class Allow {
     return this;
   }
 
-  public isAllowed = async (
+  public isPermissioned = async (
     action: string,
     resource: string,
     context?: Context
@@ -127,4 +157,4 @@ class Allow {
   }
 }
 
-export default Allow;
+export default Permission;

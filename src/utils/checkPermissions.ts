@@ -1,10 +1,10 @@
 import { Context, ConfigFull } from '../types';
-import Allow from '../Allow';
+import Permission from '../Permission';
 import { asyncForEach } from './utils';
 import { PermissionsResponse } from '../PermissionsResponse';
 
 const checkPermissions = async (
-  permissions: Allow[],
+  permissions: Permission[],
   action: string,
   resource: string,
   context: Context | undefined,
@@ -22,16 +22,16 @@ const checkPermissions = async (
   | Pass over all permissions and collect fields, condition, meta
   |
   */
-  await asyncForEach(permissions, async (ability: Allow) => {
+  await asyncForEach(permissions, async (ability: Permission) => {
     // When allowFullAccess os true and abortEarly is apply we can skip
     const skip = allowFullAccess && config.abortEarly;
     if (skip) return;
 
-    // Skip when not Allowed by current ability
-    if (!(await ability.isAllowed(action, resource, context))) return;
+    // Skip when not Permissioned by current ability
+    if (!(await ability.isPermissioned(action, resource, context))) return;
 
-    // User Allowed by current ability
-    response.setAllow(true);
+    // User Permissioned by current ability
+    response.setPermission(true);
 
     const meta = ability.getMeta();
     // Collect meta
@@ -48,11 +48,11 @@ const checkPermissions = async (
   /**
    * Summary
    */
-  const isUserAllowed = response.isAllow();
-  if (isUserAllowed) {
-    if (allowFullAccess) response.onUserNotAllow();
+  const isUserPermissioned = response.isPermission();
+  if (isUserPermissioned) {
+    if (allowFullAccess) response.onUserNotPermission();
   } else {
-    response.onUserNotAllow();
+    response.onUserNotPermission();
   }
 
   return response.get();

@@ -121,7 +121,7 @@ export const splitFields = (allowedFields: string[]) => {
   };
 };
 
-export const getAllowedFields = (
+export const getPermissionedFields = (
   data: {},
   fields: null | string[],
   fieldsWithConditions: null | FieldsWithConditions[]
@@ -146,7 +146,7 @@ export const asyncForEach = async (
   }
 };
 
-export const onNotAllowed = (action: string, resources: string) =>
+export const onNotPermissioned = (action: string, resources: string) =>
   `You are not authorized to ${action} ${resources}`;
 
 export const mergeConfigWithDefaults = (config?: Config): ConfigFull => {
@@ -156,6 +156,9 @@ export const mergeConfigWithDefaults = (config?: Config): ConfigFull => {
       throwErr: config?.validateData?.throwErr ?? false,
     },
     throwErr: config?.throwErr ?? false,
-    onNotAllowed: config?.onNotAllowed ?? onNotAllowed,
+    onNotPermissioned: config?.onNotPermissioned ?? onNotPermissioned,
   };
 };
+
+export const hasOwnProperty = (obj: object, field: string) =>
+  Object.prototype.hasOwnProperty.call(obj, field);

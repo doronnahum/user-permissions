@@ -1,5 +1,5 @@
 import {
-  getAllowedFields,
+  getPermissionedFields,
   splitFields,
   isObject,
   checkConditions,
@@ -68,7 +68,11 @@ export const validateObject = (
   fields: null | string[],
   fieldsWithConditions: null | FieldsWithConditions[]
 ): ValidateDataResponse => {
-  const allowedFields = getAllowedFields(data, fields, fieldsWithConditions);
+  const allowedFields = getPermissionedFields(
+    data,
+    fields,
+    fieldsWithConditions
+  );
   const { positiveFields, negativeFields } = splitFields(allowedFields);
   const negativeFieldsRes = validateNegativeFields(data, negativeFields);
   if (!negativeFieldsRes.valid) return negativeFieldsRes;

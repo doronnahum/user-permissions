@@ -2,16 +2,16 @@ import {
   matchRoles,
   parseConditions,
   isConditionEmpty,
-  onNotAllowed,
+  onNotPermissioned,
 } from '../src/utils/utils';
 
-describe('test onNotAllowed utils', () => {
+describe('test onNotPermissioned utils', () => {
   it('Should by a function', () => {
-    expect(typeof onNotAllowed).toEqual('function');
+    expect(typeof onNotPermissioned).toEqual('function');
   });
 
   it('Should return string', () => {
-    expect(typeof onNotAllowed('create', 'post')).toEqual('string');
+    expect(typeof onNotPermissioned('create', 'post')).toEqual('string');
   });
 });
 

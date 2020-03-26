@@ -10,7 +10,7 @@ import {
 import { validateData } from './utils/validateData';
 import { filterData } from './utils/filterData';
 import { parseConditions } from './utils/utils';
-import Allow from 'Allow';
+import Permission from 'Permission';
 
 export class PermissionsResponse {
   private action: string;
@@ -94,10 +94,10 @@ export class PermissionsResponse {
     };
   }
 
-  public isAllow() {
+  public isPermission() {
     return this.allow;
   }
-  public setAllow(value: boolean) {
+  public setPermission(value: boolean) {
     this.allow = value;
   }
   public setMessage(value: null | string) {
@@ -113,7 +113,7 @@ export class PermissionsResponse {
     if (!this.meta) this.meta = [];
     this.meta.push(value);
   }
-  public setAllowAllFields(value: boolean) {
+  public setPermissionAllFields(value: boolean) {
     this.fields.allowAll = value;
     if (value) {
       this.fields.allowed = null;
@@ -130,19 +130,19 @@ export class PermissionsResponse {
   }
 
   public allowFullAccess() {
-    this.setAllowAllFields(true);
+    this.setPermissionAllFields(true);
     this.conditions = null;
   }
-  public onUserNotAllow() {
+  public onUserNotPermission() {
     this.fields.allowAll = false;
     this.fields.allowed = null;
     this.fields.allowedByCondition = null;
     this.conditions = null;
-    this.setAllow(false);
-    this.message = this.config.onNotAllowed(this.action, this.resource);
+    this.setPermission(false);
+    this.message = this.config.onNotPermissioned(this.action, this.resource);
   }
 
-  updateFieldsAndConditions(ability: Allow) {
+  updateFieldsAndConditions(ability: Permission) {
     const hasFields = ability.hasFields();
     const hasConditions = ability.hasConditions();
     const fields = ability.getFields();

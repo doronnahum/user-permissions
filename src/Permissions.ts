@@ -1,12 +1,12 @@
 import checkPermissions from './utils/checkPermissions';
 import { asyncForEach, mergeConfigWithDefaults } from './utils/utils';
 import { Context, Config, ConfigFull } from './types';
-import Allow from './Allow';
+import Permission from './Permission';
 
 export default class Permissions {
-  private readonly permissions: Allow[];
+  private readonly permissions: Permission[];
   private readonly config: ConfigFull;
-  constructor(permissions: Allow[], config?: Config) {
+  constructor(permissions: Permission[], config?: Config) {
     // Convert permissions class to object
     this.permissions = permissions;
     this.config = mergeConfigWithDefaults(config);
@@ -41,21 +41,22 @@ export default class Permissions {
   }
 
   /**
-   * @method isAllowed
+   * @method isPermissioned
    * @description Return true when user can [action] a [resource]
    * @param {string} action
    * @param {string} resource
    * @param {object} context
    * @returns {Promise}
    */
-  public async isAllowed(
+  public async isPermissioned(
     action: string,
     resource: string,
     context?: Context
   ): Promise<boolean> {
     let result = false;
-    await asyncForEach(this.permissions, async (ability: Allow) => {
-      result = result || (await ability.isAllowed(action, resource, context));
+    await asyncForEach(this.permissions, async (ability: Permission) => {
+      result =
+        result || (await ability.isPermissioned(action, resource, context));
     });
     return result;
   }

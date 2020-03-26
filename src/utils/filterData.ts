@@ -1,4 +1,8 @@
-import { getAllowedFields, splitFields, deletePropertyPath } from './utils';
+import {
+  getPermissionedFields,
+  splitFields,
+  deletePropertyPath,
+} from './utils';
 import { FieldsWithConditions } from '../types';
 import pickDeep from 'pick-deep';
 
@@ -7,7 +11,11 @@ export const filterObject = (
   fields: null | string[],
   fieldsWithConditions: null | FieldsWithConditions[]
 ): object => {
-  const allowedFields = getAllowedFields(data, fields, fieldsWithConditions);
+  const allowedFields = getPermissionedFields(
+    data,
+    fields,
+    fieldsWithConditions
+  );
   const { positiveFields, negativeFields } = splitFields(allowedFields);
   const filteredObj =
     positiveFields.length === 0 || positiveFields.includes('*')

@@ -1,4 +1,4 @@
-import { Permissions, Allow } from '../src';
+import { Permissions, Permission } from '../src';
 
 let appPermissions: any;
 let appPermissionsThrow: any;
@@ -7,20 +7,20 @@ describe('Test Permissions class', () => {
   beforeAll(() => {
     const permissions = [
       // Everyone allow read the posts title and body
-      new Allow()
+      new Permission()
         .actions('read')
         .resources('posts')
         .fields(['title', 'body']),
 
       // Logged in user allow manage his posts
-      new Allow()
+      new Permission()
         .actions('*')
         .resources('posts')
         .conditions('{"creator": "{{ user.id }}" }')
         .user(true),
 
       // Admin user allow manage all posts
-      new Allow()
+      new Permission()
         .actions('*')
         .resources('posts')
         .roles('admin')
@@ -36,27 +36,27 @@ describe('Test Permissions class', () => {
         }),
 
       // A paying user allow read the message information field
-      new Allow()
+      new Permission()
         .actions('read')
         .resources('posts')
         .fields(['info'])
         .user({ isPay: true }),
 
       // Everyone allow read the comments title
-      new Allow()
+      new Permission()
         .actions('read')
         .resources('comments')
         .fields(['title']),
 
       // Logged in User allow read the comments body fields
-      new Allow()
+      new Permission()
         .actions('read')
         .resources('comments')
         .fields(['body'])
         .user(true),
 
       // Logged in user allow read his comments rating
-      new Allow()
+      new Permission()
         .actions('read')
         .resources('comments')
         .conditions('{"creator": "{{ user.id }}" }')
@@ -67,18 +67,18 @@ describe('Test Permissions class', () => {
     appPermissionsThrow = new Permissions(permissions, { throwErr: true });
   });
   it('Validate allow is function', () => {
-    expect(typeof Allow).toEqual('function');
+    expect(typeof Permission).toEqual('function');
   });
 
   it('Validate allow return Ability class with the expected method', () => {
-    const newAllow = new Allow();
-    expect(typeof newAllow.actions).toEqual('function');
-    expect(typeof newAllow.resources).toEqual('function');
-    expect(typeof newAllow.conditions).toEqual('function');
-    expect(typeof newAllow.user).toEqual('function');
-    expect(typeof newAllow.fields).toEqual('function');
-    expect(typeof newAllow.meta).toEqual('function');
-    expect(typeof newAllow.when).toEqual('function');
+    const newPermission = new Permission();
+    expect(typeof newPermission.actions).toEqual('function');
+    expect(typeof newPermission.resources).toEqual('function');
+    expect(typeof newPermission.conditions).toEqual('function');
+    expect(typeof newPermission.user).toEqual('function');
+    expect(typeof newPermission.fields).toEqual('function');
+    expect(typeof newPermission.meta).toEqual('function');
+    expect(typeof newPermission.when).toEqual('function');
   });
 
   it('Create new Permissions', () => {
@@ -91,25 +91,25 @@ describe('Test Permissions class', () => {
   });
 });
 
-describe('Test Allow class', () => {
+describe('Test Permission class', () => {
   let withoutActions: any;
   let withoutResource: any;
   let withoutAll: any;
   beforeAll(() => {
-    withoutActions = new Allow().resources('posts');
-    withoutResource = new Allow().actions('read');
-    withoutAll = new Allow();
+    withoutActions = new Permission().resources('posts');
+    withoutResource = new Permission().actions('read');
+    withoutAll = new Permission();
   });
   it('Support empty action and resource', async () => {
-    expect(await withoutActions.isAllowed('read', 'posts')).toBe(true);
-    expect(await withoutResource.isAllowed('read', 'posts')).toBe(true);
-    expect(await withoutAll.isAllowed('delete', 'posts')).toBe(true);
+    expect(await withoutActions.isPermissioned('read', 'posts')).toBe(true);
+    expect(await withoutResource.isPermissioned('read', 'posts')).toBe(true);
+    expect(await withoutAll.isPermissioned('delete', 'posts')).toBe(true);
   });
 });
 describe('Test Permissions permissions handlers', () => {
   it('Everyone allow read the posts title and body- test allow method', async () => {
-    expect(await appPermissions.isAllowed('read', 'posts')).toBe(true);
-    expect(await appPermissions.isAllowed('delete', 'posts')).toBe(false);
+    expect(await appPermissions.isPermissioned('read', 'posts')).toBe(true);
+    expect(await appPermissions.isPermissioned('delete', 'posts')).toBe(false);
   });
 
   it('Everyone allow read the posts title and body', async () => {
