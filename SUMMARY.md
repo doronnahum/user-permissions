@@ -1,8 +1,9 @@
 # Table of contents
 
-* [User permissions](README.md)
+* [User Permissions](README.md)
 
 ## docs
 
-* [Untitled](docs/untitled.md)
+* [Define permissions](docs/untitled.md)
+* [Untitled](docs/untitled-1.md)
 

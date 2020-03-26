@@ -1,4 +1,4 @@
-# User permissions
+# User Permissions
 
 ### user permissions is a small powerful authorization library that manage what resources a user allowed to access
 
@@ -13,15 +13,17 @@
 ✔ Supports MongoDB like conditions $in, $nin, $exists, $gte, $gt, $lte, \$lt...
 
 ✔ Chainable, friendly API  
- e.g `new Permission().actions('read').resources('posts').fields(['title', 'body'])`
+e.g `new Allow().actions('read').resources('posts').fields(['title', 'body'])`
 
 ✔ Supports Template - you can specify dynamic context values in the conditions  
- e.g `new Permission().resources('posts').conditions('{"creator": "" }')`
+e.g `new Allow().resources('posts').conditions('{"creator": "" }')`
 
 ✔ Utils to Filter/Validate data by permission  
- e.g `appAbilities.check('read', 'posts').validateData(data)`
+e.g `appAbilities.check('read', 'posts').validateData(data)`
 
-### Install
+### [DEMO](https://scrimba.com/c/cdVN9vCW)
+
+## Install
 
 `npm i user-permissions`
 
@@ -56,16 +58,25 @@ const appPersmissions = new Permissions([
 
 There are two ways to check permissions
 
+<<<<<<< HEAD
+
 1. **isPermissioned**
    - **Return:** boolean value
    - **When to use**: When you need only to check permissions
-   - **Example**: `await appPersmissions.isPermissioned('read', 'posts', context)`
-2. **check**
+   - # **Example**: `await appPersmissions.isPermissioned('read', 'posts', context)`
+1. **isAllowed**
+   - **Return:** boolean value
+   - **When to use**: When you need only to check permissions
+   - **Example**: `await appPersmissions.isAllowed('read', 'posts', context)`
+     > > > > > > > 3304a0797250f3e4c839a70ee520389ca63b85ae
+1. **check**
    - **Return:** A full details of the fields and conditions. see PermissionsResponse
    - **When to use**: When you want to build a fetch query from the rules, to expose only fields that user need to read
    - **Example**: `await appPersmissions.check('read', 'posts', context)`
 
 ```javascript
+let res;
+
 /*
 |-----------------------------------------------------------------------------
 | Example 1: anonymouse user try to read posts
@@ -73,21 +84,24 @@ There are two ways to check permissions
 |
 */
 
-// Before the request
-const res = await appPersmissions.check('read', 'posts', { user: null });
-if (!res.allowed) {
-  throw new Error('You are not allowed to read posts');
-}
-/* 
+console.log('----------- Example 1 -----------');
+
+res = await appPersmissions.check('read', 'posts', { user: null });
+
+if (!res.allow) {
+  console.error('You are not allowed to read posts');
+} else {
+  /* 
    When fields.allowAll are false then we can
    get the fields that user can read with res.fields.getFieldsToSelect
    and select these fields when fetching the data from the DB.
 */
-const query = res.fields.allowAll
-  ? { $select: res.fields.getFieldsToSelect() }
-  : {};
+  const query = res.fields.allowAll
+    ? { $select: res.fields.getFieldsToSelect() }
+    : {};
 
-// Now we can fetch the data without exposing any private fields
+  console.log('User allowe to read posts', { query });
+}
 
 /*
 |-----------------------------------------------------------------------------
@@ -95,16 +109,22 @@ const query = res.fields.allowAll
 |-----------------------------------------------------------------------------
 |
 */
-const user = { id: 'a1ad' };
-const data = { creator: 'bdjd', title: 'lorem' };
+console.log('----------- Example 2 -----------');
 
-// Before the request
-const res = await appPersmissions.check('create', 'posts', { user }); // res.allowed = true
-if (!res.allowed) {
-  throw new Error('You are not allowed to create posts');
-} else if (res.validateDate(data)) {
-  // false - creator is not equal to user id
-  throw new Error('You are not allowed to create post in this structure');
+const user = { id: 'a1ad' };
+const values = { creator: 'bdjd', title: 'lorem' };
+
+res = await appPersmissions.check('create', 'posts', { user }); // res.allow = true
+
+if (!res.allow) {
+  console.error('You are not allowed to create posts');
+} else {
+  const validateData = res.validateData(values);
+  if (!validateData.valid) {
+    console.error(validateData.message);
+  } else {
+    console.log('You can create posts');
+  }
 }
 
 /*
@@ -114,14 +134,25 @@ if (!res.allowed) {
 |
 */
 
-// Before the request
-const res = await appPersmissions.check('create', 'posts', { user: null }); // res.allowed = true
-if (!res.allowed) {
-  throw new Error('You are not allowed to read posts');
+console.log('----------- Example 3 -----------');
+
+res = await appPersmissions.check('read', 'posts', { user: null }); // res.allow = true
+
+if (!res.allow) {
+  console.error('You are not allowed to read posts');
+} else {
+  //const data = await fetchDataFromDb();
+  const data = [
+    { title: 'lor', body: 'pos', privateFields: '1' },
+    { title: 'lor1', body: 'pos1', privateFields: '1' },
+    { title: 'lor2', body: 'pos2', privateFields: '1' },
+    { title: 'lor3', body: 'pos3', privateFields: '1' },
+  ];
+
+  const response = res.filterData(data); // This will filter all fields except title and body
+
+  console.log('Posts response', response);
 }
-const data = await fetchDataFromDb();
-
-const response = res.filterData(data); // This will filter all fields except title and body
-
-return response;
 ```
+
+###
