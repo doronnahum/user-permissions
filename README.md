@@ -32,21 +32,21 @@ e.g `appAbilities.check('read', 'posts').validateData(data)`
 ### 1. Define permissions
 
 ```javascript
-import { Permissions, Allow } from 'user-permissions';
+import { Permissions, Permission} from 'user-permissions';
 
 const appPersmissions = new Permissions([
   // Everyone has permission to read the title and body of the posts
-  new Allow()
+  new Permission()
     .actions('read')
     .resources('posts')
     .fields(['title', 'body']),
   // Only logged in users have permission to manage their posts
-  new Allow()
+  new Permission()
     .resources('posts')
     .conditions('{"creator": "{{ user.id }}" }')
     .user(true),
   // Only paying users are allowed to read private posts
-  new Allow()
+  new Permission()
     .actions('read')
     .resources('posts')
     .fields(['info'])

@@ -5,5 +5,6 @@
 ## docs
 
 * [Define permissions](docs/untitled.md)
-* [Untitled](docs/untitled-1.md)
+* [Permission](docs/untitled-1.md)
+* [Check response](docs/check-response.md)
 
