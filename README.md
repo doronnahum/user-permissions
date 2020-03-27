@@ -341,8 +341,7 @@ You get object with this properties:
   * type: boolean
   * true when not all the fields are allowed and some of the fields are allowed with conditions for example: you define app with this permissions
     1. new Permission\(\).fields\('privateNotes'\).conditions\('{"user":"{{user.id}}"}'\)
-
-    * new Permission\(\).fields\(\['title','body\]\)
+    2. new Permission\(\).fields\(\['title','body\]\)
 
           in this case any user can read title and body but user can read only his privateNotes  
           after you fetch all posts and select 'title,body,privateNotes' you need to remove privateNotes  
