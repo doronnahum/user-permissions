@@ -163,7 +163,7 @@ Permissions accept a collection of Permission class.
 **Permission can be implement in two ways:**
 
 1. using the Chainable api e.g `new Permission().actions('read').resources('posts')`
-2. using the constractors  
+2. using the constructors  
    \* using the constructor is useful when you saving the Permissions in your DB
 
    e.g `new Permission({actions: 'read', ...})`
@@ -285,7 +285,7 @@ Permissions accept a collection of Permission class.
 
 ### when
 
-- **info**:Define an async function that returns a boolean value to apply or not the permission
+- **info**:Define an async function that returns a Boolean value to apply or not the permission
 - **type**: function
 - **examples**:
   - `new Permission().when(context => context.user && context.user.age > 40)` // apply only when the we find user in the context the older then 40
@@ -305,7 +305,7 @@ There are two ways to check permissions
 - **hasPermission**
   - **When to use**: When you need only to check permissions
   - **Example**: `await appPermissions.hasPermission('read', 'posts', context)`
-  - **Response:** boolean value
+  - **Response:** Boolean value
 - **check**
 
   - **When to use**: When you want to build a fetch query from the rules, to expose only fields that user need to read
@@ -321,7 +321,7 @@ There are two ways to check permissions
       - The resource we checked for permission.
       - e.g posts
     - **allow**
-      - type: boolean
+      - type: Boolean
       - user allow or not allow to make this request
     - **message**
       - type: null \| string
@@ -331,7 +331,7 @@ There are two ways to check permissions
     - **fields**
       - type: object
         - fields properties
-          - **allowAll** - boolean - true when at least one permission is allow all fields with out ant condition
+          - **allowAll** - Boolean - true when at least one permission is allow all fields with out ant condition
           - **allow** - string\[\] - collection of all the fields from the permission with empty conditions
           - **allowedByCondition** - object\[\] - collection of all the fields from the permission with conditions, each item in the array will by {fields: string\[\], condition: object}
           - **getFieldsToSelect** - function - this is all the fields that user allow by one of the permissions
@@ -342,10 +342,10 @@ There are two ways to check permissions
       - pass object or object\[\] and the function return you data without the fields that user not allow
       - return null when allow is false
     - **validateData**
-      - type: \(data: object \| object\[\]\) =&gt; { valid: boolean; message?: string }
+      - type: \(data: object \| object\[\]\) =&gt; { valid: Boolean; message?: string }
     - **filterDataIsRequired**
 
-      - type: boolean
+      - type: Boolean
       - true when not all the fields are allow and some of the fields are allow with conditions for example: you define app with this permissions
 
         1. new Permission\(\).fields\('privateNotes'\).conditions\('{"user":"{{user.id}}"}'\)
