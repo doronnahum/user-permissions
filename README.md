@@ -23,16 +23,11 @@ e.g `appAbilities.check('read', 'posts').validateData(data)`
 
 ### [DEMO](https://scrimba.com/c/cdVN9vCW)
 
-<br/>
-
 ## Install
 
 ```bash
 npm i user-permissions
 ```
-
-<br/>
-<br/>
 
 ## Getting started
 
@@ -141,10 +136,6 @@ npm i user-permissions
      console.log('Posts response', response);
    }
    ```
-
-<br/>
-<br/>
-<br/>
 
 # api
 
