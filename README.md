@@ -1,6 +1,19 @@
 # User Permissions
 
-### user permissions is a small powerful authorization library that manage what resources a user allow to access
+user permissions is a small powerful authorization library that manage what resources a user allow to access
+
+<table>
+  <thead>
+    <tr>
+      <th><a href="#features">Features</a></th>
+      <th><a href="#install">Install</a></th>
+      <th><a href="#getting-started">Getting started</a></th>
+      <th><a href="#api-reference">API Reference</a></th>
+    </tr>
+  </thead>
+</table>
+
+##### [DEMO](https://scrimba.com/c/cdVN9vCW)
 
 ## Features
 
@@ -20,8 +33,6 @@ e.g `new Allow().resources('posts').conditions('{"creator": "" }')`
 
 ✔ Utils to Filter/Validate data by permission  
 e.g `appAbilities.check('read', 'posts').validateData(data)`
-
-### [DEMO](https://scrimba.com/c/cdVN9vCW)
 
 ## Install
 
@@ -137,7 +148,7 @@ npm i user-permissions
    }
    ```
 
-# api
+# API Reference
 
 ## Define permissions
 
