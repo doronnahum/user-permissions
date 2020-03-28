@@ -239,11 +239,7 @@
 <a name='L181'></a><a href='#L181'>181</a>
 <a name='L182'></a><a href='#L182'>182</a>
 <a name='L183'></a><a href='#L183'>183</a>
-<a name='L184'></a><a href='#L184'>184</a>
-<a name='L185'></a><a href='#L185'>185</a>
-<a name='L186'></a><a href='#L186'>186</a>
-<a name='L187'></a><a href='#L187'>187</a>
-<a name='L188'></a><a href='#L188'>188</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L184'></a><a href='#L184'>184</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -332,10 +328,6 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">4x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -453,8 +445,8 @@ export class PermissionsResponse {
   private validateData: ValidateData;
   private fields: {
     allowAll: boolean;
-    allowed: null | string[];
-    allowedByCondition: null | FieldsWithConditions[];
+    allow: null | string[];
+    allowByCondition: null | FieldsWithConditions[];
     getFieldsToSelect: () =&gt; string[];
   };
 &nbsp;
@@ -483,14 +475,14 @@ export class PermissionsResponse {
         const mongooseWhere = this.conditions ? { $or: this.conditions } : null;
         return validateData(
           data,
-          this.fields.allowed,
-          this.fields.allowedByCondition,
+          this.fields.allow,
+          this.fields.allowByCondition,
           mongooseWhere,
           this.config
         );
       } else {
-        const errMessage = <span class="cstat-no" title="statement not covered" >'Not allowed to make this request';</span>
-<span class="cstat-no" title="statement not covered" >        if (config.validateData.throwErr) {</span>
+        const errMessage = <span class="cstat-no" title="statement not covered" >'Not allow to make this request';</span>
+<span class="cstat-no" title="statement not covered" >        if (config.throwErr) {</span>
 <span class="cstat-no" title="statement not covered" >          throw new Error(errMessage);</span>
         }
 <span class="cstat-no" title="statement not covered" >        return { valid: false, message: errMessage };</span>
@@ -499,15 +491,15 @@ export class PermissionsResponse {
     this.config = config;
     this.fields = {
       allowAll: false,
-      allowed: null,
-      allowedByCondition: null,
+      allow: null,
+      allowByCondition: null,
       getFieldsToSelect: <span class="fstat-no" title="function not covered" >() =&gt; {</span>
         const fields: string[] = <span class="cstat-no" title="statement not covered" >[];</span>
-<span class="cstat-no" title="statement not covered" >        if (this.fields.allowed) {</span>
-<span class="cstat-no" title="statement not covered" >          fields.push(...this.fields.allowed);</span>
+<span class="cstat-no" title="statement not covered" >        if (this.fields.allow) {</span>
+<span class="cstat-no" title="statement not covered" >          fields.push(...this.fields.allow);</span>
         }
-<span class="cstat-no" title="statement not covered" >        if (this.fields.allowedByCondition) {</span>
-<span class="cstat-no" title="statement not covered" >          this.fields.allowedByCondition.forEach(<span class="fstat-no" title="function not covered" >item </span>=&gt; {</span>
+<span class="cstat-no" title="statement not covered" >        if (this.fields.allowByCondition) {</span>
+<span class="cstat-no" title="statement not covered" >          this.fields.allowByCondition.forEach(<span class="fstat-no" title="function not covered" >item </span>=&gt; {</span>
 <span class="cstat-no" title="statement not covered" >            fields.push(...item.fields);</span>
           });
         }
@@ -518,11 +510,7 @@ export class PermissionsResponse {
       <span class="missing-if-branch" title="if path not taken" >I</span>if (this.fields.allowAll) {
 <span class="cstat-no" title="statement not covered" >        return data;</span>
       }
-      return filterData(
-        data,
-        this.fields.allowed,
-        this.fields.allowedByCondition
-      );
+      return filterData(data, this.fields.allow, this.fields.allowByCondition);
     };
   }
 &nbsp;
@@ -548,17 +536,17 @@ export class PermissionsResponse {
 <span class="fstat-no" title="function not covered" >  public s</span>etPermissionAllFields(value: boolean) {
 <span class="cstat-no" title="statement not covered" >    this.fields.allowAll = value;</span>
 <span class="cstat-no" title="statement not covered" >    if (value) {</span>
-<span class="cstat-no" title="statement not covered" >      this.fields.allowed = null;</span>
-<span class="cstat-no" title="statement not covered" >      this.fields.allowedByCondition = null;</span>
+<span class="cstat-no" title="statement not covered" >      this.fields.allow = null;</span>
+<span class="cstat-no" title="statement not covered" >      this.fields.allowByCondition = null;</span>
     }
   }
   public pushFieldsWithConditions(value: FieldsWithConditions) {
-    <span class="missing-if-branch" title="else path not taken" >E</span>if (!this.fields.allowedByCondition) this.fields.allowedByCondition = [];
-    this.fields.allowedByCondition.push(value);
+    <span class="missing-if-branch" title="else path not taken" >E</span>if (!this.fields.allowByCondition) this.fields.allowByCondition = [];
+    this.fields.allowByCondition.push(value);
   }
   public pushFields(value: Fields) {
-    if (!this.fields.allowed) this.fields.allowed = [];
-    this.fields.allowed.push(...value);
+    if (!this.fields.allow) this.fields.allow = [];
+    this.fields.allow.push(...value);
   }
 &nbsp;
 <span class="fstat-no" title="function not covered" >  public a</span>llowFullAccess() {
@@ -567,11 +555,11 @@ export class PermissionsResponse {
   }
   public onUserNotPermission() {
     this.fields.allowAll = false;
-    this.fields.allowed = null;
-    this.fields.allowedByCondition = null;
+    this.fields.allow = null;
+    this.fields.allowByCondition = null;
     this.conditions = null;
     this.setPermission(false);
-    this.message = this.config.onNotPermissioned(this.action, this.resource);
+    this.message = this.config.onAccessDeny(this.action, this.resource);
   }
 &nbsp;
   updateFieldsAndConditions(ability: Permission) {
@@ -624,7 +612,7 @@ export class PermissionsResponse {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Thu Mar 26 2020 19:52:11 GMT+0200 (Israel Standard Time)
+                at Sat Mar 28 2020 20:41:40 GMT+0300 (Israel Daylight Time)
             </div>
         </div>
         <script src="..\prettify.js"></script>

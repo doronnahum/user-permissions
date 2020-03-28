@@ -101,21 +101,21 @@ describe('Test Permission class', () => {
     withoutAll = new Permission();
   });
   it('Support empty action and resource', async () => {
-    expect(await withoutActions.isPermissioned('read', 'posts')).toBe(true);
-    expect(await withoutResource.isPermissioned('read', 'posts')).toBe(true);
-    expect(await withoutAll.isPermissioned('delete', 'posts')).toBe(true);
+    expect(await withoutActions.hasPermission('read', 'posts')).toBe(true);
+    expect(await withoutResource.hasPermission('read', 'posts')).toBe(true);
+    expect(await withoutAll.hasPermission('delete', 'posts')).toBe(true);
   });
 });
 describe('Test Permissions permissions handlers', () => {
   it('Everyone allow read the posts title and body- test allow method', async () => {
-    expect(await appPermissions.isPermissioned('read', 'posts')).toBe(true);
-    expect(await appPermissions.isPermissioned('delete', 'posts')).toBe(false);
+    expect(await appPermissions.hasPermission('read', 'posts')).toBe(true);
+    expect(await appPermissions.hasPermission('delete', 'posts')).toBe(false);
   });
 
   it('Everyone allow read the posts title and body', async () => {
     const res = await appPermissions.check('read', 'posts');
     expect(res.allow).toBe(true);
-    expect(res.fields.allowed).toEqual(['title', 'body']);
+    expect(res.fields.allow).toEqual(['title', 'body']);
     expect(res.filterData({ title: 'lorem', info: 'ipsum' })).toEqual({
       title: 'lorem',
     });
@@ -191,11 +191,11 @@ describe('Test Permissions permissions handlers', () => {
     const res = await appPermissions.check('read', 'posts', {
       user: { isPay: true },
     });
-    expect(res.fields.allowed).toEqual(['title', 'body', 'info']);
+    expect(res.fields.allow).toEqual(['title', 'body', 'info']);
     const res1 = await appPermissions.check('read', 'posts', {
       user: { isPay: false },
     });
-    expect(res1.fields.allowed).toEqual(['title', 'body']);
+    expect(res1.fields.allow).toEqual(['title', 'body']);
   });
 
   it('Admin user allow manage all posts', async () => {
@@ -203,12 +203,12 @@ describe('Test Permissions permissions handlers', () => {
       roles: ['admin'],
       user: { id: 1, isActive: true },
     });
-    expect(res.fields.allowed).toBe(null);
+    expect(res.fields.allow).toBe(null);
     const res1 = await appPermissions.check('read', 'posts', {
       roles: ['admin'],
       user: { id: 1, isActive: false },
     });
-    expect(res1.fields.allowed).not.toBe(null);
+    expect(res1.fields.allow).not.toBe(null);
   });
   it('Test meta is exists', async () => {
     const res = await appPermissions.check('read', 'posts', {

@@ -41,14 +41,14 @@ export default class Permissions {
   }
 
   /**
-   * @method isPermissioned
+   * @method hasPermission
    * @description Return true when user can [action] a [resource]
    * @param {string} action
    * @param {string} resource
    * @param {object} context
    * @returns {Promise}
    */
-  public async isPermissioned(
+  public async hasPermission(
     action: string,
     resource: string,
     context?: Context
@@ -56,7 +56,7 @@ export default class Permissions {
     let result = false;
     await asyncForEach(this.permissions, async (ability: Permission) => {
       result =
-        result || (await ability.isPermissioned(action, resource, context));
+        result || (await ability.hasPermission(action, resource, context));
     });
     return result;
   }

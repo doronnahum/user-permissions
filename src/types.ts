@@ -13,26 +13,15 @@ export interface Context {
 }
 export interface Config {
   abortEarly?: boolean;
-  onNotPermissioned?: (action: string, resource: string) => string;
-  validateData?: {
-    throwErr?: boolean;
-  };
+  onAccessDeny?: (action: string, resource: string) => string;
   throwErr?: boolean;
 }
 export interface ConfigFull {
   abortEarly: boolean;
-  onNotPermissioned: (action: string, resource: string) => string;
-  validateData: {
-    throwErr: boolean;
-  };
+  onAccessDeny: (action: string, resource: string) => string;
   throwErr: boolean;
 }
 export type When = (context?: Context) => Promise<boolean> | boolean;
-export type IsPermissioned = (
-  action: string,
-  resource: string,
-  context?: Context
-) => Promise<boolean>;
 export type UserContext = boolean | object;
 
 export interface ValidateDataResponse {
@@ -46,30 +35,13 @@ export interface FieldsWithConditions {
   fields: string[];
 }
 
-export interface IPermissionsCheckResponse {
-  allow: boolean;
-  message: string;
-  conditions?: null | object[];
-  validateData: ValidateData;
-  fields: {
-    allowAll: boolean;
-    allowed: null | string[];
-    allowedByCondition: null | FieldsWithConditions[];
-    all: null | string[];
-  };
-
-  filterData: (data: object | object[]) => object | object[] | null;
-  filterDataIsRequired: boolean;
-  meta: any[];
-}
-
 export interface IPermissionConstructor {
   actions?: Actions;
   resources?: Resources;
 
-  roles?: Roles;
+  roles?: string | Roles;
   conditions?: Conditions;
-  fields?: Fields;
+  fields?: string | Fields;
   user?: UserContext;
   when?: When;
   meta?: any;

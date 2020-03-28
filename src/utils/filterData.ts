@@ -11,12 +11,8 @@ export const filterObject = (
   fields: null | string[],
   fieldsWithConditions: null | FieldsWithConditions[]
 ): object => {
-  const allowedFields = getPermissionedFields(
-    data,
-    fields,
-    fieldsWithConditions
-  );
-  const { positiveFields, negativeFields } = splitFields(allowedFields);
+  const allowFields = getPermissionedFields(data, fields, fieldsWithConditions);
+  const { positiveFields, negativeFields } = splitFields(allowFields);
   const filteredObj =
     positiveFields.length === 0 || positiveFields.includes('*')
       ? data

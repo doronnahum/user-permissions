@@ -130,7 +130,7 @@ class Permission {
     return this;
   }
 
-  public isPermissioned = async (
+  public hasPermission = async (
     action: string,
     resource: string,
     context?: Context

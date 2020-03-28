@@ -12,13 +12,13 @@ describe('test validate data function', () => {
     expect(typeof validateData).toEqual('function');
   });
 
-  it('Should by true when all fields are allowed', () => {
+  it('Should by true when all fields are allow', () => {
     const fakeData = getFakeData();
     const allKeys = Object.keys(fakeData[0]);
     expect(validateData(fakeData, allKeys, null).valid).toEqual(true);
   });
 
-  it('Should by false when not all fields are allowed', () => {
+  it('Should by false when not all fields are allow', () => {
     const fakeData = getFakeData();
     const notAllKeys = Object.keys(fakeData[0]).filter(item => item === 'name');
     expect(validateData(fakeData, notAllKeys, null).valid).toEqual(false);
@@ -66,7 +66,7 @@ describe('test validate data function', () => {
     const fakeData = { location: getFakeData()[0].location };
     expect(() => {
       validateData(fakeData, ['location.state'], null, null, {
-        validateData: { throwErr: true },
+        throwErr: true,
       });
     }).toThrow();
   });

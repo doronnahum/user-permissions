@@ -12,8 +12,8 @@ const checkPermissions = async (
 ) => {
   const response = new PermissionsResponse(action, resource, config, context);
 
-  let allowFullAccess = false; // When at least one ability is allowed all fields without any condition
-  let allowAllFields = false; // When at least one ability is allowed all fields
+  let allowFullAccess = false; // When at least one ability is allow all fields without any condition
+  let allowAllFields = false; // When at least one ability is allow all fields
 
   /*
   |-----------------------------------------------------------------
@@ -28,7 +28,7 @@ const checkPermissions = async (
     if (skip) return;
 
     // Skip when not Permissioned by current ability
-    if (!(await ability.isPermissioned(action, resource, context))) return;
+    if (!(await ability.hasPermission(action, resource, context))) return;
 
     // User Permissioned by current ability
     response.setPermission(true);

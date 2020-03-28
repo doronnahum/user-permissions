@@ -1,6 +1,6 @@
 # User Permissions
 
-### user permissions is a small powerful authorization library that manage what resources a user allowed to access
+### user permissions is a small powerful authorization library that manage what resources a user allow to access
 
 ## Features:
 
@@ -45,7 +45,7 @@ const appPersmissions = new Permissions([
     .resources('posts')
     .conditions('{"creator": "{{ user.id }}" }')
     .user(true),
-  // Only paying users are allowed to read private posts
+  // Only paying users are allow to read private posts
   new Permission()
     .actions('read')
     .resources('posts')
@@ -60,14 +60,14 @@ There are two ways to check permissions
 
 <<<<<<< HEAD
 
-1. **isPermissioned**
+1. **hasPermission**
    - **Return:** boolean value
    - **When to use**: When you need only to check permissions
-   - # **Example**: `await appPersmissions.isPermissioned('read', 'posts', context)`
-1. **isAllowed**
+   - # **Example**: `await appPersmissions.hasPermission('read', 'posts', context)`
+1. **hasPermission**
    - **Return:** boolean value
    - **When to use**: When you need only to check permissions
-   - **Example**: `await appPersmissions.isAllowed('read', 'posts', context)`
+   - **Example**: `await appPersmissions.hasPermission('read', 'posts', context)`
      > > > > > > > 3304a0797250f3e4c839a70ee520389ca63b85ae
 1. **check**
    - **Return:** A full details of the fields and conditions. see PermissionsResponse
@@ -89,7 +89,7 @@ console.log('----------- Example 1 -----------');
 res = await appPersmissions.check('read', 'posts', { user: null });
 
 if (!res.allow) {
-  console.error('You are not allowed to read posts');
+  console.error('You are not allow to read posts');
 } else {
   /* 
    When fields.allowAll are false then we can
@@ -117,7 +117,7 @@ const values = { creator: 'bdjd', title: 'lorem' };
 res = await appPersmissions.check('create', 'posts', { user }); // res.allow = true
 
 if (!res.allow) {
-  console.error('You are not allowed to create posts');
+  console.error('You are not allow to create posts');
 } else {
   const validateData = res.validateData(values);
   if (!validateData.valid) {
@@ -139,7 +139,7 @@ console.log('----------- Example 3 -----------');
 res = await appPersmissions.check('read', 'posts', { user: null }); // res.allow = true
 
 if (!res.allow) {
-  console.error('You are not allowed to read posts');
+  console.error('You are not allow to read posts');
 } else {
   //const data = await fetchDataFromDb();
   const data = [

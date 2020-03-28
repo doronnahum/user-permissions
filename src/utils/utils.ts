@@ -105,10 +105,10 @@ export const isObject = (item: any) => {
   return typeof item === 'object' && !Array.isArray(item) && item !== null;
 };
 
-export const splitFields = (allowedFields: string[]) => {
+export const splitFields = (allowFields: string[]) => {
   const positiveFields: string[] = [];
   const negativeFields: string[] = [];
-  allowedFields.forEach(field => {
+  allowFields.forEach(field => {
     if (field.startsWith('-')) {
       negativeFields.push(field.substr(1));
     } else {
@@ -126,15 +126,15 @@ export const getPermissionedFields = (
   fields: null | string[],
   fieldsWithConditions: null | FieldsWithConditions[]
 ) => {
-  const allowedFields = fields ? [...fields] : [];
+  const allowFields = fields ? [...fields] : [];
   if (fieldsWithConditions) {
     fieldsWithConditions.forEach(item => {
       if (checkConditions(item.conditions, data)) {
-        allowedFields.push(...item.fields);
+        allowFields.push(...item.fields);
       }
     });
   }
-  return allowedFields;
+  return allowFields;
 };
 
 export const asyncForEach = async (
@@ -146,17 +146,14 @@ export const asyncForEach = async (
   }
 };
 
-export const onNotPermissioned = (action: string, resources: string) =>
+export const onAccessDeny = (action: string, resources: string) =>
   `You are not authorized to ${action} ${resources}`;
 
 export const mergeConfigWithDefaults = (config?: Config): ConfigFull => {
   return {
     abortEarly: config?.abortEarly ?? true,
-    validateData: {
-      throwErr: config?.validateData?.throwErr ?? false,
-    },
     throwErr: config?.throwErr ?? false,
-    onNotPermissioned: config?.onNotPermissioned ?? onNotPermissioned,
+    onAccessDeny: config?.onAccessDeny ?? onAccessDeny,
   };
 };
 

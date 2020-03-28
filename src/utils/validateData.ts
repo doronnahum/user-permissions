@@ -40,9 +40,9 @@ const validatePositiveFields = (
           }
           throw new Error(deepCheck.message);
         }
-        throw new Error(`${fieldName} is not allowed`);
+        throw new Error(`${fieldName} is not allow`);
       }
-      throw new Error(`${fieldName} is not allowed`);
+      throw new Error(`${fieldName} is not allow`);
     });
     return { valid: true };
   } catch (error) {
@@ -55,7 +55,7 @@ const validateNegativeFields = (data: object, fields: string[]) => {
     if (fields.length === 0) return { valid: true };
     fields.forEach((field: string) => {
       if (get(data, field) !== undefined) {
-        throw new Error(`${field} is not allowed`);
+        throw new Error(`${field} is not allow`);
       }
     });
     return { valid: true };
@@ -68,12 +68,8 @@ export const validateObject = (
   fields: null | string[],
   fieldsWithConditions: null | FieldsWithConditions[]
 ): ValidateDataResponse => {
-  const allowedFields = getPermissionedFields(
-    data,
-    fields,
-    fieldsWithConditions
-  );
-  const { positiveFields, negativeFields } = splitFields(allowedFields);
+  const allowFields = getPermissionedFields(data, fields, fieldsWithConditions);
+  const { positiveFields, negativeFields } = splitFields(allowFields);
   const negativeFieldsRes = validateNegativeFields(data, negativeFields);
   if (!negativeFieldsRes.valid) return negativeFieldsRes;
   return validatePositiveFields(data, positiveFields);
@@ -103,13 +99,13 @@ export const validateData = (
       return { valid: true };
     } else {
       const res = validateObject(data, fields, fieldsWithConditions);
-      if (!res.valid && config.validateData.throwErr) {
+      if (!res.valid && config.throwErr) {
         throw new Error(res.message);
       }
       return res;
     }
   } catch (error) {
-    if (config.validateData.throwErr) {
+    if (config.throwErr) {
       throw new Error(error.message);
     }
     return { valid: false, message: error.message };

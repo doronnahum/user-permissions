@@ -2,16 +2,16 @@ import {
   matchRoles,
   parseConditions,
   isConditionEmpty,
-  onNotPermissioned,
+  onAccessDeny,
 } from '../src/utils/utils';
 
-describe('test onNotPermissioned utils', () => {
+describe('test onAccessDeny utils', () => {
   it('Should by a function', () => {
-    expect(typeof onNotPermissioned).toEqual('function');
+    expect(typeof onAccessDeny).toEqual('function');
   });
 
   it('Should return string', () => {
-    expect(typeof onNotPermissioned('create', 'post')).toEqual('string');
+    expect(typeof onAccessDeny('create', 'post')).toEqual('string');
   });
 });
 
