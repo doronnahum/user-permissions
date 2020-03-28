@@ -1,6 +1,6 @@
 # User Permissions
 
-user permissions is a small powerful authorization library that manage what resources a user allow to access
+small and powerful authorization library
 
 <table>
   <thead>
@@ -23,15 +23,15 @@ user permissions is a small powerful authorization library that manage what reso
 
 ✔ Supports node.js & web
 
-✔ Supports MongoDB like conditions $in, $nin, $exists, $gte, $gt, $lte, \$lt...
+✔ Supports MongoDB like conditions $in, $exists, $gte, $gt, \$lte...
 
 ✔ Friendly API  
-e.g `new Allow().actions('read').resources('posts').fields(['title', 'body'])`
+e.g `new Permission().actions('read').resources('posts').fields(['title', 'body'])`
 
-✔ Supports Template - you can specify dynamic context values in the conditions  
-e.g `new Allow().resources('posts').conditions('{"creator": "" }')`
+✔ Supports Template - you can specify dynamic conditions  
+e.g `new Permission().resources('posts').conditions('{"creator": "" }')`
 
-✔ Utils to Filter/Validate data by permission  
+✔ Ability to Filter/Validate data by permission  
 e.g `appAbilities.check('read', 'posts').validateData(data)`
 
 ## Install
@@ -84,16 +84,11 @@ npm i user-permissions
    if (!res.allow) {
      console.error('You are not allow to read posts');
    } else {
-     /*
-      When fields.allowAll are false then we can
-      get the fields that user can read with res.fields.getFieldsToSelect
-      and select these fields when fetching the data from the DB.
-   */
      const query = res.fields.allowAll
        ? { $select: res.fields.getFieldsToSelect() }
        : {};
 
-     console.log('User allowe to read posts', { query });
+     console.log('User allow to read posts', { query });
    }
 
    /*
@@ -102,7 +97,6 @@ npm i user-permissions
    |-----------------------------------------------------------------------------
    |
    */
-   console.log('----------- Example 2 -----------');
 
    const user = { id: 'a1ad' };
    const values = { creator: 'bdjd', title: 'lorem' };
@@ -116,18 +110,17 @@ npm i user-permissions
      if (!validateData.valid) {
        console.error(validateData.message);
      } else {
-       console.log('You can create posts');
+       console.log('Create the post', values);
      }
    }
 
    /*
    |-----------------------------------------------------------------------------
-   | Example 3: Logged in user try to read posts - example of using filter data
+   | Example 3: Logged in user try to read posts
+   |            example of using filter data
    |-----------------------------------------------------------------------------
    |
    */
-
-   console.log('----------- Example 3 -----------');
 
    res = await appPermissions.check('read', 'posts', { user: null }); // res.allow = true
 
@@ -152,7 +145,7 @@ npm i user-permissions
 
 ## Define permissions
 
-**Define permissions to your app by created a a new instance of the Permissions class.**
+**Define permissions to your app by creating a new instance of Permissions class.**
 
 ```javascript
 const appPermissions = new Permissions([new Permission(),...])
@@ -245,7 +238,7 @@ Permissions accept a collection of Permission class.
       user: req.user,
       roles: req.user.roles,
     });
-    if (!permissionCheck.isAllow) {
+    if (!permissionCheck.allow) {
       throw new Error(permissionCheck.message);
     }
     // Build query
