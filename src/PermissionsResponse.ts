@@ -22,7 +22,7 @@ export class PermissionsResponse {
   private fields: {
     allowAll: boolean;
     allow: null | string[];
-    allowByCondition: null | FieldsWithConditions[];
+    allowedByCondition: null | FieldsWithConditions[];
     getFieldsToSelect: () => string[];
   };
 
@@ -52,7 +52,7 @@ export class PermissionsResponse {
         return validateData(
           data,
           this.fields.allow,
-          this.fields.allowByCondition,
+          this.fields.allowedByCondition,
           mongooseWhere,
           this.config
         );
@@ -68,14 +68,14 @@ export class PermissionsResponse {
     this.fields = {
       allowAll: false,
       allow: null,
-      allowByCondition: null,
+      allowedByCondition: null,
       getFieldsToSelect: () => {
         const fields: string[] = [];
         if (this.fields.allow) {
           fields.push(...this.fields.allow);
         }
-        if (this.fields.allowByCondition) {
-          this.fields.allowByCondition.forEach(item => {
+        if (this.fields.allowedByCondition) {
+          this.fields.allowedByCondition.forEach(item => {
             fields.push(...item.fields);
           });
         }
@@ -86,7 +86,11 @@ export class PermissionsResponse {
       if (this.fields.allowAll) {
         return data;
       }
-      return filterData(data, this.fields.allow, this.fields.allowByCondition);
+      return filterData(
+        data,
+        this.fields.allow,
+        this.fields.allowedByCondition
+      );
     };
   }
 
@@ -113,12 +117,12 @@ export class PermissionsResponse {
     this.fields.allowAll = value;
     if (value) {
       this.fields.allow = null;
-      this.fields.allowByCondition = null;
+      this.fields.allowedByCondition = null;
     }
   }
   public pushFieldsWithConditions(value: FieldsWithConditions) {
-    if (!this.fields.allowByCondition) this.fields.allowByCondition = [];
-    this.fields.allowByCondition.push(value);
+    if (!this.fields.allowedByCondition) this.fields.allowedByCondition = [];
+    this.fields.allowedByCondition.push(value);
   }
   public pushFields(value: Fields) {
     if (!this.fields.allow) this.fields.allow = [];
@@ -132,7 +136,7 @@ export class PermissionsResponse {
   public onUserNotPermission() {
     this.fields.allowAll = false;
     this.fields.allow = null;
-    this.fields.allowByCondition = null;
+    this.fields.allowedByCondition = null;
     this.conditions = null;
     this.setPermission(false);
     this.message = this.config.onAccessDeny(this.action, this.resource);

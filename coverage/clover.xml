@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1585417300762" clover="3.2.0">
-  <project timestamp="1585417300762" name="All files">
+<coverage generated="1585421764224" clover="3.2.0">
+  <project timestamp="1585421764224" name="All files">
     <metrics statements="403" coveredstatements="364" conditionals="253" coveredconditionals="213" methods="91" coveredmethods="85" elements="747" coveredelements="662" complexity="0" loc="403" ncloc="403" packages="2" files="11" classes="11"/>
     <package name="src">
       <metrics statements="183" coveredstatements="147" conditionals="83" coveredconditionals="51" methods="42" coveredmethods="37"/>
@@ -142,57 +142,57 @@
         <line num="86" count="4" type="cond" truecount="1" falsecount="1"/>
         <line num="87" count="0" type="stmt"/>
         <line num="89" count="4" type="stmt"/>
-        <line num="93" count="1" type="stmt"/>
-        <line num="94" count="12" type="stmt"/>
-        <line num="96" count="1" type="stmt"/>
-        <line num="97" count="25" type="stmt"/>
-        <line num="99" count="1" type="stmt"/>
-        <line num="100" count="0" type="stmt"/>
+        <line num="97" count="1" type="stmt"/>
+        <line num="98" count="12" type="stmt"/>
+        <line num="100" count="1" type="stmt"/>
+        <line num="101" count="25" type="stmt"/>
         <line num="103" count="1" type="stmt"/>
-        <line num="104" count="8" type="cond" truecount="1" falsecount="1"/>
-        <line num="105" count="8" type="stmt"/>
-        <line num="106" count="8" type="stmt"/>
-        <line num="108" count="1" type="stmt"/>
-        <line num="109" count="2" type="cond" truecount="1" falsecount="1"/>
-        <line num="110" count="2" type="stmt"/>
+        <line num="104" count="0" type="stmt"/>
+        <line num="107" count="1" type="stmt"/>
+        <line num="108" count="8" type="cond" truecount="1" falsecount="1"/>
+        <line num="109" count="8" type="stmt"/>
+        <line num="110" count="8" type="stmt"/>
         <line num="112" count="1" type="stmt"/>
-        <line num="113" count="0" type="stmt"/>
-        <line num="114" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="115" count="0" type="stmt"/>
-        <line num="116" count="0" type="stmt"/>
-        <line num="119" count="1" type="stmt"/>
-        <line num="120" count="8" type="cond" truecount="1" falsecount="1"/>
-        <line num="121" count="8" type="stmt"/>
+        <line num="113" count="2" type="cond" truecount="1" falsecount="1"/>
+        <line num="114" count="2" type="stmt"/>
+        <line num="116" count="1" type="stmt"/>
+        <line num="117" count="0" type="stmt"/>
+        <line num="118" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="119" count="0" type="stmt"/>
+        <line num="120" count="0" type="stmt"/>
         <line num="123" count="1" type="stmt"/>
-        <line num="124" count="11" type="cond" truecount="2" falsecount="0"/>
-        <line num="125" count="11" type="stmt"/>
-        <line num="128" count="1" type="stmt"/>
-        <line num="129" count="0" type="stmt"/>
-        <line num="130" count="0" type="stmt"/>
+        <line num="124" count="8" type="cond" truecount="1" falsecount="1"/>
+        <line num="125" count="8" type="stmt"/>
+        <line num="127" count="1" type="stmt"/>
+        <line num="128" count="11" type="cond" truecount="2" falsecount="0"/>
+        <line num="129" count="11" type="stmt"/>
         <line num="132" count="1" type="stmt"/>
-        <line num="133" count="4" type="stmt"/>
-        <line num="134" count="4" type="stmt"/>
-        <line num="135" count="4" type="stmt"/>
-        <line num="136" count="4" type="stmt"/>
+        <line num="133" count="0" type="stmt"/>
+        <line num="134" count="0" type="stmt"/>
+        <line num="136" count="1" type="stmt"/>
         <line num="137" count="4" type="stmt"/>
         <line num="138" count="4" type="stmt"/>
-        <line num="141" count="1" type="stmt"/>
-        <line num="142" count="19" type="stmt"/>
-        <line num="143" count="19" type="stmt"/>
-        <line num="144" count="19" type="stmt"/>
-        <line num="145" count="19" type="stmt"/>
+        <line num="139" count="4" type="stmt"/>
+        <line num="140" count="4" type="stmt"/>
+        <line num="141" count="4" type="stmt"/>
+        <line num="142" count="4" type="stmt"/>
+        <line num="145" count="1" type="stmt"/>
+        <line num="146" count="19" type="stmt"/>
         <line num="147" count="19" type="stmt"/>
-        <line num="150" count="19" type="cond" truecount="2" falsecount="0"/>
-        <line num="151" count="8" type="stmt"/>
-        <line num="153" count="19" type="cond" truecount="4" falsecount="0"/>
-        <line num="154" count="1" type="stmt"/>
-        <line num="159" count="18" type="cond" truecount="4" falsecount="0"/>
-        <line num="160" count="7" type="stmt"/>
-        <line num="164" count="11" type="cond" truecount="3" falsecount="1"/>
-        <line num="165" count="11" type="stmt"/>
-        <line num="169" count="1" type="stmt"/>
-        <line num="170" count="12" type="stmt"/>
-        <line num="183" count="1" type="stmt"/>
+        <line num="148" count="19" type="stmt"/>
+        <line num="149" count="19" type="stmt"/>
+        <line num="151" count="19" type="stmt"/>
+        <line num="154" count="19" type="cond" truecount="2" falsecount="0"/>
+        <line num="155" count="8" type="stmt"/>
+        <line num="157" count="19" type="cond" truecount="4" falsecount="0"/>
+        <line num="158" count="1" type="stmt"/>
+        <line num="163" count="18" type="cond" truecount="4" falsecount="0"/>
+        <line num="164" count="7" type="stmt"/>
+        <line num="168" count="11" type="cond" truecount="3" falsecount="1"/>
+        <line num="169" count="11" type="stmt"/>
+        <line num="173" count="1" type="stmt"/>
+        <line num="174" count="12" type="stmt"/>
+        <line num="187" count="1" type="stmt"/>
       </file>
       <file name="declarations.d.ts" path="C:\Users\doron\myprojects\check-abilities\src\declarations.d.ts">
         <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>

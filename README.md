@@ -1,8 +1,8 @@
 # User Permissions
 
-### user permissions is a small powerful authorization library that manage what resources a user allowed to access
+### user permissions is a small powerful authorization library that manage what resources a user allow to access
 
-## Features:
+## Features
 
 ✔ Small & Fast - The fastest and smallest compared to: [casbin](https://github.com/casbin/casbin), [casl](https://github.com/stalniy/casl), [role-acl](https://github.com/tensult/role-acl), [rbac](https://github.com/seeden/rbac)
 
@@ -23,135 +23,138 @@ e.g `appAbilities.check('read', 'posts').validateData(data)`
 
 ### [DEMO](https://scrimba.com/c/cdVN9vCW)
 
+<br/>
+
 ## Install
 
-`npm i user-permissions`
-
-## Getting started:
-
-### 1. Define permissions
-
-```javascript
-import { Permissions, Permission } from 'user-permissions';
-
-const appPersmissions = new Permissions([
-  // Everyone has permission to read the title and body of the posts
-  new Permission()
-    .actions('read')
-    .resources('posts')
-    .fields(['title', 'body']),
-  // Only logged in users have permission to manage their posts
-  new Permission()
-    .resources('posts')
-    .conditions('{"creator": "{{ user.id }}" }')
-    .user(true),
-  // Only paying users are allowed to read private posts
-  new Permission()
-    .actions('read')
-    .resources('posts')
-    .fields(['info'])
-    .user({ isPay: true }),
-]);
+```bash
+npm i user-permissions
 ```
 
-### 2. Check permissions
+<br/>
+<br/>
 
-There are two ways to check permissions
+## Getting started
 
-1. **isAllowed**
-   - **Return:** boolean value
-   - **When to use**: When you need only to check permissions
-   - **Example**: `await appPersmissions.isAllowed('read', 'posts', context)`
-2. **check**
-   - **Return:** A full details of the fields and conditions. see PermissionsResponse
-   - **When to use**: When you want to build a fetch query from the rules, to expose only fields that user need to read
-   - **Example**: `await appPersmissions.check('read', 'posts', context)`
+1. **Define permissions**
 
-```javascript
-let res;
+   ```javascript
+   import { Permissions, Permission } from 'user-permissions';
 
-/*
-|-----------------------------------------------------------------------------
-| Example 1: anonymouse user try to read posts
-|-----------------------------------------------------------------------------
-|
-*/
+   const appPermissions = new Permissions([
+     // Everyone has permission to read the title and body of the posts
+     new Permission()
+       .actions('read')
+       .resources('posts')
+       .fields(['title', 'body']),
+     // Only logged in users have permission to manage their posts
+     new Permission()
+       .resources('posts')
+       .conditions('{"creator": "{{ user.id }}" }')
+       .user(true),
+     // Only paying users are allow to read private posts
+     new Permission()
+       .actions('read')
+       .resources('posts')
+       .fields(['info'])
+       .user({ isPay: true }),
+   ]);
+   ```
 
-console.log('----------- Example 1 -----------');
+2. **Check permissions**
 
-res = await appPersmissions.check('read', 'posts', { user: null });
+   ```javascript
+   let res;
 
-if (!res.allow) {
-  console.error('You are not allowed to read posts');
-} else {
-  /* 
-   When fields.allowAll are false then we can
-   get the fields that user can read with res.fields.getFieldsToSelect
-   and select these fields when fetching the data from the DB.
-*/
-  const query = res.fields.allowAll
-    ? { $select: res.fields.getFieldsToSelect() }
-    : {};
+   /*
+   |-----------------------------------------------------------------------------
+   | Example 1: anonymous user try to read posts
+   |-----------------------------------------------------------------------------
+   |
+   */
 
-  console.log('User allowe to read posts', { query });
-}
+   res = await appPermissions.check('read', 'posts', { user: null });
 
-/*
-|-----------------------------------------------------------------------------
-| Example 2: Logged in user try to create a new post
-|-----------------------------------------------------------------------------
-|
-*/
-console.log('----------- Example 2 -----------');
+   if (!res.allow) {
+     console.error('You are not allow to read posts');
+   } else {
+     /*
+      When fields.allowAll are false then we can
+      get the fields that user can read with res.fields.getFieldsToSelect
+      and select these fields when fetching the data from the DB.
+   */
+     const query = res.fields.allowAll
+       ? { $select: res.fields.getFieldsToSelect() }
+       : {};
 
-const user = { id: 'a1ad' };
-const values = { creator: 'bdjd', title: 'lorem' };
+     console.log('User allowe to read posts', { query });
+   }
 
-res = await appPersmissions.check('create', 'posts', { user }); // res.allow = true
+   /*
+   |-----------------------------------------------------------------------------
+   | Example 2: Logged in user try to create a new post
+   |-----------------------------------------------------------------------------
+   |
+   */
+   console.log('----------- Example 2 -----------');
 
-if (!res.allow) {
-  console.error('You are not allowed to create posts');
-} else {
-  const validateData = res.validateData(values);
-  if (!validateData.valid) {
-    console.error(validateData.message);
-  } else {
-    console.log('You can create posts');
-  }
-}
+   const user = { id: 'a1ad' };
+   const values = { creator: 'bdjd', title: 'lorem' };
 
-/*
-|-----------------------------------------------------------------------------
-| Example 3: Logged in user try to read posts - example of using filter data
-|-----------------------------------------------------------------------------
-|
-*/
+   res = await appPermissions.check('create', 'posts', { user }); // res.allow = true
 
-console.log('----------- Example 3 -----------');
+   if (!res.allow) {
+     console.error('You are not allow to create posts');
+   } else {
+     const validateData = res.validateData(values);
+     if (!validateData.valid) {
+       console.error(validateData.message);
+     } else {
+       console.log('You can create posts');
+     }
+   }
 
-res = await appPersmissions.check('read', 'posts', { user: null }); // res.allow = true
+   /*
+   |-----------------------------------------------------------------------------
+   | Example 3: Logged in user try to read posts - example of using filter data
+   |-----------------------------------------------------------------------------
+   |
+   */
 
-if (!res.allow) {
-  console.error('You are not allowed to read posts');
-} else {
-  //const data = await fetchDataFromDb();
-  const data = [
-    { title: 'lor', body: 'pos', privateFields: '1' },
-    { title: 'lor1', body: 'pos1', privateFields: '1' },
-    { title: 'lor2', body: 'pos2', privateFields: '1' },
-    { title: 'lor3', body: 'pos3', privateFields: '1' },
-  ];
+   console.log('----------- Example 3 -----------');
 
-  const response = res.filterData(data); // This will filter all fields except title and body
+   res = await appPermissions.check('read', 'posts', { user: null }); // res.allow = true
 
-  console.log('Posts response', response);
-}
-```
+   if (!res.allow) {
+     console.error('You are not allow to read posts');
+   } else {
+     //const data = await fetchDataFromDb();
+     const data = [
+       { title: 'lor', body: 'pos', privateFields: '1' },
+       { title: 'lor1', body: 'pos1', privateFields: '1' },
+       { title: 'lor2', body: 'pos2', privateFields: '1' },
+       { title: 'lor3', body: 'pos3', privateFields: '1' },
+     ];
+
+     const response = res.filterData(data); // This will filter all fields except title and body
+
+     console.log('Posts response', response);
+   }
+   ```
+
+<br/>
+<br/>
+<br/>
+
+# api
 
 ## Define permissions
 
-**Define permissions to your app by created a a new instance of the Permissions class.**  
-e.g `const appPersmissions = new Permissions([new Permission(),...])`
+**Define permissions to your app by created a a new instance of the Permissions class.**
+
+```javascript
+const appPermissions = new Permissions([new Permission(),...])
+```
 
 Permissions accept a collection of Permission class.
 
@@ -200,64 +203,65 @@ Permissions accept a collection of Permission class.
 - **type:** string \| object
   - when it a string, it must be a valid [stringify](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/stringify) in this way we can use a template
 - **examples**:
+
   - `new Permission().conditions({active: true})`
   - `new Permission().conditions('{"user":"{{user.id}}"}')`
   - `new Permission(`{conditions: '{"organization":"{{user.organization}}"}',...}`)`
 
-🌟 **This is a powerful way to protect your records**  
- When we check permissions we find all the permissions that allowed the request and collect  
- all the conditions into the check response.  
- we used this conditions in the filterData&validateData utils and also you can convert the conditions  
- to a fetch query.  
- this library used [sift ](https://github.com/crcn/sift.js#readme)that is a "tiny library for using MongoDB queries to filter data in Javascript"  
- you can use any MongoDB operator in the conditions like $in, $nin, $exists, $gte..
+  🌟 **This is a powerful way to protect your records**  
+   When we check permissions we find all the permissions that allow the request and collect  
+   all the conditions into the check response.  
+   we used this conditions in the filterData&validateData utils and also you can convert the conditions  
+   to a fetch query.  
+   this library used [sift](https://github.com/crcn/sift.js#readme)that is a "tiny library for using MongoDB queries to filter data in Javascript"  
+   you can use any MongoDB operator in the conditions like $in, $nin, $exists, $gte..
 
-```javascript
-/*
-|-----------------------------------------------------------------------------
-| For example
-|-----------------------------------------------------------------------------
-| an organization_admin try to find all his users
-| your app includes a number of organization 
-| and you want to serve only users in his organization
-*/
+  ```javascript
+  /*
+  |-----------------------------------------------------------------------------
+  | For example
+  |-----------------------------------------------------------------------------
+  | an organization_admin try to find all his users
+  | your app includes a number of organization
+  | and you want to serve only users in his organization
+  */
 
-// App Permissions
-import { Permissions, Permission } from 'user-permissions';
+  // App Permissions
+  import { Permissions, Permission } from 'user-permissions';
 
-const appPersmissions = new Permissions([
-  new Permission()
-    .resources('users')
-    .conditions('{"organizationId": "{{ user.organizationId}}" }')
-    .roles('organization_admin'),
-]);
+  const appPermissions = new Permissions([
+    new Permission()
+      .resources('users')
+      .conditions('{"organizationId": "{{ user.organizationId}}" }')
+      .roles('organization_admin'),
+  ]);
 
-// some where in your app
-router.find('/users', async (req, res) => {
-  // req.user = {id:'a1', roles: ['organization_admin'], organizationId: 'akdi1' }
-  const permissionCheck = await appPersmissions.check('read', 'users', {
-    user: req.user,
-    roles: req.user.roles,
+  // some where in your app
+  router.find('/users', async (req, res) => {
+    // req.user = {id:'a1', roles: ['organization_admin'], organizationId: 'akdi1' }
+    const permissionCheck = await appPermissions.check('read', 'users', {
+      user: req.user,
+      roles: req.user.roles,
+    });
+    if (!permissionCheck.isAllow) {
+      throw new Error(permissionCheck.message);
+    }
+    // Build query
+    const query = {};
+    if (permissionCheck.conditions) {
+      query['$or'] = permissionCheck.conditions;
+    }
+    // query['$or'] = [{organizationId: 'akdi1'}]
+    const users = await User.find(query);
+    res.json(users);
   });
-  if (!permissionCheck.isAllow) {
-    throw new Error(permissionCheck.message);
-  }
-  // Build query
-  const query = {};
-  if (permissionCheck.conditions) {
-    query['$or'] = permissionCheck.conditions;
-  }
-  // query['$or'] = [{organizationId: 'akdi1'}]
-  const users = await User.find(query);
-  res.json(users);
-});
-```
+  ```
 
 ### fields
 
-- **info**: The fields to allowed/denied
-  - You can use Glob notation to define allowed or denied attributes
-    - allowed : \['firstName', 'lastName'\]
+- **info**: The fields to allow/denied
+  - You can use Glob notation to define allow or denied attributes
+    - allow : \['firstName', 'lastName'\]
     - denied: \['-password'\]
     - mixed: \['title', 'body', 'creator', '-creator.password'\]
 - **type**: string \| string\[\]
@@ -292,56 +296,60 @@ router.find('/users', async (req, res) => {
 - **examples**:
   - `new Permission().meta({populate: 'comments'})` // now you can allow the user to populate the comments fields
 
-## check permissions response
+## check permissions
 
-When you check permissions
+There are two ways to check permissions
 
-```javascript
-const res = await appPersmissions.check('read', 'posts', { user: null });
-```
+- **hasPermission**
+  - **When to use**: When you need only to check permissions
+  - **Example**: `await appPermissions.hasPermission('read', 'posts', context)`
+  - **Response:** boolean value
+- **check**
 
-You get object with this properties:
+  - **When to use**: When you want to build a fetch query from the rules, to expose only fields that user need to read
+  - **Example**: `await appPermissions.check('read', 'posts', context)`
+  - **Response:** object with this properties:
 
-- **action**
-  - type: string
-  - The action we checked for permission.
-  - e.g create
-- **resource**
-  - type: string
-  - The resource we checked for permission.
-  - e.g posts
-- **allow**
-  - type: boolean
-  - user allow or not allowed to make this request
-- **message**
-  - type: null \| string
-  - when allow is false then the default message is : `You are not authorized to ${action} ${resources}`
-- **conditions**
-  - type: null \| object\[
-- **fields**
-  - type: object
-    - fields properties
-      - **allowAll** - boolean - true when at least one permission is allowed all fields with out ant condition
-      - **allowed** - string\[\] - collection of all the fields from the permission with empty conditions
-      - **allowedByCondition** - object\[\] - collection of all the fields from the permission with conditions, each item in the array will by {fields: string\[\], condition: object}
-      - **getFieldsToSelect** - function - this is all the fields that user allowed by one of the permissions
-- **meta**:
-  - type: null \| any\[\],
-- **filterData**
-  - type: \(data: object \| object\[\]\) =&gt; object \| object\[\] \| null
-  - pass object or object\[\] and the function return you data without the fields that user not allowed
-  - return null when allow is false
-- **validateData**
-  - type: \(data: object \| object\[\]\) =&gt; { valid: boolean; message?: string }
-- **filterDataIsRequired**
+    - **action**
+      - type: string
+      - The action we checked for permission.
+      - e.g create
+    - **resource**
+      - type: string
+      - The resource we checked for permission.
+      - e.g posts
+    - **allow**
+      - type: boolean
+      - user allow or not allow to make this request
+    - **message**
+      - type: null \| string
+      - when allow is false then the default message is : `You are not authorized to ${action} ${resources}`
+    - **conditions**
+      - type: null \| object\[
+    - **fields**
+      - type: object
+        - fields properties
+          - **allowAll** - boolean - true when at least one permission is allow all fields with out ant condition
+          - **allow** - string\[\] - collection of all the fields from the permission with empty conditions
+          - **allowedByCondition** - object\[\] - collection of all the fields from the permission with conditions, each item in the array will by {fields: string\[\], condition: object}
+          - **getFieldsToSelect** - function - this is all the fields that user allow by one of the permissions
+    - **meta**:
+      - type: null \| any\[\],
+    - **filterData**
+      - type: \(data: object \| object\[\]\) =&gt; object \| object\[\] \| null
+      - pass object or object\[\] and the function return you data without the fields that user not allow
+      - return null when allow is false
+    - **validateData**
+      - type: \(data: object \| object\[\]\) =&gt; { valid: boolean; message?: string }
+    - **filterDataIsRequired**
 
-  - type: boolean
-  - true when not all the fields are allowed and some of the fields are allowed with conditions for example: you define app with this permissions
+      - type: boolean
+      - true when not all the fields are allow and some of the fields are allow with conditions for example: you define app with this permissions
 
-    1. new Permission\(\).fields\('privateNotes'\).conditions\('{"user":"{{user.id}}"}'\)
-    2. new Permission\(\).fields\(\['title','body\]\)
+        1. new Permission\(\).fields\('privateNotes'\).conditions\('{"user":"{{user.id}}"}'\)
+        2. new Permission\(\).fields\(\['title','body\]\)
 
-       in this case any user can read title and body but user can read only his privateNotes  
+        in this case any user can read title and body but user can read only his privateNotes  
         after you fetch all posts and select 'title,body,privateNotes' you need to remove privateNotes  
         from all the records that not belong to user  
         in this case filterDataIsRequired will be true  

@@ -130,7 +130,7 @@ describe('Test Permissions permissions handlers', () => {
     );
   });
 
-  it("anonymous user allow't create post", async () => {
+  it('anonymous user allow create post', async () => {
     const res = await appPermissions.check('create', 'posts');
     expect(res.allow).toBe(false);
   });

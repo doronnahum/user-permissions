@@ -239,7 +239,11 @@
 <a name='L181'></a><a href='#L181'>181</a>
 <a name='L182'></a><a href='#L182'>182</a>
 <a name='L183'></a><a href='#L183'>183</a>
-<a name='L184'></a><a href='#L184'>184</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L184'></a><a href='#L184'>184</a>
+<a name='L185'></a><a href='#L185'>185</a>
+<a name='L186'></a><a href='#L186'>186</a>
+<a name='L187'></a><a href='#L187'>187</a>
+<a name='L188'></a><a href='#L188'>188</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -328,6 +332,10 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -446,7 +454,7 @@ export class PermissionsResponse {
   private fields: {
     allowAll: boolean;
     allow: null | string[];
-    allowByCondition: null | FieldsWithConditions[];
+    allowedByCondition: null | FieldsWithConditions[];
     getFieldsToSelect: () =&gt; string[];
   };
 &nbsp;
@@ -476,7 +484,7 @@ export class PermissionsResponse {
         return validateData(
           data,
           this.fields.allow,
-          this.fields.allowByCondition,
+          this.fields.allowedByCondition,
           mongooseWhere,
           this.config
         );
@@ -492,14 +500,14 @@ export class PermissionsResponse {
     this.fields = {
       allowAll: false,
       allow: null,
-      allowByCondition: null,
+      allowedByCondition: null,
       getFieldsToSelect: <span class="fstat-no" title="function not covered" >() =&gt; {</span>
         const fields: string[] = <span class="cstat-no" title="statement not covered" >[];</span>
 <span class="cstat-no" title="statement not covered" >        if (this.fields.allow) {</span>
 <span class="cstat-no" title="statement not covered" >          fields.push(...this.fields.allow);</span>
         }
-<span class="cstat-no" title="statement not covered" >        if (this.fields.allowByCondition) {</span>
-<span class="cstat-no" title="statement not covered" >          this.fields.allowByCondition.forEach(<span class="fstat-no" title="function not covered" >item </span>=&gt; {</span>
+<span class="cstat-no" title="statement not covered" >        if (this.fields.allowedByCondition) {</span>
+<span class="cstat-no" title="statement not covered" >          this.fields.allowedByCondition.forEach(<span class="fstat-no" title="function not covered" >item </span>=&gt; {</span>
 <span class="cstat-no" title="statement not covered" >            fields.push(...item.fields);</span>
           });
         }
@@ -510,7 +518,11 @@ export class PermissionsResponse {
       <span class="missing-if-branch" title="if path not taken" >I</span>if (this.fields.allowAll) {
 <span class="cstat-no" title="statement not covered" >        return data;</span>
       }
-      return filterData(data, this.fields.allow, this.fields.allowByCondition);
+      return filterData(
+        data,
+        this.fields.allow,
+        this.fields.allowedByCondition
+      );
     };
   }
 &nbsp;
@@ -537,12 +549,12 @@ export class PermissionsResponse {
 <span class="cstat-no" title="statement not covered" >    this.fields.allowAll = value;</span>
 <span class="cstat-no" title="statement not covered" >    if (value) {</span>
 <span class="cstat-no" title="statement not covered" >      this.fields.allow = null;</span>
-<span class="cstat-no" title="statement not covered" >      this.fields.allowByCondition = null;</span>
+<span class="cstat-no" title="statement not covered" >      this.fields.allowedByCondition = null;</span>
     }
   }
   public pushFieldsWithConditions(value: FieldsWithConditions) {
-    <span class="missing-if-branch" title="else path not taken" >E</span>if (!this.fields.allowByCondition) this.fields.allowByCondition = [];
-    this.fields.allowByCondition.push(value);
+    <span class="missing-if-branch" title="else path not taken" >E</span>if (!this.fields.allowedByCondition) this.fields.allowedByCondition = [];
+    this.fields.allowedByCondition.push(value);
   }
   public pushFields(value: Fields) {
     if (!this.fields.allow) this.fields.allow = [];
@@ -556,7 +568,7 @@ export class PermissionsResponse {
   public onUserNotPermission() {
     this.fields.allowAll = false;
     this.fields.allow = null;
-    this.fields.allowByCondition = null;
+    this.fields.allowedByCondition = null;
     this.conditions = null;
     this.setPermission(false);
     this.message = this.config.onAccessDeny(this.action, this.resource);
@@ -612,7 +624,7 @@ export class PermissionsResponse {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Sat Mar 28 2020 20:41:40 GMT+0300 (Israel Daylight Time)
+                at Sat Mar 28 2020 21:56:04 GMT+0300 (Israel Daylight Time)
             </div>
         </div>
         <script src="..\prettify.js"></script>
