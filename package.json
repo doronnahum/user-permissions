@@ -64,6 +64,6 @@
   "dependencies": {
     "@strikeentco/get": "^1.0.1",
     "pick-deep": "1.0.0",
-    "sift": "^11.0.10"
+    "sift": "^11.1.8"
   }
 }
