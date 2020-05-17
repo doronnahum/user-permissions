@@ -46,3 +46,21 @@ export interface IPermissionConstructor {
   when?: When;
   meta?: any;
 }
+
+export interface ICheckResponse {
+  action: string;
+  resource: string;
+  allow: boolean;
+  message: string | null | undefined;
+  conditions: object[] | null | undefined;
+  fields: {
+      allowAll: boolean;
+      allow: string[] | null;
+      allowedByCondition: FieldsWithConditions[] | null;
+      getFieldsToSelect: () => string[];
+  };
+  meta: any[] | null;
+  filterData: (data: object | object[]) => object | object[] | null;
+  validateData: ValidateData;
+  filterDataIsRequired: boolean;
+}

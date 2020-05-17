@@ -1,6 +1,6 @@
 {
   "name": "user-permissions",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "Small authorization library for NodeJS and browser",
   "license": "MIT",
   "scripts": {

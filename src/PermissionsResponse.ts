@@ -5,6 +5,7 @@ import {
   Fields,
   Context,
   Conditions,
+  ICheckResponse
 } from './types';
 
 import { validateData } from './utils/validateData';
@@ -170,7 +171,7 @@ export class PermissionsResponse {
     }
   }
 
-  public get() {
+  public get(): ICheckResponse {
     return {
       action: this.action,
       resource: this.resource,
