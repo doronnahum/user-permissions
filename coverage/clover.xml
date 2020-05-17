@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1585421843909" clover="3.2.0">
-  <project timestamp="1585421843909" name="All files">
-    <metrics statements="403" coveredstatements="364" conditionals="253" coveredconditionals="213" methods="91" coveredmethods="85" elements="747" coveredelements="662" complexity="0" loc="403" ncloc="403" packages="2" files="11" classes="11"/>
+<coverage generated="1589705646648" clover="3.2.0">
+  <project timestamp="1589705646648" name="All files">
+    <metrics statements="403" coveredstatements="364" conditionals="253" coveredconditionals="213" methods="93" coveredmethods="87" elements="749" coveredelements="664" complexity="0" loc="403" ncloc="403" packages="2" files="11" classes="11"/>
     <package name="src">
-      <metrics statements="183" coveredstatements="147" conditionals="83" coveredconditionals="51" methods="42" coveredmethods="37"/>
-      <file name="Permission.ts" path="C:\Users\doron\myprojects\check-abilities\src\Permission.ts">
+      <metrics statements="183" coveredstatements="147" conditionals="83" coveredconditionals="51" methods="44" coveredmethods="39"/>
+      <file name="Permission.ts" path="D:\doron\projects\user-permissions\src\Permission.ts">
         <metrics statements="77" coveredstatements="61" conditionals="36" coveredconditionals="19" methods="17" coveredmethods="17"/>
         <line num="1" count="1" type="stmt"/>
         <line num="11" count="1" type="stmt"/>
@@ -84,7 +84,7 @@
         <line num="158" count="1" type="stmt"/>
         <line num="160" count="1" type="stmt"/>
       </file>
-      <file name="Permissions.ts" path="C:\Users\doron\myprojects\check-abilities\src\Permissions.ts">
+      <file name="Permissions.ts" path="D:\doron\projects\user-permissions\src\Permissions.ts">
         <metrics statements="19" coveredstatements="19" conditionals="7" coveredconditionals="7" methods="7" coveredmethods="7"/>
         <line num="1" count="1" type="stmt"/>
         <line num="2" count="1" type="stmt"/>
@@ -106,7 +106,7 @@
         <line num="61" count="2" type="stmt"/>
         <line num="63" count="1" type="stmt"/>
       </file>
-      <file name="PermissionsResponse.ts" path="C:\Users\doron\myprojects\check-abilities\src\PermissionsResponse.ts">
+      <file name="PermissionsResponse.ts" path="D:\doron\projects\user-permissions\src\PermissionsResponse.ts">
         <metrics statements="85" coveredstatements="65" conditionals="40" coveredconditionals="25" methods="18" coveredmethods="13"/>
         <line num="10" count="1" type="stmt"/>
         <line num="11" count="1" type="stmt"/>
@@ -194,18 +194,18 @@
         <line num="174" count="12" type="stmt"/>
         <line num="187" count="1" type="stmt"/>
       </file>
-      <file name="declarations.d.ts" path="C:\Users\doron\myprojects\check-abilities\src\declarations.d.ts">
+      <file name="declarations.d.ts" path="D:\doron\projects\user-permissions\src\declarations.d.ts">
         <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
       </file>
-      <file name="index.ts" path="C:\Users\doron\myprojects\check-abilities\src\index.ts">
-        <metrics statements="2" coveredstatements="2" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
-        <line num="1" count="1" type="stmt"/>
-        <line num="2" count="1" type="stmt"/>
+      <file name="index.ts" path="D:\doron\projects\user-permissions\src\index.ts">
+        <metrics statements="2" coveredstatements="2" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="2"/>
+        <line num="1" count="13" type="stmt"/>
+        <line num="2" count="4" type="stmt"/>
       </file>
     </package>
     <package name="src.utils">
       <metrics statements="220" coveredstatements="217" conditionals="170" coveredconditionals="162" methods="49" coveredmethods="48"/>
-      <file name="checkPermissions.ts" path="C:\Users\doron\myprojects\check-abilities\src\utils\checkPermissions.ts">
+      <file name="checkPermissions.ts" path="D:\doron\projects\user-permissions\src\utils\checkPermissions.ts">
         <metrics statements="25" coveredstatements="25" conditionals="19" coveredconditionals="19" methods="4" coveredmethods="4"/>
         <line num="3" count="1" type="stmt"/>
         <line num="4" count="1" type="stmt"/>
@@ -233,7 +233,7 @@
         <line num="58" count="12" type="stmt"/>
         <line num="61" count="1" type="stmt"/>
       </file>
-      <file name="filterData.ts" path="C:\Users\doron\myprojects\check-abilities\src\utils\filterData.ts">
+      <file name="filterData.ts" path="D:\doron\projects\user-permissions\src\utils\filterData.ts">
         <metrics statements="14" coveredstatements="14" conditionals="6" coveredconditionals="6" methods="4" coveredmethods="4"/>
         <line num="1" count="2" type="stmt"/>
         <line num="7" count="2" type="stmt"/>
@@ -250,7 +250,7 @@
         <line num="33" count="22" type="stmt"/>
         <line num="36" count="1" type="stmt"/>
       </file>
-      <file name="tinytim.ts" path="C:\Users\doron\myprojects\check-abilities\src\utils\tinytim.ts">
+      <file name="tinytim.ts" path="D:\doron\projects\user-permissions\src\utils\tinytim.ts">
         <metrics statements="18" coveredstatements="18" conditionals="8" coveredconditionals="6" methods="2" coveredmethods="2"/>
         <line num="4" count="5" type="stmt"/>
         <line num="5" count="5" type="stmt"/>
@@ -271,7 +271,7 @@
         <line num="31" count="21" type="cond" truecount="2" falsecount="0"/>
         <line num="32" count="10" type="stmt"/>
       </file>
-      <file name="utils.ts" path="C:\Users\doron\myprojects\check-abilities\src\utils\utils.ts">
+      <file name="utils.ts" path="D:\doron\projects\user-permissions\src\utils\utils.ts">
         <metrics statements="76" coveredstatements="73" conditionals="75" coveredconditionals="69" methods="21" coveredmethods="20"/>
         <line num="12" count="4" type="stmt"/>
         <line num="13" count="4" type="stmt"/>
@@ -350,7 +350,7 @@
         <line num="160" count="4" type="stmt"/>
         <line num="161" count="0" type="stmt"/>
       </file>
-      <file name="validateData.ts" path="C:\Users\doron\myprojects\check-abilities\src\utils\validateData.ts">
+      <file name="validateData.ts" path="D:\doron\projects\user-permissions\src\utils\validateData.ts">
         <metrics statements="56" coveredstatements="56" conditionals="38" coveredconditionals="38" methods="9" coveredmethods="9"/>
         <line num="1" count="2" type="stmt"/>
         <line num="14" count="2" type="stmt"/>
@@ -409,7 +409,7 @@
         <line num="109" count="1" type="stmt"/>
         <line num="111" count="5" type="stmt"/>
       </file>
-      <file name="validators.ts" path="C:\Users\doron\myprojects\check-abilities\src\utils\validators.ts">
+      <file name="validators.ts" path="D:\doron\projects\user-permissions\src\utils\validators.ts">
         <metrics statements="31" coveredstatements="31" conditionals="24" coveredconditionals="24" methods="9" coveredmethods="9"/>
         <line num="3" count="2" type="stmt"/>
         <line num="4" count="34" type="cond" truecount="3" falsecount="0"/>
