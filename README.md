@@ -1,5 +1,7 @@
 # User Permissions
 
+This package is not ready to production yet
+
 small and powerful authorization library
 
 <table>
