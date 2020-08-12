@@ -65,6 +65,6 @@
     "@strikeentco/get": "^1.0.1",
     "@types/mocha": "^7.0.2",
     "pick-deep": "1.0.0",
-    "sift": "^13.0.2"
+    "sift": "^13.2.0"
   }
 }
