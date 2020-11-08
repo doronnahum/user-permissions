@@ -54,10 +54,10 @@ export interface ICheckResponse {
   message: string | null | undefined;
   conditions: object[] | null | undefined;
   fields: {
-      allowAll: boolean;
-      allow: string[] | null;
-      allowedByCondition: FieldsWithConditions[] | null;
-      getFieldsToSelect: () => string[];
+    allowAll: boolean;
+    allow: string[] | null;
+    allowedByCondition: FieldsWithConditions[] | null;
+    getFieldsToSelect: () => string[];
   };
   meta: any[] | null;
   filterData: (data: object | object[]) => object | object[] | null;

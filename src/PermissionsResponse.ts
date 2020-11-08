@@ -5,7 +5,7 @@ import {
   Fields,
   Context,
   Conditions,
-  ICheckResponse
+  ICheckResponse,
 } from './types';
 
 import { validateData } from './utils/validateData';
